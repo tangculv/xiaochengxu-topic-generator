@@ -30,8 +30,9 @@
             <input id="keyword-filter" type="search" placeholder="搜索题目、用户、风险、备注" />
           </label>
           <div class="topbar-cta">
+            <button id="focus-mode" class="button secondary active">连续处理</button>
             <button id="open-generator" class="button secondary">生成设置</button>
-            <button id="generate-batch" class="button primary">生成新批次</button>
+            <button id="generate-batch" class="button primary desktop-only">生成新批次</button>
           </div>
         </div>
       </header>
@@ -205,22 +206,51 @@
                 <h2>选题列表</h2>
                 <p id="inline-ai-tip" class="muted small">根据你当前的筛选条件，系统会提示最值得先看的题目。</p>
               </div>
-              <div class="toolbar-actions">
-                <button id="toggle-all-expanded" class="button ghost small-button">展开全部补充信息</button>
+              <div class="toolbar-actions result-toolbar-actions">
+                <label class="compact-toggle">
+                  <input id="focus-hide-processed" type="checkbox" checked />
+                  <span>判断后隐藏已处理</span>
+                </label>
+                <button id="toggle-all-expanded" class="button ghost small-button desktop-only">展开全部补充信息</button>
               </div>
             </div>
 
-            <div class="panel mini-toolbar selection-toolbar">
-              <div class="selection-summary-inline">
-                <strong id="selection-count">已选择 0 项</strong>
-                <span id="selection-hint" class="muted small">勾选后可以一次性改判断结果，适合先粗筛一轮。</span>
-              </div>
-              <div class="selection-actions-inline">
-                <button id="batch-want" class="button secondary">批量标记“要”</button>
-                <button id="batch-review" class="button secondary">批量标记“再看”</button>
-                <button id="batch-reject" class="button secondary">批量标记“不要”</button>
-                <button id="batch-project" class="button secondary">批量加入立项池</button>
-                <button id="clear-selection" class="button ghost">清空</button>
+            <div class="workspace-toolbar-stack">
+              <div id="project-guidance" class="panel mini-toolbar guidance-toolbar hidden"></div>
+
+              <details id="workspace-secondary-tools" class="workspace-secondary-tools">
+                <summary>展开执行辅助</summary>
+                <div class="workspace-secondary-stack">
+                  <div id="project-todo-strip" class="panel mini-toolbar todo-strip hidden"></div>
+                  <div id="project-subviews" class="panel mini-toolbar subview-toolbar hidden"></div>
+                  <div id="suggested-queue" class="panel mini-toolbar suggestion-toolbar hidden"></div>
+                </div>
+              </details>
+
+              <div class="panel mini-toolbar selection-toolbar">
+                <div class="selection-summary-inline">
+                  <strong id="selection-count">已选择 0 项</strong>
+                  <span id="selection-hint" class="muted small">勾选后可批量处理。</span>
+                </div>
+                <div class="selection-primary-actions">
+                  <button id="batch-want" class="button secondary">批量标记“要”</button>
+                  <button id="batch-review" class="button secondary">批量标记“再看”</button>
+                  <button id="batch-reject" class="button secondary">批量标记“不要”</button>
+                  <button id="batch-project" class="button secondary">批量加入立项池</button>
+                </div>
+                <details id="selection-more" class="selection-more">
+                  <summary>更多批量操作</summary>
+                  <div class="selection-actions-inline selection-actions-advanced">
+                    <button id="batch-stage-validate" class="button secondary">批量设为待验证</button>
+                    <button id="batch-stage-prototype" class="button secondary">批量推进到原型</button>
+                    <button id="batch-stage-build" class="button secondary">批量推进到开发</button>
+                    <button id="batch-priority-p0" class="button ghost">批量设为 P0</button>
+                    <button id="batch-fill-owner" class="button ghost">补负责人</button>
+                    <button id="batch-fill-next-action" class="button ghost">补下一步动作</button>
+                    <button id="batch-fill-validation" class="button ghost">补验证计划</button>
+                    <button id="clear-selection" class="button ghost">清空选择</button>
+                  </div>
+                </details>
               </div>
             </div>
 
@@ -228,6 +258,7 @@
               <div id="idea-list" class="idea-list"></div>
             </div>
             <div id="table-view" class="view-pane hidden">
+              <div id="mobile-table-tip" class="panel mini-toolbar mobile-table-tip hidden">手机上更建议使用卡片视图；表格适合横向比较，左右滑动可查看完整列。</div>
               <div class="table-wrap">
                 <table class="idea-table">
                   <thead>
@@ -272,7 +303,7 @@
                   <h2>处理进度</h2>
                 </div>
               </div>
-              <div id="funnel-metrics" class="metrics metrics-funnel"></div>
+              <div id="funnel-metrics" class="metrics metrics-funnel clickable-metrics"></div>
               <div id="quick-metrics" class="metrics metrics-funnel"></div>
               <div id="decision-metrics" class="metrics metrics-funnel"></div>
             </section>
@@ -286,6 +317,16 @@
               </div>
             </div>
             <div id="action-insights" class="action-insights"></div>
+          </section>
+
+          <section class="panel overview-panel">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">长期沉淀</p>
+                <h2>跨批次题库</h2>
+              </div>
+            </div>
+            <div id="project-pipeline" class="action-insights"></div>
           </section>
 
           <section class="panel distribution-panel">
@@ -314,10 +355,14 @@
         </section>
       </main>
 
-      <aside class="detail panel">
+      <aside id="detail-panel" class="detail panel">
+        <div id="mobile-detail-backdrop" class="mobile-detail-backdrop"></div>
         <div class="detail-header">
-          <p class="eyebrow">详细分析</p>
-          <h2>详细信息</h2>
+          <div>
+            <p class="eyebrow">详细分析</p>
+            <h2>详细信息</h2>
+          </div>
+          <button id="mobile-detail-toggle" class="button ghost small-button mobile-detail-toggle" aria-expanded="false">展开详情</button>
         </div>
         <div id="detail-content" class="detail-content"></div>
       </aside>
