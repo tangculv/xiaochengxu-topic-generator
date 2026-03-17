@@ -1,21 +1,15 @@
 # SESSION_HANDOFF
 
-- current_objective: 将选题生成器以尽量少操心的方式上线为真正完整版，优先采用 Render 托管全栈服务
+- current_objective: 指导用户在 Render 完成一次 Web Service 创建，将完整版选题生成器上线为可访问网站
 - completed_work:
-  - 新增 `deploy-fullstack/`，实现 Node HTTP 服务包装现有 Python 生成器，提供 `/ui-web/*`、`/api/batches`、`/api/dimensions`、`/api/generate`
-  - 保留现有本地版与 Cloudflare 演示版，同时补齐真正可线上实时生成的完整版路线
-  - 已本地验证：`node deploy-fullstack/server.js` 可正常启动；`POST /api/generate` 成功生成批次 `BATCH-20260317-154644`，共 174 条
-  - 为 Render 准备了最简部署配置与说明：`deploy-fullstack/render.yaml`、`deploy-fullstack/README.md`
+  - 当前项目已建立独立 git 仓库并完成首次提交
+  - 已成功推送到 GitHub：`https://github.com/tangculv/xiaochengxu-topic-generator.git`
+  - Render 所需全栈部署文件已齐备：`deploy-fullstack/server.js`、`deploy-fullstack/package.json`、`deploy-fullstack/render.yaml`
+  - 本地验证通过：网页可访问、`/api/generate` 可真实生成批次
 - exact_files_changed:
-  - deploy-fullstack/server.js
-  - deploy-fullstack/package.json
-  - deploy-fullstack/render.yaml
-  - deploy-fullstack/README.md
   - RUNLOG.md
-  - TODO.autonomous.md
   - SESSION_HANDOFF.md
 - open_issues:
-  - 用户的 GitHub 仓库目前仍可能是空仓库，需要把当前项目代码推上去后 Render 才能真正拉取部署
-  - 人工标签仍保存在浏览器 localStorage，未写回服务端
-  - 若用户坚持只用 Cloudflare，不用 Render，则仍需把 Python 生成器重写成 JS/TS Worker 版本
-- recommended_next_action: 先把本仓库代码推到 GitHub，再在 Render 新建 Web Service，Start Command 填 `node deploy-fullstack/server.js`，部署完成后直接访问 `/ui-web/`
+  - 仍需用户在 Render 网页完成一次仓库授权与服务创建
+  - 人工标签当前仍存 localStorage，尚未服务端持久化
+- recommended_next_action: 登录 Render，新建 Web Service，连接 GitHub 仓库 `tangculv/xiaochengxu-topic-generator`，Start Command 填 `node deploy-fullstack/server.js`，部署完成后访问 `/ui-web/`
