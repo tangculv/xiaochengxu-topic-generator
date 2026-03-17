@@ -1,14 +1,13 @@
 # SESSION_HANDOFF
 
 ## current objective
-将选题决策工作台 V3 商业产品级升级提交并推送，然后确认 Render 线上已更新。
+等待 Render 完成自动部署，并确认线上页面已从 V2 升级到 V3。
 
 ## completed work
-- 已完成 `ui-web/index.html` 的 V3 产品化结构升级
-- 已完成 `ui-web/styles.css` 的浅色高端 SaaS 视觉系统
-- 已完成 `ui-web/app.js` 的 V3 决策逻辑、quick views、产品形态建议和商业分析详情
-- 已本地启动 `python3 scripts/topic_generator_server.py` 验证 `/ui-web/` 与 `/api/health` 可访问
-- 已修复“今日新生成”视角按批次创建时间匹配的问题
+- 已完成 V3 商业产品级 UI / UX 升级开发
+- 已本地验证 `/ui-web/` 和 `/api/health` 可访问
+- 已修复“今日新生成”视角逻辑
+- 已提交并推送到 GitHub：`a954a8c feat(web): upgrade topic decision workspace to v3 saas experience`
 
 ## exact files changed
 - ui-web/index.html
@@ -19,9 +18,10 @@
 - SESSION_HANDOFF.md
 
 ## open issues
-- 还未 git commit / push
-- 还未确认 Render 自动部署后的线上页面
-- `选题库/generated/index.json` 为运行时文件变更，不建议随本次 UI 升级提交
+- Render 线上地址当前仍返回 V2 页面，说明自动部署尚未完成或尚未触发
+- `选题库/generated/index.json` 为运行时文件，未纳入本次提交
 
-## recommended next command
-git add ui-web/index.html ui-web/styles.css ui-web/app.js RUNLOG.md TODO.autonomous.md SESSION_HANDOFF.md && git commit -m "feat(web): upgrade topic decision workspace to v3 saas experience" && git push
+## recommended next action
+打开 Render 控制台检查最近一次 Deploy 状态；如未自动触发，则手动执行一次 Redeploy / Clear build cache and deploy。部署完成后访问：
+https://xiaochengxu-topic-generator.onrender.com/ui-web/
+确认标题变为“选题决策工作台 V3”。
