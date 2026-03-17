@@ -3,22 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>选题生成器工作台</title>
+    <title>选题决策工作台 V2</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="app-shell">
       <aside class="sidebar">
-        <section class="panel compact">
+        <section class="panel compact hero-panel">
           <p class="eyebrow">小程序工厂</p>
-          <h1>选题生成器工作台</h1>
-          <p class="muted">支持批次切换、页面内直接生成、质量模式切换、收藏/待观察/立项管理。</p>
+          <h1>选题决策工作台 V2</h1>
+          <p class="muted">先按逻辑筛，再按类型看，最后快速判断并沉淀成你的立项池。</p>
         </section>
 
         <section class="panel compact">
-          <h2>批次与生成</h2>
+          <div class="section-header tight">
+            <h2>批次与生成</h2>
+            <span class="muted small">生成能力保持原强度</span>
+          </div>
           <label>
-            <span>浏览批次</span>
+            <span>当前批次</span>
             <select id="batch-select"></select>
           </label>
           <label>
@@ -29,104 +32,181 @@
             <span>批次名称</span>
             <input id="generate-name" type="text" placeholder="例如：老人照护专项" />
           </label>
-          <label>
-            <span>生成规模</span>
-            <select id="generate-multiplier">
-              <option value="1">标准（约100-200）</option>
-              <option value="2">扩展（约300-400）</option>
-              <option value="3">极限（500+）</option>
-            </select>
-          </label>
-          <label>
-            <span>质量模式</span>
-            <select id="generate-quality">
-              <option value="focused">收敛优先（推荐）</option>
-              <option value="expanded">数量优先</option>
-            </select>
-          </label>
-          <div class="button-row">
-            <button id="generate-batch" class="button primary">页面内直接生成</button>
-            <button id="refresh-batches" class="button">刷新批次</button>
+          <div class="inline-grid two">
+            <label>
+              <span>生成规模</span>
+              <select id="generate-multiplier">
+                <option value="1">标准（约100-200）</option>
+                <option value="2">扩展（约300-400）</option>
+                <option value="3">极限（500+）</option>
+              </select>
+            </label>
+            <label>
+              <span>质量模式</span>
+              <select id="generate-quality">
+                <option value="focused">收敛优先</option>
+                <option value="expanded">数量优先</option>
+              </select>
+            </label>
           </div>
-          <p id="generate-status" class="muted small">请先启动本地服务：python3 scripts/topic_generator_server.py</p>
+          <div class="button-row">
+            <button id="generate-batch" class="button primary">直接生成新批次</button>
+            <button id="refresh-batches" class="button">刷新</button>
+          </div>
+          <p id="generate-status" class="muted small">线上可直接生成；本地也可用 python3 scripts/topic_generator_server.py 启动。</p>
           <pre id="command-preview" class="code-block">POST /api/generate</pre>
         </section>
 
-        <section class="panel compact filters">
-          <h2>筛选器</h2>
-          <label>
-            <span>状态</span>
-            <select id="status-filter">
-              <option value="all">全部</option>
-              <option value="candidate">候选</option>
-              <option value="rejected">淘汰</option>
-            </select>
-          </label>
-          <label>
-            <span>人工标签</span>
-            <select id="decision-filter">
-              <option value="all">全部</option>
-              <option value="未处理">未处理</option>
-              <option value="收藏">收藏</option>
-              <option value="待观察">待观察</option>
-              <option value="立项候选">立项候选</option>
-              <option value="淘汰复核">淘汰复核</option>
-            </select>
-          </label>
-          <label>
-            <span>关系类型</span>
-            <select id="relation-filter"></select>
-          </label>
-          <label>
-            <span>领域</span>
-            <select id="domain-filter"></select>
-          </label>
-          <label>
-            <span>最低分</span>
-            <input id="score-filter" type="range" min="50" max="100" value="70" />
-            <strong id="score-value">70</strong>
-          </label>
-          <label>
-            <span>搜索</span>
-            <input id="keyword-filter" type="search" placeholder="搜索一句话描述 / 风险 / 原因" />
-          </label>
+        <section class="panel compact filter-panel">
+          <div class="section-header tight">
+            <h2>筛选策略</h2>
+            <button id="clear-filters" class="button ghost small-button">清空筛选</button>
+          </div>
+
+          <div class="filter-group">
+            <h3>选题逻辑</h3>
+            <div class="chip-group" id="logic-relation-chips"></div>
+            <div class="chip-group" id="logic-action-chips"></div>
+            <div class="chip-group" id="logic-value-chips"></div>
+            <div class="chip-group" id="logic-stage-chips"></div>
+          </div>
+
+          <div class="filter-group">
+            <h3>选题类型</h3>
+            <div class="chip-group" id="topic-primary-chips"></div>
+            <div class="chip-group" id="topic-secondary-chips"></div>
+          </div>
+
+          <div class="filter-group">
+            <h3>基础过滤</h3>
+            <label>
+              <span>候选状态</span>
+              <select id="status-filter">
+                <option value="all">全部</option>
+                <option value="candidate">候选</option>
+                <option value="rejected">淘汰</option>
+              </select>
+            </label>
+            <label>
+              <span>快速决策</span>
+              <select id="quick-filter">
+                <option value="all">全部</option>
+                <option value="未处理">未处理</option>
+                <option value="要">要</option>
+                <option value="再看">再看</option>
+                <option value="不要">不要</option>
+              </select>
+            </label>
+            <label>
+              <span>详细标签</span>
+              <select id="decision-filter">
+                <option value="all">全部</option>
+                <option value="未处理">未处理</option>
+                <option value="收藏">收藏</option>
+                <option value="待观察">待观察</option>
+                <option value="立项候选">立项候选</option>
+                <option value="淘汰复核">淘汰复核</option>
+              </select>
+            </label>
+            <label>
+              <span>关系类型</span>
+              <select id="relation-filter"></select>
+            </label>
+            <label>
+              <span>领域</span>
+              <select id="domain-filter"></select>
+            </label>
+            <label>
+              <span>最低分</span>
+              <input id="score-filter" type="range" min="50" max="100" value="70" />
+              <strong id="score-value">70</strong>
+            </label>
+            <label>
+              <span>搜索</span>
+              <input id="keyword-filter" type="search" placeholder="搜索逻辑、用户、风险、备注" />
+            </label>
+          </div>
         </section>
       </aside>
 
       <main class="content">
-        <section class="panel compact toolbar">
+        <section class="panel compact toolbar workspace-toolbar">
           <div>
             <p class="eyebrow">当前批次</p>
             <h2 id="batch-title">加载中...</h2>
             <p class="muted" id="batch-meta"></p>
           </div>
-          <div class="toolbar-actions">
+          <div class="toolbar-actions wrap">
             <button id="sort-total" class="button active">按总分</button>
             <button id="sort-priority" class="button">按优先级</button>
+            <button id="sort-grade" class="button">按推荐等级</button>
+            <button id="view-cards" class="button active">卡片视图</button>
+            <button id="view-table" class="button">表格视图</button>
           </div>
         </section>
 
         <section class="panel chart-panel">
           <div class="section-header">
-            <h2>状态概览</h2>
+            <h2>批次总览与决策进度</h2>
             <span id="list-count" class="muted"></span>
           </div>
           <div id="summary-metrics" class="metrics"></div>
+          <div id="grade-metrics" class="metrics"></div>
+          <div id="quick-metrics" class="metrics"></div>
           <div id="decision-metrics" class="metrics"></div>
-          <div id="score-bars" class="bars"></div>
+          <div class="distribution-grid">
+            <div>
+              <h3>逻辑分布</h3>
+              <div id="logic-distribution" class="bars"></div>
+            </div>
+            <div>
+              <h3>类型分布</h3>
+              <div id="type-distribution" class="bars"></div>
+            </div>
+            <div>
+              <h3>得分分布</h3>
+              <div id="score-bars" class="bars"></div>
+            </div>
+          </div>
         </section>
 
         <section class="panel list-panel">
           <div class="section-header">
-            <h2>选题列表</h2>
-            <span class="muted">点击查看详情</span>
+            <div>
+              <h2>结果工作区</h2>
+              <p class="muted small">先看逻辑和类型，再用“要 / 再看 / 不要”快速收敛。</p>
+            </div>
+            <span id="active-strategy" class="muted small"></span>
           </div>
-          <div id="idea-list" class="idea-list"></div>
+          <div id="cards-view" class="view-pane">
+            <div id="idea-list" class="idea-list"></div>
+          </div>
+          <div id="table-view" class="view-pane hidden">
+            <div class="table-wrap">
+              <table class="idea-table">
+                <thead>
+                  <tr>
+                    <th data-sort="title">题目</th>
+                    <th data-sort="logic_relation">逻辑</th>
+                    <th data-sort="topic_type_primary">类型</th>
+                    <th data-sort="scores.total">总分</th>
+                    <th data-sort="priority_score">优先级</th>
+                    <th data-sort="recommendation_grade">推荐等级</th>
+                    <th>付费</th>
+                    <th>传播</th>
+                    <th>AI</th>
+                    <th data-sort="quickDecision">当前决策</th>
+                  </tr>
+                </thead>
+                <tbody id="idea-table-body"></tbody>
+              </table>
+            </div>
+          </div>
         </section>
       </main>
 
       <aside class="detail panel">
-        <p class="eyebrow">详情</p>
+        <p class="eyebrow">详情与沉淀</p>
         <div id="detail-content" class="detail-content"></div>
       </aside>
     </div>

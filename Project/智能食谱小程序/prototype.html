@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能食谱小程序 - 原型</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            width: 375px;
+            height: 667px;
+            margin: 20px auto;
+            background: #fff;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            overflow-y: auto;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* 欢迎页 */
+        .welcome-page {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .tagline {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .start-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 15px 60px;
+            font-size: 16px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+            margin-bottom: 10px;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .trust-badge {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        /* 用户画像采集 */
+        .profile-page {
+            background: #f5f5f5;
+        }
+
+        .header {
+            background: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .back-btn {
+            font-size: 20px;
+            cursor: pointer;
+            color: #667eea;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .step-indicator {
+            flex: 1;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .form-container {
+            padding: 20px;
+        }
+
+        .form-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .radio-item input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tag-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .tag-item input {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .tag-item.selected {
+            background: #e8f5e9;
+        }
+
+        .tag-item.selected input {
+            accent-color: #52c41a;
+        }
+
+        .sub-options {
+            margin-left: 30px;
+            margin-top: 8px;
+            display: none;
+            width: 100%;
+        }
+
+        .tag-item.selected .sub-options {
+            display: block;
+        }
+
+        .forbidden-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .forbidden-tag {
+            padding: 8px 16px;
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .forbidden-tag.selected {
+            background: #ff7875;
+            color: white;
+            border-color: #ff7875;
+        }
+
+        .next-btn {
+            width: 100%;
+            padding: 15px;
+            background: #52c41a;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .next-btn:active {
+            opacity: 0.8;
+        }
+
+        /* 首页 */
+        .home-page {
+            padding-bottom: 70px;
+            background: #f5f5f5;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: white;
+            padding: 10px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .nav-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            cursor: pointer;
+            color: #666;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .nav-tab.active {
+            color: #52c41a;
+            font-weight: bold;
+        }
+
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: #52c41a;
+            border-radius: 2px;
+        }
+
+        .date-header {
+            padding: 20px;
+            background: white;
+            margin-top: 10px;
+        }
+
+        .date-title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .meal-cards {
+            padding: 10px;
+        }
+
+        .meal-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .meal-card:active {
+            transform: scale(0.98);
+        }
+
+        .meal-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .meal-content {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .meal-calories {
+            font-size: 14px;
+            color: #52c41a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .expert-badge {
+            background: #faad14;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 10px;
+            margin-left: 8px;
+        }
+
+        .meal-arrow {
+            color: #999;
+        }
+
+        .total-calories {
+            background: white;
+            margin: 10px 20px;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .total-title {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .total-value {
+            font-size: 24px;
+            color: #52c41a;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        .total-range {
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* 底部导航 */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            border-top: 1px solid #eee;
+        }
+
+        .bottom-nav-item {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .bottom-nav-item.active {
+            color: #52c41a;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+        }
+
+        .nav-label {
+            font-size: 10px;
+        }
+
+        /* 食谱详情 */
+        .detail-page {
+            background: #f5f5f5;
+            padding-bottom: 80px;
+        }
+
+        .detail-header {
+            background: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .detail-title {
+            flex: 1;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .favorite-btn {
+            font-size: 20px;
+            cursor: pointer;
+            color: #ff7875;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .detail-content {
+            padding: 20px;
+        }
+
+        .recipe-name {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .recipe-badges {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+
+        .badge-expert {
+            background: #faad14;
+            color: white;
+        }
+
+        .badge-calories {
+            background: #52c41a;
+            color: white;
+        }
+
+        .detail-section {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        .ingredient-list,
+        .step-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .ingredient-list li,
+        .step-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 14px;
+        }
+
+        .ingredient-list li:last-child,
+        .step-list li:last-child {
+            border-bottom: none;
+        }
+
+        .nutrition-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .nutrition-table td {
+            padding: 8px 0;
+            font-size: 14px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .nutrition-table td:last-child {
+            text-align: right;
+            color: #52c41a;
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 15px 20px;
+            display: flex;
+            gap: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .btn-primary {
+            background: #52c41a;
+            color: white;
+        }
+
+        .references {
+            font-size: 12px;
+            color: #999;
+            padding: 20px;
+        }
+
+        /* 我的页面 */
+        .profile-summary {
+            background: white;
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+        }
+
+        .user-info {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .user-tag {
+            color: #52c41a;
+            font-weight: bold;
+        }
+
+        .menu-item {
+            background: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #f5f5f5;
+            cursor: pointer;
+        }
+
+        .menu-item:active {
+            background: #f8f8f8;
+        }
+
+        .menu-arrow {
+            color: #ccc;
+        }
+
+        .disclaimer {
+            background: #fff7e6;
+            padding: 15px 20px;
+            margin: 10px 20px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #faad14;
+            border: 1px solid #ffe58f;
+        }
+
+        /* 加载动画 */
+        .loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.95);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading.active {
+            display: flex;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #52c41a;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* 调试信息 */
+        .debug-info {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-info" id="debugInfo">等待点击...</div>
+
+    <div class="app-container">
+        <!-- 欢迎页 -->
+        <div id="welcome" class="page active welcome-page">
+            <div class="logo">🥗</div>
+            <div class="logo" style="font-size: 28px;">智能食谱</div>
+            <div class="tagline">根据你的健康需求<br>AI生成专属食谱</div>
+            <button class="start-btn" id="startBtn">开始使用</button>
+            <div class="trust-badge">科学食谱 · 营养师审核</div>
+        </div>
+
+        <!-- 用户画像采集 - 步骤1 -->
+        <div id="profile-step1" class="page profile-page">
+            <div class="header">
+                <div class="back-btn" id="backToWelcome">‹</div>
+                <div class="step-indicator">步骤 1/3</div>
+            </div>
+            <div class="form-container">
+                <div class="form-title">基础信息</div>
+                <div class="form-group">
+                    <div class="form-label">性别</div>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" name="gender" value="女" checked> 女
+                        </label>
+                        <label class="radio-item">
+                            <input type="radio" name="gender" value="男"> 男
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-label">年龄</div>
+                    <input type="number" class="form-input" value="28">
+                </div>
+                <div class="form-group">
+                    <div class="form-label">身高</div>
+                    <div class="form-row">
+                        <input type="number" class="form-input" value="165" placeholder="身高">
+                        <input type="text" class="form-input" value="cm" style="width: 60px;" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-label">体重</div>
+                    <div class="form-row">
+                        <input type="number" class="form-input" value="55" placeholder="体重">
+                        <input type="text" class="form-input" value="kg" style="width: 60px;" readonly>
+                    </div>
+                </div>
+                <button class="next-btn" id="toStep2">下一步</button>
+            </div>
+        </div>
+
+        <!-- 用户画像采集 - 步骤2 -->
+        <div id="profile-step2" class="page profile-page">
+            <div class="header">
+                <div class="back-btn" id="backToStep1">‹</div>
+                <div class="step-indicator">步骤 2/3</div>
+            </div>
+            <div class="form-container">
+                <div class="form-title">选择你的健康需求</div>
+                <div class="disclaimer">
+                    ⚠️ 本工具仅供参考，不能替代医生建议
+                </div>
+                <div class="tag-list">
+                    <div class="tag-item" id="tagPregnancy">
+                        <input type="radio" name="healthTag" value="pregnancy">
+                        <span>🤰 孕期女性</span>
+                        <div class="sub-options">
+                            <select class="form-input" style="margin-top: 5px;">
+                                <option>孕早期（0-12周）</option>
+                                <option>孕中期（13-27周）</option>
+                                <option>孕晚期（28周+）</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tag-item" id="tagDiabetes">
+                        <input type="radio" name="healthTag" value="diabetes">
+                        <span>💊 糖尿病</span>
+                        <div class="sub-options">
+                            <select class="form-input" style="margin-top: 5px;">
+                                <option>1型糖尿病</option>
+                                <option>2型糖尿病</option>
+                                <option>妊娠期糖尿病</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tag-item" id="tagFitness">
+                        <input type="radio" name="healthTag" value="fitness">
+                        <span>💪 健身</span>
+                        <div class="sub-options">
+                            <div class="radio-group">
+                                <label class="radio-item">
+                                    <input type="radio" name="fitnessGoal" value="lose"> 减脂
+                                </label>
+                                <label class="radio-item">
+                                    <input type="radio" name="fitnessGoal" value="gain"> 增肌
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tag-item" id="tagInsomnia">
+                        <input type="radio" name="healthTag" value="insomnia">
+                        <span>😴 失眠人群</span>
+                    </div>
+                </div>
+                <button class="next-btn" id="toStep3">下一步</button>
+            </div>
+        </div>
+
+        <!-- 用户画像采集 - 步骤3 -->
+        <div id="profile-step3" class="page profile-page">
+            <div class="header">
+                <div class="back-btn" id="backToStep2">‹</div>
+                <div class="step-indicator">步骤 3/3</div>
+            </div>
+            <div class="form-container">
+                <div class="form-title">饮食禁忌（可选）</div>
+                <div class="form-group">
+                    <div class="form-label">选择你不吃的食材：</div>
+                    <div class="forbidden-tags" id="forbiddenTags">
+                        <span class="forbidden-tag" data-tag="海鲜">🦐 海鲜</span>
+                        <span class="forbidden-tag" data-tag="牛肉">🥩 牛肉</span>
+                        <span class="forbidden-tag" data-tag="辛辣食物">🌶️ 辛辣食物</span>
+                        <span class="forbidden-tag" data-tag="乳制品">🥛 乳制品</span>
+                        <span class="forbidden-tag" data-tag="蛋类">🥚 蛋类</span>
+                        <span class="forbidden-tag" data-tag="羊肉">🐑 羊肉</span>
+                    </div>
+                    <div class="form-label" style="margin-top: 15px;">已选：<span id="selectedForbiddens">无</span></div>
+                </div>
+                <button class="next-btn" id="generateBtn">生成我的食谱</button>
+            </div>
+        </div>
+
+        <!-- 首页 - 今日推荐 -->
+        <div id="home" class="page home-page">
+            <div class="nav-tabs">
+                <div class="nav-tab" id="tabProfile">我的</div>
+                <div class="nav-tab active" id="tabHome">今日推荐</div>
+                <div class="nav-tab" id="tabLibrary">食谱库</div>
+            </div>
+            <div class="date-header">
+                <div class="date-title">今日 · 2026-03-06 星期四</div>
+            </div>
+            <div class="meal-cards">
+                <div class="meal-card" id="cardBreakfast">
+                    <div class="meal-title">早餐</div>
+                    <div class="meal-content">燕麦牛奶粥 + 水煮蛋</div>
+                    <div class="meal-calories">
+                        <span>热量: 320 kcal</span>
+                        <span class="meal-arrow">▶</span>
+                    </div>
+                </div>
+                <div class="meal-card" id="cardLunch">
+                    <div class="meal-title">午餐</div>
+                    <div class="meal-content">香煎鸡胸肉 + 西兰花 + 杂粮饭</div>
+                    <div class="meal-calories">
+                        <span>热量: 450 kcal <span class="expert-badge">专家推荐</span></span>
+                        <span class="meal-arrow">▶</span>
+                    </div>
+                </div>
+                <div class="meal-card" id="cardDinner">
+                    <div class="meal-title">晚餐</div>
+                    <div class="meal-content">蒸鳕鱼 + 蒜蓉青菜 + 紫薯</div>
+                    <div class="meal-calories">
+                        <span>热量: 380 kcal</span>
+                        <span class="meal-arrow">▶</span>
+                    </div>
+                </div>
+            </div>
+            <div class="total-calories">
+                <div class="total-title">今日总热量</div>
+                <div class="total-value">1150 kcal</div>
+                <div class="total-range">建议范围: 1100-1300 kcal</div>
+            </div>
+
+            <div class="bottom-nav">
+                <div class="bottom-nav-item" id="navProfile">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-label">我的</div>
+                </div>
+                <div class="bottom-nav-item active" id="navHome">
+                    <div class="nav-icon">🍽️</div>
+                    <div class="nav-label">今日</div>
+                </div>
+                <div class="bottom-nav-item" id="navLibrary">
+                    <div class="nav-icon">📚</div>
+                    <div class="nav-label">食谱库</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 食谱详情页 -->
+        <div id="detail" class="page detail-page">
+            <div class="detail-header">
+                <div class="back-btn" id="backToHome">‹</div>
+                <div class="detail-title" id="detailTitle">午餐详情</div>
+                <div class="favorite-btn">❤️</div>
+            </div>
+            <div class="detail-content">
+                <div class="recipe-name" id="recipeName">香煎鸡胸肉 + 西兰花 + 杂粮饭</div>
+                <div class="recipe-badges">
+                    <span class="badge badge-expert">专家推荐</span>
+                    <span class="badge badge-calories" id="badgeCalories">450 kcal</span>
+                </div>
+
+                <div class="detail-section">
+                    <div class="section-title">🛒 食材清单</div>
+                    <ul class="ingredient-list" id="ingredientList">
+                        <li>• 鸡胸肉 150g</li>
+                        <li>• 西兰花 200g</li>
+                        <li>• 杂粮饭 150g</li>
+                        <li>• 橄榄油 10ml</li>
+                        <li>• 生抽、盐 适量</li>
+                    </ul>
+                </div>
+
+                <div class="detail-section">
+                    <div class="section-title">📊 营养成分</div>
+                    <table class="nutrition-table">
+                        <tr>
+                            <td>热量</td>
+                            <td>450 kcal</td>
+                        </tr>
+                        <tr>
+                            <td>蛋白质</td>
+                            <td>35g</td>
+                        </tr>
+                        <tr>
+                            <td>碳水</td>
+                            <td>45g</td>
+                        </tr>
+                        <tr>
+                            <td>脂肪</td>
+                            <td>12g</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="detail-section">
+                    <div class="section-title">👨‍🍳 制作步骤</div>
+                    <ul class="step-list">
+                        <li>1. 鸡胸肉切块，用生抽、盐腌制15分钟</li>
+                        <li>2. 西兰花切小朵，焯水备用</li>
+                        <li>3. 热锅下橄榄油，煎鸡胸肉至金黄</li>
+                        <li>4. 加入西兰花翻炒均匀，出锅</li>
+                        <li>5. 搭配杂粮饭即可</li>
+                    </ul>
+                </div>
+
+                <div class="references">
+                    📚 参考文献：<br>
+                    • 中国居民膳食指南（2022）<br>
+                    • 糖尿病膳食指南（2021）
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="action-btn btn-secondary" id="regenerateBtn">换一个</button>
+                <button class="action-btn btn-primary">我要做这道菜</button>
+            </div>
+        </div>
+
+        <!-- 我的页面 -->
+        <div id="profile" class="page home-page">
+            <div class="nav-tabs">
+                <div class="nav-tab active" id="tabProfile2">我的</div>
+                <div class="nav-tab" id="tabHome2">今日推荐</div>
+                <div class="nav-tab" id="tabLibrary2">食谱库</div>
+            </div>
+
+            <div class="profile-summary">
+                <div class="avatar">👩</div>
+                <div class="user-info">28岁 · 女性</div>
+                <div class="user-info user-tag">孕期（孕中期）</div>
+                <div class="user-info">目标: 体重控制</div>
+            </div>
+
+            <div class="menu-item" id="editProfile">
+                <span>✏️ 编辑我的画像</span>
+                <span class="menu-arrow">›</span>
+            </div>
+            <div class="menu-item">
+                <span>❤️ 我的收藏</span>
+                <span class="menu-arrow">›</span>
+                <div style="font-size: 12px; color: #999;">12 道菜</div>
+            </div>
+            <div class="menu-item">
+                <span>⚙️ 设置</span>
+                <span class="menu-arrow">›</span>
+            </div>
+            <div class="menu-item">
+                <span>ℹ️ 关于我们</span>
+                <span class="menu-arrow">›</span>
+            </div>
+
+            <div class="bottom-nav">
+                <div class="bottom-nav-item active" id="navProfile2">
+                    <div class="nav-icon">👤</div>
+                    <div class="nav-label">我的</div>
+                </div>
+                <div class="bottom-nav-item" id="navHome2">
+                    <div class="nav-icon">🍽️</div>
+                    <div class="nav-label">今日</div>
+                </div>
+                <div class="bottom-nav-item" id="navLibrary2">
+                    <div class="nav-icon">📚</div>
+                    <div class="nav-label">食谱库</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 加载动画 -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <div class="loading-text">AI正在思考中...</div>
+            <div style="font-size: 12px; color: #999; margin-top: 10px;">根据你的需求生成专属食谱</div>
+        </div>
+    </div>
+
+    <script>
+        // 调试函数
+        function updateDebug(message) {
+            var debugInfo = document.getElementById('debugInfo');
+            if (debugInfo) {
+                debugInfo.textContent = message;
+            }
+            console.log(message);
+        }
+
+        // 页面切换函数
+        function showPage(pageId) {
+            updateDebug('切换到页面: ' + pageId);
+            var pages = document.querySelectorAll('.page');
+            for (var i = 0; i < pages.length; i++) {
+                pages[i].classList.remove('active');
+            }
+
+            var targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                updateDebug('页面切换成功: ' + pageId);
+            } else {
+                updateDebug('错误: 找不到页面 ' + pageId);
+            }
+        }
+
+        // 健康标签选择
+        function selectTag(element) {
+            updateDebug('选择标签');
+            var tags = document.querySelectorAll('.tag-item');
+            for (var i = 0; i < tags.length; i++) {
+                tags[i].classList.remove('selected');
+                var radio = tags[i].querySelector('input');
+                if (radio) {
+                    radio.checked = false;
+                }
+            }
+
+            element.classList.add('selected');
+            var radio = element.querySelector('input');
+            if (radio) {
+                radio.checked = true;
+            }
+        }
+
+        // 禁忌标签选择
+        var forbiddens = [];
+
+        function toggleForbidden(element) {
+            var tag = element.getAttribute('data-tag');
+            var index = forbiddens.indexOf(tag);
+
+            if (index > -1) {
+                forbiddens.splice(index, 1);
+                element.classList.remove('selected');
+            } else {
+                forbiddens.push(tag);
+                element.classList.add('selected');
+            }
+
+            var display = document.getElementById('selectedForbiddens');
+            if (display) {
+                display.textContent = forbiddens.length > 0 ? forbiddens.join('、') : '无';
+            }
+        }
+
+        // 显示食谱详情
+        function showDetail(mealType) {
+            updateDebug('显示食谱详情: ' + mealType);
+            var titles = {
+                'breakfast': '早餐详情',
+                'lunch': '午餐详情',
+                'dinner': '晚餐详情'
+            };
+
+            var calories = {
+                'breakfast': '320 kcal',
+                'lunch': '450 kcal',
+                'dinner': '380 kcal'
+            };
+
+            var detailTitle = document.getElementById('detailTitle');
+            var badgeCalories = document.getElementById('badgeCalories');
+            var recipeName = document.getElementById('recipeName');
+
+            if (detailTitle) detailTitle.textContent = titles[mealType];
+            if (badgeCalories) badgeCalories.textContent = calories[mealType];
+            if (recipeName) {
+                var cardId = 'card' + mealType.charAt(0).toUpperCase() + mealType.slice(1);
+                var card = document.getElementById(cardId);
+                if (card) {
+                    recipeName.textContent = card.querySelector('.meal-content').textContent;
+                }
+            }
+
+            showPage('detail');
+        }
+
+        // 生成食谱
+        function generateRecipes() {
+            updateDebug('开始生成食谱');
+            var loading = document.getElementById('loading');
+            if (loading) {
+                loading.classList.add('active');
+            }
+
+            setTimeout(function () {
+                if (loading) {
+                    loading.classList.remove('active');
+                }
+                showPage('home');
+                updateDebug('生成完成，回到首页');
+            }, 2000);
+        }
+
+        // 重新生成
+        function regenerateRecipe() {
+            updateDebug('重新生成食谱');
+            var loading = document.getElementById('loading');
+            if (loading) {
+                loading.classList.add('active');
+            }
+
+            setTimeout(function () {
+                if (loading) {
+                    loading.classList.remove('active');
+                }
+                updateDebug('重新生成完成');
+            }, 1000);
+        }
+
+        // 底部导航切换
+        function switchNavTab(tabId) {
+            updateDebug('切换导航标签: ' + tabId);
+            var tabs = document.querySelectorAll('.nav-tab');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+
+            var navItems = document.querySelectorAll('.bottom-nav-item');
+            for (var i = 0; i < navItems.length; i++) {
+                navItems[i].classList.remove('active');
+            }
+
+            if (tabId === 'profile') {
+                document.getElementById('tabProfile').classList.add('active');
+                document.getElementById('tabProfile2').classList.add('active');
+                document.getElementById('navProfile').classList.add('active');
+                document.getElementById('navProfile2').classList.add('active');
+                showPage('profile');
+            } else if (tabId === 'home') {
+                document.getElementById('tabHome').classList.add('active');
+                document.getElementById('tabHome2').classList.add('active');
+                document.getElementById('navHome').classList.add('active');
+                document.getElementById('navHome2').classList.add('active');
+                showPage('home');
+            } else if (tabId === 'library') {
+                document.getElementById('tabLibrary').classList.add('active');
+                document.getElementById('tabLibrary2').classList.add('active');
+                document.getElementById('navLibrary').classList.add('active');
+                document.getElementById('navLibrary2').classList.add('active');
+                showPage('home');
+            }
+        }
+
+        // DOM加载完成后绑定事件
+        function bindEvents() {
+            updateDebug('开始绑定事件...');
+
+            // 欢迎页按钮
+            var startBtn = document.getElementById('startBtn');
+            if (startBtn) {
+                startBtn.addEventListener('click', function () {
+                    updateDebug('点击开始使用按钮');
+                    showPage('profile-step1');
+                });
+                updateDebug('开始使用按钮绑定成功');
+            } else {
+                updateDebug('错误: 找不到开始使用按钮');
+            }
+
+            // 第一步导航
+            var backToWelcome = document.getElementById('backToWelcome');
+            var toStep2 = document.getElementById('toStep2');
+            if (backToWelcome) {
+                backToWelcome.addEventListener('click', function () {
+                    showPage('welcome');
+                });
+            }
+            if (toStep2) {
+                toStep2.addEventListener('click', function () {
+                    showPage('profile-step2');
+                });
+            }
+
+            // 第二步导航
+            var backToStep1 = document.getElementById('backToStep1');
+            var toStep3 = document.getElementById('toStep3');
+            if (backToStep1) {
+                backToStep1.addEventListener('click', function () {
+                    showPage('profile-step1');
+                });
+            }
+            if (toStep3) {
+                toStep3.addEventListener('click', function () {
+                    showPage('profile-step3');
+                });
+            }
+
+            // 第三步导航
+            var backToStep2Btn = document.getElementById('backToStep2');
+            var generateBtn = document.getElementById('generateBtn');
+            if (backToStep2Btn) {
+                backToStep2Btn.addEventListener('click', function () {
+                    showPage('profile-step2');
+                });
+            }
+            if (generateBtn) {
+                generateBtn.addEventListener('click', function () {
+                    generateRecipes();
+                });
+            }
+
+            // 健康标签选择
+            var tagPregnancy = document.getElementById('tagPregnancy');
+            var tagDiabetes = document.getElementById('tagDiabetes');
+            var tagFitness = document.getElementById('tagFitness');
+            var tagInsomnia = document.getElementById('tagInsomnia');
+
+            if (tagPregnancy) tagPregnancy.addEventListener('click', function () {
+                selectTag(tagPregnancy);
+            });
+            if (tagDiabetes) tagDiabetes.addEventListener('click', function () {
+                selectTag(tagDiabetes);
+            });
+            if (tagFitness) tagFitness.addEventListener('click', function () {
+                selectTag(tagFitness);
+            });
+            if (tagInsomnia) tagInsomnia.addEventListener('click', function () {
+                selectTag(tagInsomnia);
+            });
+
+            // 禁忌标签选择
+            var forbiddenTags = document.querySelectorAll('.forbidden-tag');
+            for (var i = 0; i < forbiddenTags.length; i++) {
+                forbiddenTags[i].addEventListener('click', function () {
+                    toggleForbidden(this);
+                });
+            }
+
+            // 首页卡片点击
+            var cardBreakfast = document.getElementById('cardBreakfast');
+            var cardLunch = document.getElementById('cardLunch');
+            var cardDinner = document.getElementById('cardDinner');
+
+            if (cardBreakfast) cardBreakfast.addEventListener('click', function () {
+                showDetail('breakfast');
+            });
+            if (cardLunch) cardLunch.addEventListener('click', function () {
+                showDetail('lunch');
+            });
+            if (cardDinner) cardDinner.addEventListener('click', function () {
+                showDetail('dinner');
+            });
+
+            // 详情页返回
+            var backToHome = document.getElementById('backToHome');
+            var regenerateBtn = document.getElementById('regenerateBtn');
+            if (backToHome) backToHome.addEventListener('click', function () {
+                showPage('home');
+            });
+            if (regenerateBtn) regenerateBtn.addEventListener('click', function () {
+                regenerateRecipe();
+            });
+
+            // 首页底部导航
+            var navProfile = document.getElementById('navProfile');
+            var navHome = document.getElementById('navHome');
+            var navLibrary = document.getElementById('navLibrary');
+
+            if (navProfile) navProfile.addEventListener('click', function () {
+                switchNavTab('profile');
+            });
+            if (navHome) navHome.addEventListener('click', function () {
+                switchNavTab('home');
+            });
+            if (navLibrary) navLibrary.addEventListener('click', function () {
+                switchNavTab('library');
+            });
+
+            // 我的页面底部导航
+            var navProfile2 = document.getElementById('navProfile2');
+            var navHome2 = document.getElementById('navHome2');
+            var navLibrary2 = document.getElementById('navLibrary2');
+
+            if (navProfile2) navProfile2.addEventListener('click', function () {
+                switchNavTab('profile');
+            });
+            if (navHome2) navHome2.addEventListener('click', function () {
+                switchNavTab('home');
+            });
+            if (navLibrary2) navLibrary2.addEventListener('click', function () {
+                switchNavTab('library');
+            });
+
+            // 顶部导航标签
+            var tabProfile = document.getElementById('tabProfile');
+            var tabHome = document.getElementById('tabHome');
+            var tabLibrary = document.getElementById('tabLibrary');
+            var tabProfile2 = document.getElementById('tabProfile2');
+            var tabHome2 = document.getElementById('tabHome2');
+            var tabLibrary2 = document.getElementById('tabLibrary2');
+
+            if (tabProfile) tabProfile.addEventListener('click', function () {
+                switchNavTab('profile');
+            });
+            if (tabHome) tabHome.addEventListener('click', function () {
+                switchNavTab('home');
+            });
+            if (tabLibrary) tabLibrary.addEventListener('click', function () {
+                switchNavTab('library');
+            });
+            if (tabProfile2) tabProfile2.addEventListener('click', function () {
+                switchNavTab('profile');
+            });
+            if (tabHome2) tabHome2.addEventListener('click', function () {
+                switchNavTab('home');
+            });
+            if (tabLibrary2) tabLibrary2.addEventListener('click', function () {
+                switchNavTab('library');
+            });
+
+            // 我的页面编辑按钮
+            var editProfile = document.getElementById('editProfile');
+            if (editProfile) editProfile.addEventListener('click', function () {
+                showPage('profile-step1');
+            });
+
+            updateDebug('所有事件绑定完成');
+        }
+
+        // 页面加载时绑定事件
+        document.addEventListener('DOMContentLoaded', function () {
+            updateDebug('DOM加载完成');
+            bindEvents();
+        });
+
+        // 备用：如果DOMContentLoaded没有触发
+        window.addEventListener('load', function () {
+            updateDebug('窗口加载完成');
+            bindEvents();
+        });
+
+        // 确保页面加载完成
+        window.onload = function () {
+            updateDebug('页面加载完成');
+            bindEvents();
+        };
+    </script>
+</body>
+</html>

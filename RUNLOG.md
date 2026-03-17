@@ -49,3 +49,8 @@
   action: 绑定 GitHub 远程仓库并推送 main 分支
   result: 已成功推送至 `https://github.com/tangculv/xiaochengxu-topic-generator.git`，Render 现可直接连接该仓库部署完整版
   next_intent: 给用户最简 Render 部署步骤，完成线上可访问版本收尾
+
+- timestamp: 2026-03-17 17:35 CST
+  action: 实施选题决策工作台 V2 前端重构
+  result: 已完成三栏工作台、逻辑/类型筛选 chips、卡片/表格双视图、两层决策模型、推荐等级与详情沉淀区；本地语法检查与接口回归通过
+  next_intent: 提交改动并推送到 GitHub，让 Render 自动部署新版线上界面
