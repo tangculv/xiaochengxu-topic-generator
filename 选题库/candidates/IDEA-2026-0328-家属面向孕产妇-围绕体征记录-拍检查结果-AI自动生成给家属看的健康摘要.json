@@ -1,0 +1,79 @@
+{
+  "id": "IDEA-2026-0328",
+  "batch_id": "BATCH-100",
+  "created": "2026-03-17",
+  "status": "candidate",
+  "dedupe_key": "R-CARE-07|A-DISTRIBUTE-RESULT|D-HEALTH|体征",
+  "relation": {
+    "id": "R-CARE-07",
+    "from": "家属",
+    "to": "孕产妇",
+    "type": "care"
+  },
+  "action": {
+    "id": "A-DISTRIBUTE-RESULT",
+    "name": "发结果"
+  },
+  "domain": {
+    "id": "D-HEALTH",
+    "name": "健康",
+    "sub": "体征"
+  },
+  "ai": {
+    "level": "L2",
+    "level_name": "替代技能工作",
+    "capability": "AI-GENERATE",
+    "what_it_does": "围绕体征记录，拍检查结果，AI自动生成给家属看的健康摘要",
+    "what_it_replaces": "替代技能工作"
+  },
+  "one_liner": "家属面向孕产妇：围绕体征记录，拍检查结果，AI自动生成给家属看的健康摘要",
+  "user_action": "上传图片/记录 → AI分析 → 查看结果",
+  "trigger": "拿到检查结果后",
+  "frequency": "每月 1 次",
+  "user": {
+    "primary": "家属、社区管理者、健康管理人员",
+    "secondary": "被照护者本人",
+    "population": "1000万"
+  },
+  "payment": {
+    "who_pays": "家属或组织者",
+    "why": "把复杂健康数据转化为可执行行动",
+    "price": "19.9元/月",
+    "free_tier": "基础摘要免费",
+    "vip_tier": "对比趋势 + 复诊提醒"
+  },
+  "spread": {
+    "mechanism": "family_group",
+    "description": "群内协作天然传播，可形成一人带多人",
+    "viral_action": "生成结果卡片或周报后分享",
+    "one_brings_many": "群内协作天然传播，可形成一人带多人"
+  },
+  "scores": {
+    "solo_feasible": 9,
+    "ai_breakthrough": 12,
+    "high_frequency": 10,
+    "clear_user_payment": 15,
+    "specific_executable": 9,
+    "large_market": 10,
+    "real_pain": 15,
+    "human_drive": 15,
+    "total": 90
+  },
+  "priority_score": 86.0,
+  "competition": {
+    "existing": "医院原始报告、人工解读",
+    "gap": "缺少面向家庭场景的持续健康摘要产品",
+    "moat": "长期健康事件与解释记录"
+  },
+  "risks": [
+    "对敏感结果需谨慎表达",
+    "需要稳定 OCR"
+  ],
+  "page_types": [
+    "dashboard",
+    "dashboard"
+  ],
+  "notes": "家庭决策链长，传播性好",
+  "rejection_reasons": [],
+  "template_id": "care-report-体征"
+}

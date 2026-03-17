@@ -1,0 +1,79 @@
+{
+  "id": "IDEA-2026-0402",
+  "batch_id": "BATCH-100",
+  "created": "2026-03-17",
+  "status": "candidate",
+  "dedupe_key": "R-AUTH-03|A-DISTRIBUTE-RESULT|D-SKILL|乐器",
+  "relation": {
+    "id": "R-AUTH-03",
+    "from": "培训班老师",
+    "to": "学员家长",
+    "type": "authority"
+  },
+  "action": {
+    "id": "A-DISTRIBUTE-RESULT",
+    "name": "发结果"
+  },
+  "domain": {
+    "id": "D-SKILL",
+    "name": "技能",
+    "sub": "乐器"
+  },
+  "ai": {
+    "level": "L2",
+    "level_name": "替代技能工作",
+    "capability": "AI-GENERATE",
+    "what_it_does": "AI生成学员进步报告并自动发给家长",
+    "what_it_replaces": "替代技能工作"
+  },
+  "one_liner": "培训班老师面向学员家长：AI生成学员进步报告并自动发给家长",
+  "user_action": "上传图片/记录 → AI分析 → 查看结果",
+  "trigger": "每周课程后",
+  "frequency": "每周 1-2 次",
+  "user": {
+    "primary": "老师、机构、教练",
+    "secondary": "学员家长",
+    "population": "5000万"
+  },
+  "payment": {
+    "who_pays": "老师或机构",
+    "why": "提升服务感知与续费率",
+    "price": "39.0元/月",
+    "free_tier": "5 个学员内免费",
+    "vip_tier": "多班级管理 + 家长分发 + 续费提醒"
+  },
+  "spread": {
+    "mechanism": "class_group",
+    "description": "群内协作天然传播，可形成一人带多人",
+    "viral_action": "生成结果卡片或周报后分享",
+    "one_brings_many": "群内协作天然传播，可形成一人带多人"
+  },
+  "scores": {
+    "solo_feasible": 9,
+    "ai_breakthrough": 12,
+    "high_frequency": 8,
+    "clear_user_payment": 15,
+    "specific_executable": 9,
+    "large_market": 10,
+    "real_pain": 12,
+    "human_drive": 15,
+    "total": 89
+  },
+  "priority_score": 79.6,
+  "competition": {
+    "existing": "表单+人工总结",
+    "gap": "没有低成本、可批量生成个性化报告的小程序",
+    "moat": "老师评价标准与学员成长档案沉淀"
+  },
+  "risks": [
+    "需绑定具体评估数据",
+    "老师付费教育成本"
+  ],
+  "page_types": [
+    "dashboard",
+    "dashboard"
+  ],
+  "notes": "老师端付费明确，报告天然传播",
+  "rejection_reasons": [],
+  "template_id": "skill-report"
+}

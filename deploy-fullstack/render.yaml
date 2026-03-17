@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: topic-generator-fullstack
+    runtime: node
+    plan: free
+    rootDir: .
+    buildCommand: |
+      python3 --version
+      node --version
+    startCommand: node deploy-fullstack/server.js
+    envVars:
+      - key: PORT
+        value: 10000

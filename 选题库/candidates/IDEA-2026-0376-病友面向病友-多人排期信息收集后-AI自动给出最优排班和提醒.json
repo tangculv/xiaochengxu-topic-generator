@@ -1,0 +1,78 @@
+{
+  "id": "IDEA-2026-0376",
+  "batch_id": "BATCH-20260317-073649",
+  "created": "2026-03-17",
+  "status": "candidate",
+  "dedupe_key": "R-MUT-03|A-COORDINATE-SCHEDULE|D-TIME|排班",
+  "relation": {
+    "id": "R-MUT-03",
+    "from": "病友",
+    "to": "病友",
+    "type": "mutual"
+  },
+  "action": {
+    "id": "A-COORDINATE-SCHEDULE",
+    "name": "排期协调"
+  },
+  "domain": {
+    "id": "D-TIME",
+    "name": "时间",
+    "sub": "排班"
+  },
+  "ai": {
+    "level": "L2",
+    "level_name": "替代技能工作",
+    "capability": "AI-GENERATE",
+    "what_it_does": "多人排期信息收集后，AI自动给出最优排班和提醒",
+    "what_it_replaces": "替代技能工作"
+  },
+  "one_liner": "病友面向病友：多人排期信息收集后，AI自动给出最优排班和提醒",
+  "user_action": "上传图片/记录 → AI分析 → 查看结果",
+  "trigger": "每次组织活动或分工前",
+  "frequency": "每周 1 次",
+  "user": {
+    "primary": "家属协作人、班委、社区干部、老师",
+    "secondary": "参与成员",
+    "population": "4亿"
+  },
+  "payment": {
+    "who_pays": "组织者",
+    "why": "减少沟通和反复确认成本",
+    "price": "19.9元/月",
+    "free_tier": "基础排期免费",
+    "vip_tier": "智能提醒 + 历史排期建议"
+  },
+  "spread": {
+    "mechanism": "interest_group",
+    "description": "结果卡片可分享带来传播",
+    "viral_action": "生成结果卡片或周报后分享",
+    "one_brings_many": "结果卡片可分享带来传播"
+  },
+  "scores": {
+    "solo_feasible": 9,
+    "ai_breakthrough": 12,
+    "high_frequency": 8,
+    "clear_user_payment": 10,
+    "specific_executable": 7,
+    "large_market": 10,
+    "real_pain": 8,
+    "human_drive": 10,
+    "total": 73
+  },
+  "priority_score": 64.2,
+  "competition": {
+    "existing": "接龙表单、群内投票",
+    "gap": "缺少适合微信群场景的排期协调助手",
+    "moat": "历史协作模式数据"
+  },
+  "risks": [
+    "AI 差异需依赖历史数据"
+  ],
+  "page_types": [
+    "dashboard",
+    "dashboard"
+  ],
+  "notes": "天然社群传播，但付费链路更弱",
+  "rejection_reasons": [],
+  "template_id": "schedule-helper"
+}

@@ -1,0 +1,79 @@
+{
+  "id": "IDEA-2026-0678",
+  "batch_id": "BATCH-100",
+  "created": "2026-03-17",
+  "status": "candidate",
+  "dedupe_key": "R-CONT-01|A-TRACK-FINANCE|D-MONEY|工资",
+  "relation": {
+    "id": "R-CONT-01",
+    "from": "小时工/兼职",
+    "to": "自我利益保护",
+    "type": "contract"
+  },
+  "action": {
+    "id": "A-TRACK-FINANCE",
+    "name": "追踪财务"
+  },
+  "domain": {
+    "id": "D-MONEY",
+    "name": "金钱",
+    "sub": "工资"
+  },
+  "ai": {
+    "level": "L2",
+    "level_name": "替代技能工作",
+    "capability": "AI-GENERATE",
+    "what_it_does": "围绕工资管理，记录工时与收入，AI自动核算应得工资并生成追款凭证",
+    "what_it_replaces": "替代技能工作"
+  },
+  "one_liner": "小时工/兼职面向自我利益保护：围绕工资管理，记录工时与收入，AI自动核算应得工资并生成追款凭证",
+  "user_action": "上传图片/记录 → AI分析 → 查看结果",
+  "trigger": "每次上下班后",
+  "frequency": "每天 1-2 次",
+  "user": {
+    "primary": "小时工、兼职、灵活就业者",
+    "secondary": "工友群",
+    "population": "2亿"
+  },
+  "payment": {
+    "who_pays": "劳动者本人",
+    "why": "避免被少算工时，提高讨薪成功率",
+    "price": "39.0元/月",
+    "free_tier": "基础记账免费",
+    "vip_tier": "凭证导出 + 法律提醒 + 月结报告"
+  },
+  "spread": {
+    "mechanism": "peer_group",
+    "description": "家庭群/病友群口碑传播",
+    "viral_action": "生成结果卡片或周报后分享",
+    "one_brings_many": "家庭群/病友群口碑传播"
+  },
+  "scores": {
+    "solo_feasible": 9,
+    "ai_breakthrough": 12,
+    "high_frequency": 10,
+    "clear_user_payment": 12,
+    "specific_executable": 9,
+    "large_market": 10,
+    "real_pain": 12,
+    "human_drive": 10,
+    "total": 83
+  },
+  "priority_score": 72.2,
+  "competition": {
+    "existing": "记工本等工具",
+    "gap": "没有 AI 帮你解释异常、组织证据、生成对账单",
+    "moat": "工时数据 + 证据链沉淀"
+  },
+  "risks": [
+    "法律表述需谨慎",
+    "需要简单到一线工友会用"
+  ],
+  "page_types": [
+    "record-history",
+    "dashboard"
+  ],
+  "notes": "真实痛点强，已有验证模型",
+  "rejection_reasons": [],
+  "template_id": "finance-proof-工资"
+}

@@ -1,0 +1,79 @@
+{
+  "id": "IDEA-2026-0592",
+  "batch_id": "BATCH-100",
+  "created": "2026-03-17",
+  "status": "candidate",
+  "dedupe_key": "R-SELF-01|A-EVALUATE-CORRECTNESS|D-STUDY|知识点",
+  "relation": {
+    "id": "R-SELF-01",
+    "from": "自己",
+    "to": "体重与饮食管理",
+    "type": "self"
+  },
+  "action": {
+    "id": "A-EVALUATE-CORRECTNESS",
+    "name": "判对错"
+  },
+  "domain": {
+    "id": "D-STUDY",
+    "name": "学业",
+    "sub": "知识点"
+  },
+  "ai": {
+    "level": "L2",
+    "level_name": "替代技能工作",
+    "capability": "AI-EVALUATE",
+    "what_it_does": "围绕知识点场景，拍作业，AI逐题批改并生成同类巩固题",
+    "what_it_replaces": "替代技能工作"
+  },
+  "one_liner": "自己面向体重与饮食管理：围绕知识点场景，拍作业，AI逐题批改并生成同类巩固题",
+  "user_action": "上传图片/记录 → AI分析 → 查看结果",
+  "trigger": "完成练习后",
+  "frequency": "每天 1-2 次",
+  "user": {
+    "primary": "学生家长、自学者",
+    "secondary": "课后托管老师",
+    "population": "3亿"
+  },
+  "payment": {
+    "who_pays": "家长或学生本人",
+    "why": "节省辅导时间，提高练习反馈密度",
+    "price": "19.9元/月",
+    "free_tier": "每日 1 页免费",
+    "vip_tier": "无限批改 + 错题本 + 周报"
+  },
+  "spread": {
+    "mechanism": "self",
+    "description": "个人使用为主，可通过成果分享传播",
+    "viral_action": "生成结果卡片或周报后分享",
+    "one_brings_many": "个人使用为主，可通过成果分享传播"
+  },
+  "scores": {
+    "solo_feasible": 9,
+    "ai_breakthrough": 12,
+    "high_frequency": 10,
+    "clear_user_payment": 10,
+    "specific_executable": 9,
+    "large_market": 10,
+    "real_pain": 8,
+    "human_drive": 10,
+    "total": 76
+  },
+  "priority_score": 60.4,
+  "competition": {
+    "existing": "作业帮、学而思等",
+    "gap": "更聚焦个体知识点闭环和家长陪伴场景",
+    "moat": "长期错题轨迹与知识点画像"
+  },
+  "risks": [
+    "手写识别稳定性",
+    "与成熟竞品竞争激烈"
+  ],
+  "page_types": [
+    "form-to-result",
+    "dashboard"
+  ],
+  "notes": "自律型需求大，但传播性较弱",
+  "rejection_reasons": [],
+  "template_id": "study-homework-知识点"
+}

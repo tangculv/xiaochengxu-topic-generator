@@ -1,0 +1,80 @@
+{
+  "id": "IDEA-2026-0219",
+  "batch_id": "BATCH-100",
+  "created": "2026-03-17",
+  "status": "rejected",
+  "dedupe_key": "R-CARE-05|A-DISTRIBUTE-RESULT|D-STUDY|复盘",
+  "relation": {
+    "id": "R-CARE-05",
+    "from": "家属",
+    "to": "慢病患者",
+    "type": "care"
+  },
+  "action": {
+    "id": "A-DISTRIBUTE-RESULT",
+    "name": "发结果"
+  },
+  "domain": {
+    "id": "D-STUDY",
+    "name": "学业",
+    "sub": "复盘"
+  },
+  "ai": {
+    "level": "L2",
+    "level_name": "替代技能工作",
+    "capability": "AI-GENERATE",
+    "what_it_does": "AI根据错题与进度生成下一周学习计划",
+    "what_it_replaces": "替代技能工作"
+  },
+  "one_liner": "家属面向慢病患者：AI根据错题与进度生成下一周学习计划",
+  "user_action": "上传图片/记录 → AI分析 → 查看结果",
+  "trigger": "每周复盘时",
+  "frequency": "每周 1 次",
+  "user": {
+    "primary": "家长、学生、老师",
+    "secondary": "托管机构",
+    "population": "4亿"
+  },
+  "payment": {
+    "who_pays": "家长或机构",
+    "why": "减少计划制定成本，提高执行率",
+    "price": "19.9元/月",
+    "free_tier": "基础计划免费",
+    "vip_tier": "个性化计划 + 执行追踪"
+  },
+  "spread": {
+    "mechanism": "family_group",
+    "description": "家庭群/病友群口碑传播",
+    "viral_action": "生成结果卡片或周报后分享",
+    "one_brings_many": "家庭群/病友群口碑传播"
+  },
+  "scores": {
+    "solo_feasible": 9,
+    "ai_breakthrough": 12,
+    "high_frequency": 10,
+    "clear_user_payment": 15,
+    "specific_executable": 9,
+    "large_market": 10,
+    "real_pain": 15,
+    "human_drive": 15,
+    "total": 95
+  },
+  "priority_score": 83.0,
+  "competition": {
+    "existing": "手工计划表",
+    "gap": "没有基于错题和节奏自动出周计划的轻量工具",
+    "moat": "学习路径数据累积"
+  },
+  "risks": [
+    "计划模板过于泛化会降低价值"
+  ],
+  "page_types": [
+    "dashboard",
+    "dashboard"
+  ],
+  "notes": "照护责任重，付费动机强",
+  "rejection_reasons": [
+    "deduped_by_higher_ai_variant"
+  ],
+  "template_id": "study-plan"
+}

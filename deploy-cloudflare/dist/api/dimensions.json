@@ -1,0 +1,284 @@
+[
+  {
+    "id": "R-CARE-01",
+    "type": "care",
+    "from": "成年子女",
+    "to": "老年父母",
+    "obligation_strength": 5,
+    "group_size": "3-8",
+    "frequency": "daily",
+    "spread_mechanism": "family_group",
+    "spread_score": "word_of_mouth",
+    "population_estimate": 300000000,
+    "population_label": "3亿",
+    "tooling_level": "very_low",
+    "obligations": [
+      "饮食照护",
+      "用药管理",
+      "体检理解",
+      "健康监测"
+    ],
+    "notes": "工具化程度极低，家庭照护责任强"
+  },
+  {
+    "id": "R-CARE-03",
+    "type": "care",
+    "from": "父母",
+    "to": "学龄儿童",
+    "obligation_strength": 5,
+    "group_size": "1-2",
+    "frequency": "daily",
+    "spread_mechanism": "family_group",
+    "spread_score": "must_use_in_group",
+    "population_estimate": 100000000,
+    "population_label": "1亿",
+    "tooling_level": "medium",
+    "obligations": [
+      "监督作业",
+      "分析错题",
+      "追踪学习进度"
+    ],
+    "notes": "家长高频刚需，群内传播强"
+  },
+  {
+    "id": "R-CARE-05",
+    "type": "care",
+    "from": "家属",
+    "to": "慢病患者",
+    "obligation_strength": 5,
+    "group_size": "3-8",
+    "frequency": "daily",
+    "spread_mechanism": "family_group",
+    "spread_score": "word_of_mouth",
+    "population_estimate": 400000000,
+    "population_label": "4亿",
+    "tooling_level": "very_low",
+    "obligations": [
+      "监督用药",
+      "饮食禁忌",
+      "监测体征",
+      "理解医嘱"
+    ],
+    "notes": "照护责任重，付费动机强"
+  },
+  {
+    "id": "R-CARE-06",
+    "type": "care",
+    "from": "家属",
+    "to": "术后康复患者",
+    "obligation_strength": 5,
+    "group_size": "3-8",
+    "frequency": "daily",
+    "spread_mechanism": "family_group",
+    "spread_score": "word_of_mouth",
+    "population_estimate": 20000000,
+    "population_label": "2000万",
+    "tooling_level": "very_low",
+    "obligations": [
+      "记录恢复进度",
+      "识别异常",
+      "提醒复诊"
+    ],
+    "notes": "康复管理高频、信息碎片化"
+  },
+  {
+    "id": "R-CARE-07",
+    "type": "care",
+    "from": "家属",
+    "to": "孕产妇",
+    "obligation_strength": 5,
+    "group_size": "3-8",
+    "frequency": "daily",
+    "spread_mechanism": "family_group",
+    "spread_score": "must_use_in_group",
+    "population_estimate": 10000000,
+    "population_label": "1000万",
+    "tooling_level": "medium",
+    "obligations": [
+      "饮食管理",
+      "产检记录",
+      "风险提醒"
+    ],
+    "notes": "家庭决策链长，传播性好"
+  },
+  {
+    "id": "R-AUTH-03",
+    "type": "authority",
+    "from": "培训班老师",
+    "to": "学员家长",
+    "obligation_strength": 4,
+    "group_size": "10-30",
+    "frequency": "weekly",
+    "spread_mechanism": "class_group",
+    "spread_score": "must_use_in_group",
+    "population_estimate": 50000000,
+    "population_label": "5000万",
+    "tooling_level": "low",
+    "obligations": [
+      "布置练习",
+      "评估反馈",
+      "发送进步报告"
+    ],
+    "notes": "老师端付费明确，报告天然传播"
+  },
+  {
+    "id": "R-AUTH-04",
+    "type": "authority",
+    "from": "体育教练",
+    "to": "学员",
+    "obligation_strength": 4,
+    "group_size": "10-50",
+    "frequency": "weekly",
+    "spread_mechanism": "interest_group",
+    "spread_score": "shareable_result",
+    "population_estimate": 30000000,
+    "population_label": "3000万",
+    "tooling_level": "low",
+    "obligations": [
+      "动作评估",
+      "训练计划",
+      "伤病预警"
+    ],
+    "notes": "垂直训练场景适合视觉 AI"
+  },
+  {
+    "id": "R-AUTH-06",
+    "type": "authority",
+    "from": "社区干部",
+    "to": "居民",
+    "obligation_strength": 4,
+    "group_size": "50-500",
+    "frequency": "weekly",
+    "spread_mechanism": "community_group",
+    "spread_score": "must_use_in_group",
+    "population_estimate": 50000000,
+    "population_label": "5000万",
+    "tooling_level": "low",
+    "obligations": [
+      "通知收集",
+      "风险上报",
+      "健康登记"
+    ],
+    "notes": "群体管理刚需，执行链条明确"
+  },
+  {
+    "id": "R-SELF-01",
+    "type": "self",
+    "from": "自己",
+    "to": "体重与饮食管理",
+    "obligation_strength": 3,
+    "group_size": "1",
+    "frequency": "daily",
+    "spread_mechanism": "self",
+    "spread_score": "personal",
+    "population_estimate": 300000000,
+    "population_label": "3亿",
+    "tooling_level": "medium",
+    "obligations": [
+      "记录餐食",
+      "管理热量",
+      "追踪体重"
+    ],
+    "notes": "自律型需求大，但传播性较弱"
+  },
+  {
+    "id": "R-SELF-03",
+    "type": "self",
+    "from": "自己",
+    "to": "学习进度",
+    "obligation_strength": 3,
+    "group_size": "1",
+    "frequency": "daily",
+    "spread_mechanism": "self",
+    "spread_score": "personal",
+    "population_estimate": 200000000,
+    "population_label": "2亿",
+    "tooling_level": "medium",
+    "obligations": [
+      "记录任务",
+      "总结错题",
+      "生成计划"
+    ],
+    "notes": "个体学习管理长期刚需"
+  },
+  {
+    "id": "R-CONT-01",
+    "type": "contract",
+    "from": "小时工/兼职",
+    "to": "自我利益保护",
+    "obligation_strength": 4,
+    "group_size": "1",
+    "frequency": "daily",
+    "spread_mechanism": "peer_group",
+    "spread_score": "word_of_mouth",
+    "population_estimate": 200000000,
+    "population_label": "2亿",
+    "tooling_level": "low",
+    "obligations": [
+      "记录工时",
+      "核算收入",
+      "留存凭证"
+    ],
+    "notes": "真实痛点强，已有验证模型"
+  },
+  {
+    "id": "R-CONT-05",
+    "type": "contract",
+    "from": "培训机构",
+    "to": "付费学员",
+    "obligation_strength": 4,
+    "group_size": "10-50",
+    "frequency": "weekly",
+    "spread_mechanism": "class_group",
+    "spread_score": "shareable_result",
+    "population_estimate": 30000000,
+    "population_label": "3000万",
+    "tooling_level": "low",
+    "obligations": [
+      "续费提醒",
+      "进度反馈",
+      "学习报告"
+    ],
+    "notes": "机构愿意为留存付费"
+  },
+  {
+    "id": "R-MUT-03",
+    "type": "mutual",
+    "from": "病友",
+    "to": "病友",
+    "obligation_strength": 3,
+    "group_size": "20-500",
+    "frequency": "weekly",
+    "spread_mechanism": "interest_group",
+    "spread_score": "shareable_result",
+    "population_estimate": 400000000,
+    "population_label": "4亿",
+    "tooling_level": "low",
+    "obligations": [
+      "共享经验",
+      "汇总记录",
+      "预警复发"
+    ],
+    "notes": "天然社群传播，但付费链路更弱"
+  },
+  {
+    "id": "R-MUT-05",
+    "type": "mutual",
+    "from": "同班家长",
+    "to": "家长",
+    "obligation_strength": 3,
+    "group_size": "30-50",
+    "frequency": "weekly",
+    "spread_mechanism": "class_group",
+    "spread_score": "must_use_in_group",
+    "population_estimate": 40000000,
+    "population_label": "4000万",
+    "tooling_level": "medium",
+    "obligations": [
+      "群内协调",
+      "材料收集",
+      "活动组织"
+    ],
+    "notes": "协同场景多，传播极强"
+  }
+]

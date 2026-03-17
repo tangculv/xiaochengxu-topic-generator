@@ -1,0 +1,79 @@
+{
+  "id": "IDEA-2026-0319",
+  "batch_id": "BATCH-100",
+  "created": "2026-03-17",
+  "status": "candidate",
+  "dedupe_key": "R-CARE-07|A-TRACK-HEALTH|D-HEALTH|用药",
+  "relation": {
+    "id": "R-CARE-07",
+    "from": "家属",
+    "to": "孕产妇",
+    "type": "care"
+  },
+  "action": {
+    "id": "A-TRACK-HEALTH",
+    "name": "追踪健康"
+  },
+  "domain": {
+    "id": "D-HEALTH",
+    "name": "健康",
+    "sub": "用药"
+  },
+  "ai": {
+    "level": "L2",
+    "level_name": "替代技能工作",
+    "capability": "AI-UNDERSTAND",
+    "what_it_does": "拍药盒/病历，AI提醒并解释是否按医嘱执行",
+    "what_it_replaces": "替代技能工作"
+  },
+  "one_liner": "家属面向孕产妇：拍药盒/病历，AI提醒并解释是否按医嘱执行",
+  "user_action": "上传图片/记录 → AI分析 → 查看结果",
+  "trigger": "每日用药时",
+  "frequency": "每天 2-3 次",
+  "user": {
+    "primary": "异地照护父母的成年子女、慢病家属",
+    "secondary": "独居老人",
+    "population": "1000万"
+  },
+  "payment": {
+    "who_pays": "成年子女或家属",
+    "why": "减少漏服、错服风险，降低沟通成本",
+    "price": "19.9元/月",
+    "free_tier": "单成员基础提醒免费",
+    "vip_tier": "多成员协同 + 异常提醒 + 月报"
+  },
+  "spread": {
+    "mechanism": "family_group",
+    "description": "群内协作天然传播，可形成一人带多人",
+    "viral_action": "生成结果卡片或周报后分享",
+    "one_brings_many": "群内协作天然传播，可形成一人带多人"
+  },
+  "scores": {
+    "solo_feasible": 9,
+    "ai_breakthrough": 12,
+    "high_frequency": 10,
+    "clear_user_payment": 15,
+    "specific_executable": 9,
+    "large_market": 10,
+    "real_pain": 15,
+    "human_drive": 15,
+    "total": 93
+  },
+  "priority_score": 87.2,
+  "competition": {
+    "existing": "普通提醒类 App",
+    "gap": "缺乏拍照即录入、家属联动与医嘱解释能力",
+    "moat": "围绕家庭照护协作形成长期留存"
+  },
+  "risks": [
+    "老人操作门槛",
+    "OCR 与药物识别准确性"
+  ],
+  "page_types": [
+    "record-history",
+    "dashboard"
+  ],
+  "notes": "家庭决策链长，传播性好",
+  "rejection_reasons": [],
+  "template_id": "care-medication"
+}

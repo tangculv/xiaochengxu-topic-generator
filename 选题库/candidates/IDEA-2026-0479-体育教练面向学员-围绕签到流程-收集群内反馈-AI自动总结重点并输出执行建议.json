@@ -1,0 +1,78 @@
+{
+  "id": "IDEA-2026-0479",
+  "batch_id": "BATCH-100",
+  "created": "2026-03-17",
+  "status": "candidate",
+  "dedupe_key": "R-AUTH-04|A-COLLECT-FEEDBACK|D-EVENT|签到",
+  "relation": {
+    "id": "R-AUTH-04",
+    "from": "体育教练",
+    "to": "学员",
+    "type": "authority"
+  },
+  "action": {
+    "id": "A-COLLECT-FEEDBACK",
+    "name": "收反馈"
+  },
+  "domain": {
+    "id": "D-EVENT",
+    "name": "活动",
+    "sub": "签到"
+  },
+  "ai": {
+    "level": "L2",
+    "level_name": "替代技能工作",
+    "capability": "AI-GENERATE",
+    "what_it_does": "围绕签到流程，收集群内反馈，AI自动总结重点并输出执行建议",
+    "what_it_replaces": "替代技能工作"
+  },
+  "one_liner": "体育教练面向学员：围绕签到流程，收集群内反馈，AI自动总结重点并输出执行建议",
+  "user_action": "上传图片/记录 → AI分析 → 查看结果",
+  "trigger": "每次活动或通知后",
+  "frequency": "每周 1-2 次",
+  "user": {
+    "primary": "班委、社区干部、机构老师",
+    "secondary": "群成员",
+    "population": "3000万"
+  },
+  "payment": {
+    "who_pays": "组织者",
+    "why": "减少手工整理反馈时间",
+    "price": "39.0元/月",
+    "free_tier": "基础总结免费",
+    "vip_tier": "自动分类 + 行动建议 + 导出"
+  },
+  "spread": {
+    "mechanism": "interest_group",
+    "description": "结果卡片可分享带来传播",
+    "viral_action": "生成结果卡片或周报后分享",
+    "one_brings_many": "结果卡片可分享带来传播"
+  },
+  "scores": {
+    "solo_feasible": 9,
+    "ai_breakthrough": 12,
+    "high_frequency": 8,
+    "clear_user_payment": 15,
+    "specific_executable": 9,
+    "large_market": 10,
+    "real_pain": 12,
+    "human_drive": 15,
+    "total": 89
+  },
+  "priority_score": 76.6,
+  "competition": {
+    "existing": "群聊 + Excel",
+    "gap": "没有把反馈直接转成待办的轻量工具",
+    "moat": "组织者历史反馈数据"
+  },
+  "risks": [
+    "L2 价值需要表达清楚"
+  ],
+  "page_types": [
+    "form-to-result",
+    "dashboard"
+  ],
+  "notes": "垂直训练场景适合视觉 AI",
+  "rejection_reasons": [],
+  "template_id": "feedback-collector-签到"
+}

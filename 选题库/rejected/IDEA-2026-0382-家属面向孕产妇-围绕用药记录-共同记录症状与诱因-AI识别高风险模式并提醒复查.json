@@ -1,0 +1,81 @@
+{
+  "id": "IDEA-2026-0382",
+  "batch_id": "BATCH-100",
+  "created": "2026-03-17",
+  "status": "rejected",
+  "dedupe_key": "R-CARE-07|A-VERIFY-COMPLIANCE|D-HEALTH|用药",
+  "relation": {
+    "id": "R-CARE-07",
+    "from": "家属",
+    "to": "孕产妇",
+    "type": "care"
+  },
+  "action": {
+    "id": "A-VERIFY-COMPLIANCE",
+    "name": "核验合规"
+  },
+  "domain": {
+    "id": "D-HEALTH",
+    "name": "健康",
+    "sub": "用药"
+  },
+  "ai": {
+    "level": "L3",
+    "level_name": "替代专家判断",
+    "capability": "AI-PATTERN",
+    "what_it_does": "围绕用药记录，共同记录症状与诱因，AI识别高风险模式并提醒复查",
+    "what_it_replaces": "替代专家判断"
+  },
+  "one_liner": "家属面向孕产妇：围绕用药记录，共同记录症状与诱因，AI识别高风险模式并提醒复查",
+  "user_action": "上传图片/记录 → AI分析 → 查看结果",
+  "trigger": "每周复盘时",
+  "frequency": "每周 1 次",
+  "user": {
+    "primary": "病友群管理员、患者本人、照护家属",
+    "secondary": "家属",
+    "population": "1000万"
+  },
+  "payment": {
+    "who_pays": "患者本人或家属",
+    "why": "降低复发风险，获得趋势提醒",
+    "price": "29.9元/月",
+    "free_tier": "基础记录免费",
+    "vip_tier": "群组趋势预警 + 个体风险提醒"
+  },
+  "spread": {
+    "mechanism": "family_group",
+    "description": "群内协作天然传播，可形成一人带多人",
+    "viral_action": "生成结果卡片或周报后分享",
+    "one_brings_many": "群内协作天然传播，可形成一人带多人"
+  },
+  "scores": {
+    "solo_feasible": 8,
+    "ai_breakthrough": 15,
+    "high_frequency": 10,
+    "clear_user_payment": 15,
+    "specific_executable": 9,
+    "large_market": 10,
+    "real_pain": 15,
+    "human_drive": 15,
+    "total": 95
+  },
+  "priority_score": 98.0,
+  "competition": {
+    "existing": "微信群聊天、普通记录表",
+    "gap": "缺少从群体记录中提炼个人风险模式的工具",
+    "moat": "病程数据与群体模式识别"
+  },
+  "risks": [
+    "数据真实性参差不齐",
+    "医疗风险提示需慎重措辞"
+  ],
+  "page_types": [
+    "form-to-result",
+    "dashboard"
+  ],
+  "notes": "家庭决策链长，传播性好",
+  "rejection_reasons": [
+    "deduped_by_higher_ai_variant"
+  ],
+  "template_id": "mutual-risk-用药"
+}

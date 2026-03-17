@@ -1,0 +1,21 @@
+# SESSION_HANDOFF
+
+- current_objective: 将选题生成器以尽量少操心的方式上线为真正完整版，优先采用 Render 托管全栈服务
+- completed_work:
+  - 新增 `deploy-fullstack/`，实现 Node HTTP 服务包装现有 Python 生成器，提供 `/ui-web/*`、`/api/batches`、`/api/dimensions`、`/api/generate`
+  - 保留现有本地版与 Cloudflare 演示版，同时补齐真正可线上实时生成的完整版路线
+  - 已本地验证：`node deploy-fullstack/server.js` 可正常启动；`POST /api/generate` 成功生成批次 `BATCH-20260317-154644`，共 174 条
+  - 为 Render 准备了最简部署配置与说明：`deploy-fullstack/render.yaml`、`deploy-fullstack/README.md`
+- exact_files_changed:
+  - deploy-fullstack/server.js
+  - deploy-fullstack/package.json
+  - deploy-fullstack/render.yaml
+  - deploy-fullstack/README.md
+  - RUNLOG.md
+  - TODO.autonomous.md
+  - SESSION_HANDOFF.md
+- open_issues:
+  - 用户的 GitHub 仓库目前仍可能是空仓库，需要把当前项目代码推上去后 Render 才能真正拉取部署
+  - 人工标签仍保存在浏览器 localStorage，未写回服务端
+  - 若用户坚持只用 Cloudflare，不用 Render，则仍需把 Python 生成器重写成 JS/TS Worker 版本
+- recommended_next_action: 先把本仓库代码推到 GitHub，再在 Render 新建 Web Service，Start Command 填 `node deploy-fullstack/server.js`，部署完成后直接访问 `/ui-web/`

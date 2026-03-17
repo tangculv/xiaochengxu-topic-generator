@@ -1,0 +1,1308 @@
+{
+  "batch": {
+    "batch_id": "BATCH-PIPELINE-20260316-225357",
+    "created": "2026-03-16",
+    "name": "流水线自动批次",
+    "relation_filter": null,
+    "ideas_generated": 16,
+    "ideas_passed": 13,
+    "ideas_rejected": 3,
+    "ideas": [
+      "IDEA-2026-0003",
+      "IDEA-2026-0001",
+      "IDEA-2026-0006",
+      "IDEA-2026-0004",
+      "IDEA-2026-0005",
+      "IDEA-2026-0002",
+      "IDEA-2026-0007",
+      "IDEA-2026-0008",
+      "IDEA-2026-0010",
+      "IDEA-2026-0011",
+      "IDEA-2026-0015",
+      "IDEA-2026-0014",
+      "IDEA-2026-0013",
+      "IDEA-2026-0009",
+      "IDEA-2026-0012",
+      "IDEA-2026-0016"
+    ],
+    "export_csv": "选题库/exports/BATCH-PIPELINE-20260316-225357.csv"
+  },
+  "cards": [
+    {
+      "id": "IDEA-2026-0003",
+      "batch_id": "BATCH-PIPELINE-20260316-225357",
+      "created": "2026-03-16",
+      "status": "candidate",
+      "dedupe_key": "R-CARE-03|A-EVALUATE-HEALTH|D-HEALTH|饮食",
+      "relation": {
+        "id": "R-CARE-03",
+        "from": "父母",
+        "to": "学龄儿童",
+        "type": "care"
+      },
+      "action": {
+        "id": "A-EVALUATE-HEALTH",
+        "name": "判健康"
+      },
+      "domain": {
+        "id": "D-HEALTH",
+        "name": "健康",
+        "sub": "饮食"
+      },
+      "ai": {
+        "level": "L3",
+        "level_name": "替代专家判断",
+        "capability": "AI-REASON",
+        "what_it_does": "拍餐食，AI结合病史给出吃法建议",
+        "what_it_replaces": "替代专家判断"
+      },
+      "one_liner": "父母面向学龄儿童：拍餐食，AI结合病史给出吃法建议",
+      "user_action": "上传图片/记录 → AI分析 → 查看结果",
+      "trigger": "每餐前后",
+      "frequency": "每天 3 次",
+      "user": {
+        "primary": "慢病患者、异地子女、控糖控脂人群",
+        "secondary": "需要照护父母的家庭成员",
+        "population": "1亿"
+      },
+      "payment": {
+        "who_pays": "患者本人或子女",
+        "why": "替代低频、昂贵的营养咨询，形成每餐决策助手",
+        "price": "29.9元/月",
+        "free_tier": "每日 1 次分析免费",
+        "vip_tier": "无限分析 + 周报 + 家庭协作"
+      },
+      "spread": {
+        "mechanism": "family_group",
+        "description": "群内协作天然传播，可形成一人带多人",
+        "viral_action": "生成结果卡片或周报后分享",
+        "one_brings_many": "群内协作天然传播，可形成一人带多人"
+      },
+      "scores": {
+        "solo_feasible": 8,
+        "ai_breakthrough": 15,
+        "high_frequency": 10,
+        "clear_user_payment": 15,
+        "specific_executable": 9,
+        "large_market": 10,
+        "real_pain": 15,
+        "human_drive": 15,
+        "total": 95
+      },
+      "priority_score": 98.0,
+      "competition": {
+        "existing": "薄荷健康、糖护士等偏记录工具",
+        "gap": "缺少基于个人病史与饮食场景的即时判断",
+        "moat": "病史+餐食图片+长期反馈构成个体化数据壁垒"
+      },
+      "risks": [
+        "医疗建议合规风险",
+        "食物识别准确率要求高"
+      ],
+      "page_types": [
+        "form-to-result",
+        "dashboard"
+      ],
+      "notes": "家长高频刚需，群内传播强",
+      "rejection_reasons": [],
+      "template_id": "care-diet"
+    },
+    {
+      "id": "IDEA-2026-0001",
+      "batch_id": "BATCH-PIPELINE-20260316-225357",
+      "created": "2026-03-16",
+      "status": "candidate",
+      "dedupe_key": "R-CARE-01|A-EVALUATE-HEALTH|D-HEALTH|饮食",
+      "relation": {
+        "id": "R-CARE-01",
+        "from": "成年子女",
+        "to": "老年父母",
+        "type": "care"
+      },
+      "action": {
+        "id": "A-EVALUATE-HEALTH",
+        "name": "判健康"
+      },
+      "domain": {
+        "id": "D-HEALTH",
+        "name": "健康",
+        "sub": "饮食"
+      },
+      "ai": {
+        "level": "L3",
+        "level_name": "替代专家判断",
+        "capability": "AI-REASON",
+        "what_it_does": "拍餐食，AI结合病史给出吃法建议",
+        "what_it_replaces": "替代专家判断"
+      },
+      "one_liner": "成年子女面向老年父母：拍餐食，AI结合病史给出吃法建议",
+      "user_action": "上传图片/记录 → AI分析 → 查看结果",
+      "trigger": "每餐前后",
+      "frequency": "每天 3 次",
+      "user": {
+        "primary": "慢病患者、异地子女、控糖控脂人群",
+        "secondary": "需要照护父母的家庭成员",
+        "population": "3亿"
+      },
+      "payment": {
+        "who_pays": "患者本人或子女",
+        "why": "替代低频、昂贵的营养咨询，形成每餐决策助手",
+        "price": "29.9元/月",
+        "free_tier": "每日 1 次分析免费",
+        "vip_tier": "无限分析 + 周报 + 家庭协作"
+      },
+      "spread": {
+        "mechanism": "family_group",
+        "description": "家庭群/病友群口碑传播",
+        "viral_action": "生成结果卡片或周报后分享",
+        "one_brings_many": "家庭群/病友群口碑传播"
+      },
+      "scores": {
+        "solo_feasible": 8,
+        "ai_breakthrough": 15,
+        "high_frequency": 10,
+        "clear_user_payment": 15,
+        "specific_executable": 9,
+        "large_market": 10,
+        "real_pain": 15,
+        "human_drive": 15,
+        "total": 97
+      },
+      "priority_score": 93.8,
+      "competition": {
+        "existing": "薄荷健康、糖护士等偏记录工具",
+        "gap": "缺少基于个人病史与饮食场景的即时判断",
+        "moat": "病史+餐食图片+长期反馈构成个体化数据壁垒"
+      },
+      "risks": [
+        "医疗建议合规风险",
+        "食物识别准确率要求高"
+      ],
+      "page_types": [
+        "form-to-result",
+        "dashboard"
+      ],
+      "notes": "工具化程度极低，家庭照护责任强",
+      "rejection_reasons": [],
+      "template_id": "care-diet"
+    },
+    {
+      "id": "IDEA-2026-0006",
+      "batch_id": "BATCH-PIPELINE-20260316-225357",
+      "created": "2026-03-16",
+      "status": "candidate",
+      "dedupe_key": "R-CARE-05|A-EVALUATE-HEALTH|D-HEALTH|饮食",
+      "relation": {
+        "id": "R-CARE-05",
+        "from": "家属",
+        "to": "慢病患者",
+        "type": "care"
+      },
+      "action": {
+        "id": "A-EVALUATE-HEALTH",
+        "name": "判健康"
+      },
+      "domain": {
+        "id": "D-HEALTH",
+        "name": "健康",
+        "sub": "饮食"
+      },
+      "ai": {
+        "level": "L3",
+        "level_name": "替代专家判断",
+        "capability": "AI-REASON",
+        "what_it_does": "拍餐食，AI结合病史给出吃法建议",
+        "what_it_replaces": "替代专家判断"
+      },
+      "one_liner": "家属面向慢病患者：拍餐食，AI结合病史给出吃法建议",
+      "user_action": "上传图片/记录 → AI分析 → 查看结果",
+      "trigger": "每餐前后",
+      "frequency": "每天 3 次",
+      "user": {
+        "primary": "慢病患者、异地子女、控糖控脂人群",
+        "secondary": "需要照护父母的家庭成员",
+        "population": "4亿"
+      },
+      "payment": {
+        "who_pays": "患者本人或子女",
+        "why": "替代低频、昂贵的营养咨询，形成每餐决策助手",
+        "price": "29.9元/月",
+        "free_tier": "每日 1 次分析免费",
+        "vip_tier": "无限分析 + 周报 + 家庭协作"
+      },
+      "spread": {
+        "mechanism": "family_group",
+        "description": "家庭群/病友群口碑传播",
+        "viral_action": "生成结果卡片或周报后分享",
+        "one_brings_many": "家庭群/病友群口碑传播"
+      },
+      "scores": {
+        "solo_feasible": 8,
+        "ai_breakthrough": 15,
+        "high_frequency": 10,
+        "clear_user_payment": 15,
+        "specific_executable": 9,
+        "large_market": 10,
+        "real_pain": 15,
+        "human_drive": 15,
+        "total": 97
+      },
+      "priority_score": 93.8,
+      "competition": {
+        "existing": "薄荷健康、糖护士等偏记录工具",
+        "gap": "缺少基于个人病史与饮食场景的即时判断",
+        "moat": "病史+餐食图片+长期反馈构成个体化数据壁垒"
+      },
+      "risks": [
+        "医疗建议合规风险",
+        "食物识别准确率要求高"
+      ],
+      "page_types": [
+        "form-to-result",
+        "dashboard"
+      ],
+      "notes": "照护责任重，付费动机强",
+      "rejection_reasons": [],
+      "template_id": "care-diet"
+    },
+    {
+      "id": "IDEA-2026-0004",
+      "batch_id": "BATCH-PIPELINE-20260316-225357",
+      "created": "2026-03-16",
+      "status": "candidate",
+      "dedupe_key": "R-CARE-03|A-TRACK-HEALTH|D-HEALTH|用药",
+      "relation": {
+        "id": "R-CARE-03",
+        "from": "父母",
+        "to": "学龄儿童",
+        "type": "care"
+      },
+      "action": {
+        "id": "A-TRACK-HEALTH",
+        "name": "追踪健康"
+      },
+      "domain": {
+        "id": "D-HEALTH",
+        "name": "健康",
+        "sub": "用药"
+      },
+      "ai": {
+        "level": "L2",
+        "level_name": "替代技能工作",
+        "capability": "AI-UNDERSTAND",
+        "what_it_does": "拍药盒/病历，AI提醒并解释是否按医嘱执行",
+        "what_it_replaces": "替代技能工作"
+      },
+      "one_liner": "父母面向学龄儿童：拍药盒/病历，AI提醒并解释是否按医嘱执行",
+      "user_action": "上传图片/记录 → AI分析 → 查看结果",
+      "trigger": "每日用药时",
+      "frequency": "每天 2-3 次",
+      "user": {
+        "primary": "异地照护父母的成年子女、慢病家属",
+        "secondary": "独居老人",
+        "population": "1亿"
+      },
+      "payment": {
+        "who_pays": "成年子女或家属",
+        "why": "减少漏服、错服风险，降低沟通成本",
+        "price": "19.9元/月",
+        "free_tier": "单成员基础提醒免费",
+        "vip_tier": "多成员协同 + 异常提醒 + 月报"
+      },
+      "spread": {
+        "mechanism": "family_group",
+        "description": "群内协作天然传播，可形成一人带多人",
+        "viral_action": "生成结果卡片或周报后分享",
+        "one_brings_many": "群内协作天然传播，可形成一人带多人"
+      },
+      "scores": {
+        "solo_feasible": 9,
+        "ai_breakthrough": 12,
+        "high_frequency": 10,
+        "clear_user_payment": 15,
+        "specific_executable": 9,
+        "large_market": 10,
+        "real_pain": 15,
+        "human_drive": 15,
+        "total": 93
+      },
+      "priority_score": 87.2,
+      "competition": {
+        "existing": "普通提醒类 App",
+        "gap": "缺乏拍照即录入、家属联动与医嘱解释能力",
+        "moat": "围绕家庭照护协作形成长期留存"
+      },
+      "risks": [
+        "老人操作门槛",
+        "OCR 与药物识别准确性"
+      ],
+      "page_types": [
+        "record-history",
+        "dashboard"
+      ],
+      "notes": "家长高频刚需，群内传播强",
+      "rejection_reasons": [],
+      "template_id": "care-medication"
+    },
+    {
+      "id": "IDEA-2026-0005",
+      "batch_id": "BATCH-PIPELINE-20260316-225357",
+      "created": "2026-03-16",
+      "status": "candidate",
+      "dedupe_key": "R-CARE-03|A-EVALUATE-CORRECTNESS|D-STUDY|作业",
+      "relation": {
+        "id": "R-CARE-03",
+        "from": "父母",
+        "to": "学龄儿童",
+        "type": "care"
+      },
+      "action": {
+        "id": "A-EVALUATE-CORRECTNESS",
+        "name": "判对错"
+      },
+      "domain": {
+        "id": "D-STUDY",
+        "name": "学业",
+        "sub": "作业"
+      },
+      "ai": {
+        "level": "L2",
+        "level_name": "替代技能工作",
+        "capability": "AI-EVALUATE",
+        "what_it_does": "拍作业，AI逐题批改并生成同类巩固题",
+        "what_it_replaces": "替代技能工作"
+      },
+      "one_liner": "父母面向学龄儿童：拍作业，AI逐题批改并生成同类巩固题",
+      "user_action": "上传图片/记录 → AI分析 → 查看结果",
+      "trigger": "孩子完成作业后",
+      "frequency": "每天 1-2 次",
+      "user": {
+        "primary": "小学阶段家长",
+        "secondary": "课后托管老师",
+        "population": "1亿"
+      },
+      "payment": {
+        "who_pays": "家长",
+        "why": "节省陪写时间，提升辅导质量",
+        "price": "19.9元/月",
+        "free_tier": "每日 1 页作业免费",
+        "vip_tier": "无限批改 + 错题本 + 周报"
+      },
+      "spread": {
+        "mechanism": "family_group",
+        "description": "群内协作天然传播，可形成一人带多人",
+        "viral_action": "生成结果卡片或周报后分享",
+        "one_brings_many": "群内协作天然传播，可形成一人带多人"
+      },
+      "scores": {
+        "solo_feasible": 9,
+        "ai_breakthrough": 12,
+        "high_frequency": 10,
+        "clear_user_payment": 15,
+        "specific_executable": 9,
+        "large_market": 10,
+        "real_pain": 15,
+        "human_drive": 15,
+        "total": 93
+      },
+      "priority_score": 87.2,
+      "competition": {
+        "existing": "作业帮、学而思等",
+        "gap": "更聚焦家长陪伴场景与个性化巩固题",
+        "moat": "孩子知识点画像与长期错题轨迹"
+      },
+      "risks": [
+        "手写识别稳定性",
+        "与成熟竞品竞争激烈"
+      ],
+      "page_types": [
+        "form-to-result",
+        "dashboard"
+      ],
+      "notes": "家长高频刚需，群内传播强",
+      "rejection_reasons": [],
+      "template_id": "study-homework"
+    },
+    {
+      "id": "IDEA-2026-0002",
+      "batch_id": "BATCH-PIPELINE-20260316-225357",
+      "created": "2026-03-16",
+      "status": "candidate",
+      "dedupe_key": "R-CARE-01|A-TRACK-HEALTH|D-HEALTH|用药",
+      "relation": {
+        "id": "R-CARE-01",
+        "from": "成年子女",
+        "to": "老年父母",
+        "type": "care"
+      },
+      "action": {
+        "id": "A-TRACK-HEALTH",
+        "name": "追踪健康"
+      },
+      "domain": {
+        "id": "D-HEALTH",
+        "name": "健康",
+        "sub": "用药"
+      },
+      "ai": {
+        "level": "L2",
+        "level_name": "替代技能工作",
+        "capability": "AI-UNDERSTAND",
+        "what_it_does": "拍药盒/病历，AI提醒并解释是否按医嘱执行",
+        "what_it_replaces": "替代技能工作"
+      },
+      "one_liner": "成年子女面向老年父母：拍药盒/病历，AI提醒并解释是否按医嘱执行",
+      "user_action": "上传图片/记录 → AI分析 → 查看结果",
+      "trigger": "每日用药时",
+      "frequency": "每天 2-3 次",
+      "user": {
+        "primary": "异地照护父母的成年子女、慢病家属",
+        "secondary": "独居老人",
+        "population": "3亿"
+      },
+      "payment": {
+        "who_pays": "成年子女或家属",
+        "why": "减少漏服、错服风险，降低沟通成本",
+        "price": "19.9元/月",
+        "free_tier": "单成员基础提醒免费",
+        "vip_tier": "多成员协同 + 异常提醒 + 月报"
+      },
+      "spread": {
+        "mechanism": "family_group",
+        "description": "家庭群/病友群口碑传播",
+        "viral_action": "生成结果卡片或周报后分享",
+        "one_brings_many": "家庭群/病友群口碑传播"
+      },
+      "scores": {
+        "solo_feasible": 9,
+        "ai_breakthrough": 12,
+        "high_frequency": 10,
+        "clear_user_payment": 15,
+        "specific_executable": 9,
+        "large_market": 10,
+        "real_pain": 15,
+        "human_drive": 15,
+        "total": 95
+      },
+      "priority_score": 83.0,
+      "competition": {
+        "existing": "普通提醒类 App",
+        "gap": "缺乏拍照即录入、家属联动与医嘱解释能力",
+        "moat": "围绕家庭照护协作形成长期留存"
+      },
+      "risks": [
+        "老人操作门槛",
+        "OCR 与药物识别准确性"
+      ],
+      "page_types": [
+        "record-history",
+        "dashboard"
+      ],
+      "notes": "工具化程度极低，家庭照护责任强",
+      "rejection_reasons": [],
+      "template_id": "care-medication"
+    },
+    {
+      "id": "IDEA-2026-0007",
+      "batch_id": "BATCH-PIPELINE-20260316-225357",
+      "created": "2026-03-16",
+      "status": "candidate",
+      "dedupe_key": "R-CARE-05|A-TRACK-HEALTH|D-HEALTH|用药",
+      "relation": {
+        "id": "R-CARE-05",
+        "from": "家属",
+        "to": "慢病患者",
+        "type": "care"
+      },
+      "action": {
+        "id": "A-TRACK-HEALTH",
+        "name": "追踪健康"
+      },
+      "domain": {
+        "id": "D-HEALTH",
+        "name": "健康",
+        "sub": "用药"
+      },
+      "ai": {
+        "level": "L2",
+        "level_name": "替代技能工作",
+        "capability": "AI-UNDERSTAND",
+        "what_it_does": "拍药盒/病历，AI提醒并解释是否按医嘱执行",
+        "what_it_replaces": "替代技能工作"
+      },
+      "one_liner": "家属面向慢病患者：拍药盒/病历，AI提醒并解释是否按医嘱执行",
+      "user_action": "上传图片/记录 → AI分析 → 查看结果",
+      "trigger": "每日用药时",
+      "frequency": "每天 2-3 次",
+      "user": {
+        "primary": "异地照护父母的成年子女、慢病家属",
+        "secondary": "独居老人",
+        "population": "4亿"
+      },
+      "payment": {
+        "who_pays": "成年子女或家属",
+        "why": "减少漏服、错服风险，降低沟通成本",
+        "price": "19.9元/月",
+        "free_tier": "单成员基础提醒免费",
+        "vip_tier": "多成员协同 + 异常提醒 + 月报"
+      },
+      "spread": {
+        "mechanism": "family_group",
+        "description": "家庭群/病友群口碑传播",
+        "viral_action": "生成结果卡片或周报后分享",
+        "one_brings_many": "家庭群/病友群口碑传播"
+      },
+      "scores": {
+        "solo_feasible": 9,
+        "ai_breakthrough": 12,
+        "high_frequency": 10,
+        "clear_user_payment": 15,
+        "specific_executable": 9,
+        "large_market": 10,
+        "real_pain": 15,
+        "human_drive": 15,
+        "total": 95
+      },
+      "priority_score": 83.0,
+      "competition": {
+        "existing": "普通提醒类 App",
+        "gap": "缺乏拍照即录入、家属联动与医嘱解释能力",
+        "moat": "围绕家庭照护协作形成长期留存"
+      },
+      "risks": [
+        "老人操作门槛",
+        "OCR 与药物识别准确性"
+      ],
+      "page_types": [
+        "record-history",
+        "dashboard"
+      ],
+      "notes": "照护责任重，付费动机强",
+      "rejection_reasons": [],
+      "template_id": "care-medication"
+    },
+    {
+      "id": "IDEA-2026-0008",
+      "batch_id": "BATCH-PIPELINE-20260316-225357",
+      "created": "2026-03-16",
+      "status": "candidate",
+      "dedupe_key": "R-AUTH-03|A-DISTRIBUTE-RESULT|D-SKILL|乐器",
+      "relation": {
+        "id": "R-AUTH-03",
+        "from": "培训班老师",
+        "to": "学员家长",
+        "type": "authority"
+      },
+      "action": {
+        "id": "A-DISTRIBUTE-RESULT",
+        "name": "发结果"
+      },
+      "domain": {
+        "id": "D-SKILL",
+        "name": "技能",
+        "sub": "乐器"
+      },
+      "ai": {
+        "level": "L2",
+        "level_name": "替代技能工作",
+        "capability": "AI-GENERATE",
+        "what_it_does": "AI生成学员进步报告并自动发给家长",
+        "what_it_replaces": "替代技能工作"
+      },
+      "one_liner": "培训班老师面向学员家长：AI生成学员进步报告并自动发给家长",
+      "user_action": "上传图片/记录 → AI分析 → 查看结果",
+      "trigger": "每周课程后",
+      "frequency": "每周 1-2 次",
+      "user": {
+        "primary": "培训班老师、工作室主理人",
+        "secondary": "学员家长",
+        "population": "5000万"
+      },
+      "payment": {
+        "who_pays": "老师或机构",
+        "why": "提升服务感知与续费率",
+        "price": "39.0元/月",
+        "free_tier": "5 个学员内免费",
+        "vip_tier": "多班级管理 + 家长分发 + 续费提醒"
+      },
+      "spread": {
+        "mechanism": "class_group",
+        "description": "群内协作天然传播，可形成一人带多人",
+        "viral_action": "生成结果卡片或周报后分享",
+        "one_brings_many": "群内协作天然传播，可形成一人带多人"
+      },
+      "scores": {
+        "solo_feasible": 9,
+        "ai_breakthrough": 12,
+        "high_frequency": 8,
+        "clear_user_payment": 15,
+        "specific_executable": 9,
+        "large_market": 10,
+        "real_pain": 12,
+        "human_drive": 15,
+        "total": 89
+      },
+      "priority_score": 79.6,
+      "competition": {
+        "existing": "表单+人工总结",
+        "gap": "没有低成本、可批量生成个性化报告的小程序",
+        "moat": "老师评价标准与学员成长档案沉淀"
+      },
+      "risks": [
+        "需绑定具体教学评估数据",
+        "老师付费教育成本"
+      ],
+      "page_types": [
+        "dashboard",
+        "dashboard"
+      ],
+      "notes": "老师端付费明确，报告天然传播",
+      "rejection_reasons": [],
+      "template_id": "study-report"
+    },
+    {
+      "id": "IDEA-2026-0010",
+      "batch_id": "BATCH-PIPELINE-20260316-225357",
+      "created": "2026-03-16",
+      "status": "candidate",
+      "dedupe_key": "R-AUTH-04|A-DISTRIBUTE-RESULT|D-SKILL|乐器",
+      "relation": {
+        "id": "R-AUTH-04",
+        "from": "体育教练",
+        "to": "学员",
+        "type": "authority"
+      },
+      "action": {
+        "id": "A-DISTRIBUTE-RESULT",
+        "name": "发结果"
+      },
+      "domain": {
+        "id": "D-SKILL",
+        "name": "技能",
+        "sub": "乐器"
+      },
+      "ai": {
+        "level": "L2",
+        "level_name": "替代技能工作",
+        "capability": "AI-GENERATE",
+        "what_it_does": "AI生成学员进步报告并自动发给家长",
+        "what_it_replaces": "替代技能工作"
+      },
+      "one_liner": "体育教练面向学员：AI生成学员进步报告并自动发给家长",
+      "user_action": "上传图片/记录 → AI分析 → 查看结果",
+      "trigger": "每周课程后",
+      "frequency": "每周 1-2 次",
+      "user": {
+        "primary": "培训班老师、工作室主理人",
+        "secondary": "学员家长",
+        "population": "3000万"
+      },
+      "payment": {
+        "who_pays": "老师或机构",
+        "why": "提升服务感知与续费率",
+        "price": "39.0元/月",
+        "free_tier": "5 个学员内免费",
+        "vip_tier": "多班级管理 + 家长分发 + 续费提醒"
+      },
+      "spread": {
+        "mechanism": "interest_group",
+        "description": "结果卡片可分享带来传播",
+        "viral_action": "生成结果卡片或周报后分享",
+        "one_brings_many": "结果卡片可分享带来传播"
+      },
+      "scores": {
+        "solo_feasible": 9,
+        "ai_breakthrough": 12,
+        "high_frequency": 8,
+        "clear_user_payment": 15,
+        "specific_executable": 9,
+        "large_market": 10,
+        "real_pain": 12,
+        "human_drive": 15,
+        "total": 89
+      },
+      "priority_score": 76.6,
+      "competition": {
+        "existing": "表单+人工总结",
+        "gap": "没有低成本、可批量生成个性化报告的小程序",
+        "moat": "老师评价标准与学员成长档案沉淀"
+      },
+      "risks": [
+        "需绑定具体教学评估数据",
+        "老师付费教育成本"
+      ],
+      "page_types": [
+        "dashboard",
+        "dashboard"
+      ],
+      "notes": "垂直训练场景适合视觉 AI",
+      "rejection_reasons": [],
+      "template_id": "study-report"
+    },
+    {
+      "id": "IDEA-2026-0011",
+      "batch_id": "BATCH-PIPELINE-20260316-225357",
+      "created": "2026-03-16",
+      "status": "candidate",
+      "dedupe_key": "R-AUTH-04|A-EVALUATE-QUALITY|D-SKILL|健身",
+      "relation": {
+        "id": "R-AUTH-04",
+        "from": "体育教练",
+        "to": "学员",
+        "type": "authority"
+      },
+      "action": {
+        "id": "A-EVALUATE-QUALITY",
+        "name": "判质量"
+      },
+      "domain": {
+        "id": "D-SKILL",
+        "name": "技能",
+        "sub": "健身"
+      },
+      "ai": {
+        "level": "L2",
+        "level_name": "替代技能工作",
+        "capability": "AI-EVALUATE",
+        "what_it_does": "录动作视频，AI评判姿势正确性并给出改进建议",
+        "what_it_replaces": "替代技能工作"
+      },
+      "one_liner": "体育教练面向学员：录动作视频，AI评判姿势正确性并给出改进建议",
+      "user_action": "上传图片/记录 → AI分析 → 查看结果",
+      "trigger": "每次训练后",
+      "frequency": "每周 2-4 次",
+      "user": {
+        "primary": "健身教练、运动学员",
+        "secondary": "工作室主理人",
+        "population": "3000万"
+      },
+      "payment": {
+        "who_pays": "学员或教练",
+        "why": "避免受伤，提高动作质量",
+        "price": "39.0元/月",
+        "free_tier": "每周 2 次分析免费",
+        "vip_tier": "无限分析 + 训练计划"
+      },
+      "spread": {
+        "mechanism": "interest_group",
+        "description": "结果卡片可分享带来传播",
+        "viral_action": "生成结果卡片或周报后分享",
+        "one_brings_many": "结果卡片可分享带来传播"
+      },
+      "scores": {
+        "solo_feasible": 9,
+        "ai_breakthrough": 12,
+        "high_frequency": 8,
+        "clear_user_payment": 15,
+        "specific_executable": 9,
+        "large_market": 10,
+        "real_pain": 12,
+        "human_drive": 15,
+        "total": 89
+      },
+      "priority_score": 76.6,
+      "competition": {
+        "existing": "Keep、人工私教反馈",
+        "gap": "缺少针对线下教练场景的低成本动作评估助手",
+        "moat": "动作样本积累 + 教练知识库"
+      },
+      "risks": [
+        "视频处理成本高",
+        "动作识别需高准确率"
+      ],
+      "page_types": [
+        "form-to-result",
+        "dashboard"
+      ],
+      "notes": "垂直训练场景适合视觉 AI",
+      "rejection_reasons": [],
+      "template_id": "coach-motion"
+    },
+    {
+      "id": "IDEA-2026-0015",
+      "batch_id": "BATCH-PIPELINE-20260316-225357",
+      "created": "2026-03-16",
+      "status": "candidate",
+      "dedupe_key": "R-MUT-03|A-VERIFY-COMPLIANCE|D-HEALTH|康复",
+      "relation": {
+        "id": "R-MUT-03",
+        "from": "病友",
+        "to": "病友",
+        "type": "mutual"
+      },
+      "action": {
+        "id": "A-VERIFY-COMPLIANCE",
+        "name": "核验合规"
+      },
+      "domain": {
+        "id": "D-HEALTH",
+        "name": "健康",
+        "sub": "康复"
+      },
+      "ai": {
+        "level": "L3",
+        "level_name": "替代专家判断",
+        "capability": "AI-PATTERN",
+        "what_it_does": "病友共同记录症状与诱因，AI识别高风险模式并提醒复查",
+        "what_it_replaces": "替代专家判断"
+      },
+      "one_liner": "病友面向病友：病友共同记录症状与诱因，AI识别高风险模式并提醒复查",
+      "user_action": "上传图片/记录 → AI分析 → 查看结果",
+      "trigger": "每周复盘时",
+      "frequency": "每周 1 次",
+      "user": {
+        "primary": "病友群管理员、患者本人",
+        "secondary": "家属",
+        "population": "4亿"
+      },
+      "payment": {
+        "who_pays": "患者本人",
+        "why": "降低复发风险，获得群体经验支持",
+        "price": "29.9元/月",
+        "free_tier": "基础记录免费",
+        "vip_tier": "群组趋势预警 + 个体风险提醒"
+      },
+      "spread": {
+        "mechanism": "interest_group",
+        "description": "结果卡片可分享带来传播",
+        "viral_action": "生成结果卡片或周报后分享",
+        "one_brings_many": "结果卡片可分享带来传播"
+      },
+      "scores": {
+        "solo_feasible": 8,
+        "ai_breakthrough": 15,
+        "high_frequency": 8,
+        "clear_user_payment": 10,
+        "specific_executable": 9,
+        "large_market": 10,
+        "real_pain": 8,
+        "human_drive": 10,
+        "total": 77
+      },
+      "priority_score": 75.8,
+      "competition": {
+        "existing": "微信群聊天、普通记录表",
+        "gap": "缺少从群体记录中提炼个人风险模式的工具",
+        "moat": "病程数据与群体模式识别"
+      },
+      "risks": [
+        "群组数据真实性参差不齐",
+        "医疗风险提示需慎重措辞"
+      ],
+      "page_types": [
+        "form-to-result",
+        "dashboard"
+      ],
+      "notes": "天然社群传播，但付费链路更弱",
+      "rejection_reasons": [],
+      "template_id": "mutual-risk"
+    },
+    {
+      "id": "IDEA-2026-0014",
+      "batch_id": "BATCH-PIPELINE-20260316-225357",
+      "created": "2026-03-16",
+      "status": "candidate",
+      "dedupe_key": "R-CONT-01|A-TRACK-FINANCE|D-MONEY|工时",
+      "relation": {
+        "id": "R-CONT-01",
+        "from": "小时工/兼职",
+        "to": "自我利益保护",
+        "type": "contract"
+      },
+      "action": {
+        "id": "A-TRACK-FINANCE",
+        "name": "追踪财务"
+      },
+      "domain": {
+        "id": "D-MONEY",
+        "name": "金钱",
+        "sub": "工时"
+      },
+      "ai": {
+        "level": "L2",
+        "level_name": "替代技能工作",
+        "capability": "AI-GENERATE",
+        "what_it_does": "记录工时与收入，AI自动核算应得工资并生成追款凭证",
+        "what_it_replaces": "替代技能工作"
+      },
+      "one_liner": "小时工/兼职面向自我利益保护：记录工时与收入，AI自动核算应得工资并生成追款凭证",
+      "user_action": "上传图片/记录 → AI分析 → 查看结果",
+      "trigger": "每次上下班后",
+      "frequency": "每天 1-2 次",
+      "user": {
+        "primary": "小时工、兼职、灵活就业者",
+        "secondary": "工友群",
+        "population": "2亿"
+      },
+      "payment": {
+        "who_pays": "劳动者本人",
+        "why": "避免被少算工时，提高讨薪成功率",
+        "price": "19.9元/月",
+        "free_tier": "基础记账免费",
+        "vip_tier": "凭证导出 + 法律提醒 + 月结报告"
+      },
+      "spread": {
+        "mechanism": "peer_group",
+        "description": "家庭群/病友群口碑传播",
+        "viral_action": "生成结果卡片或周报后分享",
+        "one_brings_many": "家庭群/病友群口碑传播"
+      },
+      "scores": {
+        "solo_feasible": 9,
+        "ai_breakthrough": 12,
+        "high_frequency": 10,
+        "clear_user_payment": 12,
+        "specific_executable": 9,
+        "large_market": 10,
+        "real_pain": 12,
+        "human_drive": 10,
+        "total": 83
+      },
+      "priority_score": 72.2,
+      "competition": {
+        "existing": "记工本等工具",
+        "gap": "没有 AI 帮你解释异常、组织证据、生成对账单",
+        "moat": "工时数据 + 证据链沉淀"
+      },
+      "risks": [
+        "法律表述需谨慎",
+        "需要简单到一线工友会用"
+      ],
+      "page_types": [
+        "record-history",
+        "dashboard"
+      ],
+      "notes": "真实痛点强，已有验证模型",
+      "rejection_reasons": [],
+      "template_id": "gig-timesheet"
+    },
+    {
+      "id": "IDEA-2026-0013",
+      "batch_id": "BATCH-PIPELINE-20260316-225357",
+      "created": "2026-03-16",
+      "status": "candidate",
+      "dedupe_key": "R-SELF-01|A-EVALUATE-HEALTH|D-HEALTH|饮食",
+      "relation": {
+        "id": "R-SELF-01",
+        "from": "自己",
+        "to": "体重与饮食管理",
+        "type": "self"
+      },
+      "action": {
+        "id": "A-EVALUATE-HEALTH",
+        "name": "判健康"
+      },
+      "domain": {
+        "id": "D-HEALTH",
+        "name": "健康",
+        "sub": "饮食"
+      },
+      "ai": {
+        "level": "L3",
+        "level_name": "替代专家判断",
+        "capability": "AI-REASON",
+        "what_it_does": "拍餐食，AI结合病史给出吃法建议",
+        "what_it_replaces": "替代专家判断"
+      },
+      "one_liner": "自己面向体重与饮食管理：拍餐食，AI结合病史给出吃法建议",
+      "user_action": "上传图片/记录 → AI分析 → 查看结果",
+      "trigger": "每餐前后",
+      "frequency": "每天 3 次",
+      "user": {
+        "primary": "慢病患者、异地子女、控糖控脂人群",
+        "secondary": "需要照护父母的家庭成员",
+        "population": "3亿"
+      },
+      "payment": {
+        "who_pays": "患者本人或子女",
+        "why": "替代低频、昂贵的营养咨询，形成每餐决策助手",
+        "price": "29.9元/月",
+        "free_tier": "每日 1 次分析免费",
+        "vip_tier": "无限分析 + 周报 + 家庭协作"
+      },
+      "spread": {
+        "mechanism": "self",
+        "description": "个人使用为主，可通过成果分享传播",
+        "viral_action": "生成结果卡片或周报后分享",
+        "one_brings_many": "个人使用为主，可通过成果分享传播"
+      },
+      "scores": {
+        "solo_feasible": 8,
+        "ai_breakthrough": 15,
+        "high_frequency": 10,
+        "clear_user_payment": 10,
+        "specific_executable": 9,
+        "large_market": 10,
+        "real_pain": 8,
+        "human_drive": 10,
+        "total": 78
+      },
+      "priority_score": 71.2,
+      "competition": {
+        "existing": "薄荷健康、糖护士等偏记录工具",
+        "gap": "缺少基于个人病史与饮食场景的即时判断",
+        "moat": "病史+餐食图片+长期反馈构成个体化数据壁垒"
+      },
+      "risks": [
+        "医疗建议合规风险",
+        "食物识别准确率要求高"
+      ],
+      "page_types": [
+        "form-to-result",
+        "dashboard"
+      ],
+      "notes": "自律型需求大，但传播性较弱",
+      "rejection_reasons": [],
+      "template_id": "care-diet"
+    },
+    {
+      "id": "IDEA-2026-0009",
+      "batch_id": "BATCH-PIPELINE-20260316-225357",
+      "created": "2026-03-16",
+      "status": "rejected",
+      "dedupe_key": "R-AUTH-03|A-DISTRIBUTE-RESULT|D-CONTENT|笔记",
+      "relation": {
+        "id": "R-AUTH-03",
+        "from": "培训班老师",
+        "to": "学员家长",
+        "type": "authority"
+      },
+      "action": {
+        "id": "A-DISTRIBUTE-RESULT",
+        "name": "发结果"
+      },
+      "domain": {
+        "id": "D-CONTENT",
+        "name": "内容",
+        "sub": "笔记"
+      },
+      "ai": {
+        "level": "L1",
+        "level_name": "替代重复劳动",
+        "capability": "AI-TRANSFORM",
+        "what_it_does": "AI 自动生成阶段报告并支持分享到群内",
+        "what_it_replaces": "替代重复劳动"
+      },
+      "one_liner": "培训班老师面向学员家长：AI 自动生成阶段报告并支持分享到群内",
+      "user_action": "上传图片/记录 → AI分析 → 查看结果",
+      "trigger": "每周总结时",
+      "frequency": "每周 1 次",
+      "user": {
+        "primary": "任意需要汇报的人",
+        "secondary": "群成员",
+        "population": "5000万"
+      },
+      "payment": {
+        "who_pays": "组织者",
+        "why": "省时间",
+        "price": "39.0元/月",
+        "free_tier": "基础模板免费",
+        "vip_tier": "高级模板"
+      },
+      "spread": {
+        "mechanism": "class_group",
+        "description": "群内协作天然传播，可形成一人带多人",
+        "viral_action": "生成结果卡片或周报后分享",
+        "one_brings_many": "群内协作天然传播，可形成一人带多人"
+      },
+      "scores": {
+        "solo_feasible": 6,
+        "ai_breakthrough": 3,
+        "high_frequency": 8,
+        "clear_user_payment": 15,
+        "specific_executable": 9,
+        "large_market": 10,
+        "real_pain": 12,
+        "human_drive": 15,
+        "total": 69
+      },
+      "priority_score": 61.6,
+      "competition": {
+        "existing": "飞书文档",
+        "gap": "差异化弱",
+        "moat": "几乎无"
+      },
+      "risks": [
+        "AI 价值过低",
+        "红海竞争严重"
+      ],
+      "page_types": [
+        "dashboard",
+        "dashboard"
+      ],
+      "notes": "老师端付费明确，报告天然传播",
+      "rejection_reasons": [
+        "ai_level_below_threshold",
+        "red_ocean",
+        "score_below_threshold"
+      ],
+      "template_id": "generic-notion"
+    },
+    {
+      "id": "IDEA-2026-0012",
+      "batch_id": "BATCH-PIPELINE-20260316-225357",
+      "created": "2026-03-16",
+      "status": "rejected",
+      "dedupe_key": "R-AUTH-04|A-DISTRIBUTE-RESULT|D-CONTENT|笔记",
+      "relation": {
+        "id": "R-AUTH-04",
+        "from": "体育教练",
+        "to": "学员",
+        "type": "authority"
+      },
+      "action": {
+        "id": "A-DISTRIBUTE-RESULT",
+        "name": "发结果"
+      },
+      "domain": {
+        "id": "D-CONTENT",
+        "name": "内容",
+        "sub": "笔记"
+      },
+      "ai": {
+        "level": "L1",
+        "level_name": "替代重复劳动",
+        "capability": "AI-TRANSFORM",
+        "what_it_does": "AI 自动生成阶段报告并支持分享到群内",
+        "what_it_replaces": "替代重复劳动"
+      },
+      "one_liner": "体育教练面向学员：AI 自动生成阶段报告并支持分享到群内",
+      "user_action": "上传图片/记录 → AI分析 → 查看结果",
+      "trigger": "每周总结时",
+      "frequency": "每周 1 次",
+      "user": {
+        "primary": "任意需要汇报的人",
+        "secondary": "群成员",
+        "population": "3000万"
+      },
+      "payment": {
+        "who_pays": "组织者",
+        "why": "省时间",
+        "price": "39.0元/月",
+        "free_tier": "基础模板免费",
+        "vip_tier": "高级模板"
+      },
+      "spread": {
+        "mechanism": "interest_group",
+        "description": "结果卡片可分享带来传播",
+        "viral_action": "生成结果卡片或周报后分享",
+        "one_brings_many": "结果卡片可分享带来传播"
+      },
+      "scores": {
+        "solo_feasible": 6,
+        "ai_breakthrough": 3,
+        "high_frequency": 8,
+        "clear_user_payment": 15,
+        "specific_executable": 9,
+        "large_market": 10,
+        "real_pain": 12,
+        "human_drive": 15,
+        "total": 69
+      },
+      "priority_score": 58.6,
+      "competition": {
+        "existing": "飞书文档",
+        "gap": "差异化弱",
+        "moat": "几乎无"
+      },
+      "risks": [
+        "AI 价值过低",
+        "红海竞争严重"
+      ],
+      "page_types": [
+        "dashboard",
+        "dashboard"
+      ],
+      "notes": "垂直训练场景适合视觉 AI",
+      "rejection_reasons": [
+        "ai_level_below_threshold",
+        "red_ocean",
+        "score_below_threshold"
+      ],
+      "template_id": "generic-notion"
+    },
+    {
+      "id": "IDEA-2026-0016",
+      "batch_id": "BATCH-PIPELINE-20260316-225357",
+      "created": "2026-03-16",
+      "status": "rejected",
+      "dedupe_key": "R-MUT-03|A-DISTRIBUTE-RESULT|D-CONTENT|笔记",
+      "relation": {
+        "id": "R-MUT-03",
+        "from": "病友",
+        "to": "病友",
+        "type": "mutual"
+      },
+      "action": {
+        "id": "A-DISTRIBUTE-RESULT",
+        "name": "发结果"
+      },
+      "domain": {
+        "id": "D-CONTENT",
+        "name": "内容",
+        "sub": "笔记"
+      },
+      "ai": {
+        "level": "L1",
+        "level_name": "替代重复劳动",
+        "capability": "AI-TRANSFORM",
+        "what_it_does": "AI 自动生成阶段报告并支持分享到群内",
+        "what_it_replaces": "替代重复劳动"
+      },
+      "one_liner": "病友面向病友：AI 自动生成阶段报告并支持分享到群内",
+      "user_action": "上传图片/记录 → AI分析 → 查看结果",
+      "trigger": "每周总结时",
+      "frequency": "每周 1 次",
+      "user": {
+        "primary": "任意需要汇报的人",
+        "secondary": "群成员",
+        "population": "4亿"
+      },
+      "payment": {
+        "who_pays": "组织者",
+        "why": "省时间",
+        "price": "19.9元/月",
+        "free_tier": "基础模板免费",
+        "vip_tier": "高级模板"
+      },
+      "spread": {
+        "mechanism": "interest_group",
+        "description": "结果卡片可分享带来传播",
+        "viral_action": "生成结果卡片或周报后分享",
+        "one_brings_many": "结果卡片可分享带来传播"
+      },
+      "scores": {
+        "solo_feasible": 6,
+        "ai_breakthrough": 3,
+        "high_frequency": 8,
+        "clear_user_payment": 10,
+        "specific_executable": 9,
+        "large_market": 10,
+        "real_pain": 8,
+        "human_drive": 10,
+        "total": 55
+      },
+      "priority_score": 47.0,
+      "competition": {
+        "existing": "飞书文档",
+        "gap": "差异化弱",
+        "moat": "几乎无"
+      },
+      "risks": [
+        "AI 价值过低",
+        "红海竞争严重"
+      ],
+      "page_types": [
+        "dashboard",
+        "dashboard"
+      ],
+      "notes": "天然社群传播，但付费链路更弱",
+      "rejection_reasons": [
+        "ai_level_below_threshold",
+        "red_ocean",
+        "score_below_threshold"
+      ],
+      "template_id": "generic-notion"
+    }
+  ]
+}

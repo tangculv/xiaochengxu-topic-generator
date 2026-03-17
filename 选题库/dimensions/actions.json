@@ -1,0 +1,113 @@
+[
+  {
+    "id": "A-EVALUATE-HEALTH",
+    "category": "evaluate",
+    "name": "判健康",
+    "description": "对饮食、用药、健康行为给出判断",
+    "ai_potential": 5,
+    "page_type": "form-to-result",
+    "fit_domains": [
+      "D-HEALTH"
+    ]
+  },
+  {
+    "id": "A-TRACK-HEALTH",
+    "category": "track",
+    "name": "追踪健康",
+    "description": "连续记录并发现趋势异常",
+    "ai_potential": 5,
+    "page_type": "record-history",
+    "fit_domains": [
+      "D-HEALTH"
+    ]
+  },
+  {
+    "id": "A-EVALUATE-CORRECTNESS",
+    "category": "evaluate",
+    "name": "判对错",
+    "description": "识别作业、试卷、练习中的正确性与知识点归因",
+    "ai_potential": 5,
+    "page_type": "form-to-result",
+    "fit_domains": [
+      "D-STUDY",
+      "D-SKILL"
+    ]
+  },
+  {
+    "id": "A-DISTRIBUTE-RESULT",
+    "category": "distribute",
+    "name": "发结果",
+    "description": "向用户分发个性化结果、报告和进步总结",
+    "ai_potential": 4,
+    "page_type": "dashboard",
+    "fit_domains": [
+      "D-HEALTH",
+      "D-STUDY",
+      "D-SKILL",
+      "D-MONEY",
+      "D-EVENT"
+    ]
+  },
+  {
+    "id": "A-TRACK-FINANCE",
+    "category": "track",
+    "name": "追踪财务",
+    "description": "记录工时、收入、账目并自动核算",
+    "ai_potential": 3,
+    "page_type": "record-history",
+    "fit_domains": [
+      "D-MONEY"
+    ]
+  },
+  {
+    "id": "A-VERIFY-COMPLIANCE",
+    "category": "verify",
+    "name": "核验合规",
+    "description": "判断是否按要求执行",
+    "ai_potential": 4,
+    "page_type": "form-to-result",
+    "fit_domains": [
+      "D-HEALTH",
+      "D-SAFETY",
+      "D-STUDY",
+      "D-EVENT"
+    ]
+  },
+  {
+    "id": "A-EVALUATE-QUALITY",
+    "category": "evaluate",
+    "name": "判质量",
+    "description": "对技能、作品、动作进行质量评估",
+    "ai_potential": 5,
+    "page_type": "form-to-result",
+    "fit_domains": [
+      "D-SKILL",
+      "D-CONTENT"
+    ]
+  },
+  {
+    "id": "A-COLLECT-FEEDBACK",
+    "category": "collect",
+    "name": "收反馈",
+    "description": "收集评价、意见、情况反馈",
+    "ai_potential": 4,
+    "page_type": "form-to-result",
+    "fit_domains": [
+      "D-EVENT",
+      "D-HEALTH",
+      "D-RELATION"
+    ]
+  },
+  {
+    "id": "A-COORDINATE-SCHEDULE",
+    "category": "coordinate",
+    "name": "排期协调",
+    "description": "协调多人时间和任务分配",
+    "ai_potential": 3,
+    "page_type": "dashboard",
+    "fit_domains": [
+      "D-TIME",
+      "D-EVENT"
+    ]
+  }
+]

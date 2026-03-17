@@ -1,0 +1,79 @@
+{
+  "id": "IDEA-2026-0733",
+  "batch_id": "BATCH-100",
+  "created": "2026-03-17",
+  "status": "candidate",
+  "dedupe_key": "R-MUT-03|A-VERIFY-COMPLIANCE|D-HEALTH|用药",
+  "relation": {
+    "id": "R-MUT-03",
+    "from": "病友",
+    "to": "病友",
+    "type": "mutual"
+  },
+  "action": {
+    "id": "A-VERIFY-COMPLIANCE",
+    "name": "核验合规"
+  },
+  "domain": {
+    "id": "D-HEALTH",
+    "name": "健康",
+    "sub": "用药"
+  },
+  "ai": {
+    "level": "L3",
+    "level_name": "替代专家判断",
+    "capability": "AI-PATTERN",
+    "what_it_does": "围绕用药记录，共同记录症状与诱因，AI识别高风险模式并提醒复查",
+    "what_it_replaces": "替代专家判断"
+  },
+  "one_liner": "病友面向病友：围绕用药记录，共同记录症状与诱因，AI识别高风险模式并提醒复查",
+  "user_action": "上传图片/记录 → AI分析 → 查看结果",
+  "trigger": "每周复盘时",
+  "frequency": "每周 1 次",
+  "user": {
+    "primary": "病友群管理员、患者本人、照护家属",
+    "secondary": "家属",
+    "population": "4亿"
+  },
+  "payment": {
+    "who_pays": "患者本人或家属",
+    "why": "降低复发风险，获得趋势提醒",
+    "price": "29.9元/月",
+    "free_tier": "基础记录免费",
+    "vip_tier": "群组趋势预警 + 个体风险提醒"
+  },
+  "spread": {
+    "mechanism": "interest_group",
+    "description": "结果卡片可分享带来传播",
+    "viral_action": "生成结果卡片或周报后分享",
+    "one_brings_many": "结果卡片可分享带来传播"
+  },
+  "scores": {
+    "solo_feasible": 8,
+    "ai_breakthrough": 15,
+    "high_frequency": 8,
+    "clear_user_payment": 10,
+    "specific_executable": 9,
+    "large_market": 10,
+    "real_pain": 8,
+    "human_drive": 10,
+    "total": 77
+  },
+  "priority_score": 75.8,
+  "competition": {
+    "existing": "微信群聊天、普通记录表",
+    "gap": "缺少从群体记录中提炼个人风险模式的工具",
+    "moat": "病程数据与群体模式识别"
+  },
+  "risks": [
+    "数据真实性参差不齐",
+    "医疗风险提示需慎重措辞"
+  ],
+  "page_types": [
+    "form-to-result",
+    "dashboard"
+  ],
+  "notes": "天然社群传播，但付费链路更弱",
+  "rejection_reasons": [],
+  "template_id": "mutual-risk-用药"
+}

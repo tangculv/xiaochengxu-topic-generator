@@ -1,0 +1,80 @@
+{
+  "id": "IDEA-2026-0667",
+  "batch_id": "BATCH-100",
+  "created": "2026-03-17",
+  "status": "rejected",
+  "dedupe_key": "R-SELF-03|A-EVALUATE-QUALITY|D-SKILL|口语",
+  "relation": {
+    "id": "R-SELF-03",
+    "from": "自己",
+    "to": "学习进度",
+    "type": "self"
+  },
+  "action": {
+    "id": "A-EVALUATE-QUALITY",
+    "name": "判质量"
+  },
+  "domain": {
+    "id": "D-SKILL",
+    "name": "技能",
+    "sub": "口语"
+  },
+  "ai": {
+    "level": "L2",
+    "level_name": "替代技能工作",
+    "capability": "AI-EVALUATE",
+    "what_it_does": "围绕口语场景，上传作品或动作片段，AI评估质量并给出改进建议",
+    "what_it_replaces": "替代技能工作"
+  },
+  "one_liner": "自己面向学习进度：围绕口语场景，上传作品或动作片段，AI评估质量并给出改进建议",
+  "user_action": "上传图片/记录 → AI分析 → 查看结果",
+  "trigger": "每次训练或练习后",
+  "frequency": "每周 2-4 次",
+  "user": {
+    "primary": "教练、学生、自学者",
+    "secondary": "机构主理人",
+    "population": "2亿"
+  },
+  "payment": {
+    "who_pays": "用户本人或机构",
+    "why": "提高动作/作品质量，减少纯人工点评成本",
+    "price": "19.9元/月",
+    "free_tier": "每周 2 次免费",
+    "vip_tier": "无限分析 + 进步记录"
+  },
+  "spread": {
+    "mechanism": "self",
+    "description": "个人使用为主，可通过成果分享传播",
+    "viral_action": "生成结果卡片或周报后分享",
+    "one_brings_many": "个人使用为主，可通过成果分享传播"
+  },
+  "scores": {
+    "solo_feasible": 9,
+    "ai_breakthrough": 12,
+    "high_frequency": 10,
+    "clear_user_payment": 10,
+    "specific_executable": 9,
+    "large_market": 10,
+    "real_pain": 8,
+    "human_drive": 10,
+    "total": 76
+  },
+  "priority_score": 60.4,
+  "competition": {
+    "existing": "人工点评、视频课程",
+    "gap": "缺少轻量化 AI 点评工具",
+    "moat": "点评历史与个体成长轨迹"
+  },
+  "risks": [
+    "视频/图像处理成本高"
+  ],
+  "page_types": [
+    "form-to-result",
+    "dashboard"
+  ],
+  "notes": "个体学习管理长期刚需",
+  "rejection_reasons": [
+    "deduped_by_higher_ai_variant"
+  ],
+  "template_id": "skill-quality-口语"
+}

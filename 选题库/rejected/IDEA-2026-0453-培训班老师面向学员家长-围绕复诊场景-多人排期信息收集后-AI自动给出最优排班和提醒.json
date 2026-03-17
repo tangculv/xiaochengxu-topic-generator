@@ -1,0 +1,80 @@
+{
+  "id": "IDEA-2026-0453",
+  "batch_id": "BATCH-100",
+  "created": "2026-03-17",
+  "status": "rejected",
+  "dedupe_key": "R-AUTH-03|A-COORDINATE-SCHEDULE|D-TIME|复诊",
+  "relation": {
+    "id": "R-AUTH-03",
+    "from": "培训班老师",
+    "to": "学员家长",
+    "type": "authority"
+  },
+  "action": {
+    "id": "A-COORDINATE-SCHEDULE",
+    "name": "排期协调"
+  },
+  "domain": {
+    "id": "D-TIME",
+    "name": "时间",
+    "sub": "复诊"
+  },
+  "ai": {
+    "level": "L2",
+    "level_name": "替代技能工作",
+    "capability": "AI-GENERATE",
+    "what_it_does": "围绕复诊场景，多人排期信息收集后，AI自动给出最优排班和提醒",
+    "what_it_replaces": "替代技能工作"
+  },
+  "one_liner": "培训班老师面向学员家长：围绕复诊场景，多人排期信息收集后，AI自动给出最优排班和提醒",
+  "user_action": "上传图片/记录 → AI分析 → 查看结果",
+  "trigger": "每次组织活动或分工前",
+  "frequency": "每周 1 次",
+  "user": {
+    "primary": "家属协作人、班委、社区干部、老师",
+    "secondary": "参与成员",
+    "population": "5000万"
+  },
+  "payment": {
+    "who_pays": "组织者",
+    "why": "减少沟通和反复确认成本",
+    "price": "39.0元/月",
+    "free_tier": "基础排期免费",
+    "vip_tier": "智能提醒 + 历史排期建议"
+  },
+  "spread": {
+    "mechanism": "class_group",
+    "description": "群内协作天然传播，可形成一人带多人",
+    "viral_action": "生成结果卡片或周报后分享",
+    "one_brings_many": "群内协作天然传播，可形成一人带多人"
+  },
+  "scores": {
+    "solo_feasible": 9,
+    "ai_breakthrough": 12,
+    "high_frequency": 8,
+    "clear_user_payment": 15,
+    "specific_executable": 7,
+    "large_market": 10,
+    "real_pain": 12,
+    "human_drive": 15,
+    "total": 87
+  },
+  "priority_score": 78.8,
+  "competition": {
+    "existing": "接龙表单、群内投票",
+    "gap": "缺少适合微信群场景的排期协调助手",
+    "moat": "历史协作模式数据"
+  },
+  "risks": [
+    "AI 差异需依赖历史数据"
+  ],
+  "page_types": [
+    "dashboard",
+    "dashboard"
+  ],
+  "notes": "老师端付费明确，报告天然传播",
+  "rejection_reasons": [
+    "deduped_by_higher_ai_variant"
+  ],
+  "template_id": "schedule-helper-复诊"
+}

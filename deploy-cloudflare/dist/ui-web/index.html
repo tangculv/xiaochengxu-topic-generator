@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>选题生成器工作台</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <section class="panel compact">
+          <p class="eyebrow">小程序工厂</p>
+          <h1>选题生成器工作台</h1>
+          <p class="muted">支持批次切换、页面内直接生成、质量模式切换、收藏/待观察/立项管理。</p>
+        </section>
+
+        <section class="panel compact">
+          <h2>批次与生成</h2>
+          <label>
+            <span>浏览批次</span>
+            <select id="batch-select"></select>
+          </label>
+          <label>
+            <span>关系过滤</span>
+            <select id="generate-relation"></select>
+          </label>
+          <label>
+            <span>批次名称</span>
+            <input id="generate-name" type="text" placeholder="例如：老人照护专项" />
+          </label>
+          <label>
+            <span>生成规模</span>
+            <select id="generate-multiplier">
+              <option value="1">标准（约100-200）</option>
+              <option value="2">扩展（约300-400）</option>
+              <option value="3">极限（500+）</option>
+            </select>
+          </label>
+          <label>
+            <span>质量模式</span>
+            <select id="generate-quality">
+              <option value="focused">收敛优先（推荐）</option>
+              <option value="expanded">数量优先</option>
+            </select>
+          </label>
+          <div class="button-row">
+            <button id="generate-batch" class="button primary">页面内直接生成</button>
+            <button id="refresh-batches" class="button">刷新批次</button>
+          </div>
+          <p id="generate-status" class="muted small">请先启动本地服务：python3 scripts/topic_generator_server.py</p>
+          <pre id="command-preview" class="code-block">POST /api/generate</pre>
+        </section>
+
+        <section class="panel compact filters">
+          <h2>筛选器</h2>
+          <label>
+            <span>状态</span>
+            <select id="status-filter">
+              <option value="all">全部</option>
+              <option value="candidate">候选</option>
+              <option value="rejected">淘汰</option>
+            </select>
+          </label>
+          <label>
+            <span>人工标签</span>
+            <select id="decision-filter">
+              <option value="all">全部</option>
+              <option value="未处理">未处理</option>
+              <option value="收藏">收藏</option>
+              <option value="待观察">待观察</option>
+              <option value="立项候选">立项候选</option>
+              <option value="淘汰复核">淘汰复核</option>
+            </select>
+          </label>
+          <label>
+            <span>关系类型</span>
+            <select id="relation-filter"></select>
+          </label>
+          <label>
+            <span>领域</span>
+            <select id="domain-filter"></select>
+          </label>
+          <label>
+            <span>最低分</span>
+            <input id="score-filter" type="range" min="50" max="100" value="70" />
+            <strong id="score-value">70</strong>
+          </label>
+          <label>
+            <span>搜索</span>
+            <input id="keyword-filter" type="search" placeholder="搜索一句话描述 / 风险 / 原因" />
+          </label>
+        </section>
+      </aside>
+
+      <main class="content">
+        <section class="panel compact toolbar">
+          <div>
+            <p class="eyebrow">当前批次</p>
+            <h2 id="batch-title">加载中...</h2>
+            <p class="muted" id="batch-meta"></p>
+          </div>
+          <div class="toolbar-actions">
+            <button id="sort-total" class="button active">按总分</button>
+            <button id="sort-priority" class="button">按优先级</button>
+          </div>
+        </section>
+
+        <section class="panel chart-panel">
+          <div class="section-header">
+            <h2>状态概览</h2>
+            <span id="list-count" class="muted"></span>
+          </div>
+          <div id="summary-metrics" class="metrics"></div>
+          <div id="decision-metrics" class="metrics"></div>
+          <div id="score-bars" class="bars"></div>
+        </section>
+
+        <section class="panel list-panel">
+          <div class="section-header">
+            <h2>选题列表</h2>
+            <span class="muted">点击查看详情</span>
+          </div>
+          <div id="idea-list" class="idea-list"></div>
+        </section>
+      </main>
+
+      <aside class="detail panel">
+        <p class="eyebrow">详情</p>
+        <div id="detail-content" class="detail-content"></div>
+      </aside>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+{
+  "levels": [
+    {
+      "id": "L1",
+      "name": "替代重复劳动",
+      "score": 0,
+      "price_ceiling": 9.9
+    },
+    {
+      "id": "L2",
+      "name": "替代技能工作",
+      "score": 10,
+      "price_ceiling": 39.9
+    },
+    {
+      "id": "L3",
+      "name": "替代专家判断",
+      "score": 20,
+      "price_ceiling": 99
+    }
+  ],
+  "capabilities": [
+    {
+      "id": "AI-UNDERSTAND",
+      "name": "理解非结构化输入",
+      "min_level": "L2"
+    },
+    {
+      "id": "AI-EVALUATE",
+      "name": "质量评判",
+      "min_level": "L2"
+    },
+    {
+      "id": "AI-GENERATE",
+      "name": "个性化生成",
+      "min_level": "L2"
+    },
+    {
+      "id": "AI-PATTERN",
+      "name": "模式识别",
+      "min_level": "L2"
+    },
+    {
+      "id": "AI-REASON",
+      "name": "知识推理",
+      "min_level": "L3"
+    },
+    {
+      "id": "AI-TRANSFORM",
+      "name": "格式转换",
+      "min_level": "L1"
+    }
+  ]
+}

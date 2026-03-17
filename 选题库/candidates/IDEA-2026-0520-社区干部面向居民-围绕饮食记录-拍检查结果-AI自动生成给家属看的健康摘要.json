@@ -1,0 +1,79 @@
+{
+  "id": "IDEA-2026-0520",
+  "batch_id": "BATCH-100",
+  "created": "2026-03-17",
+  "status": "candidate",
+  "dedupe_key": "R-AUTH-06|A-DISTRIBUTE-RESULT|D-HEALTH|饮食",
+  "relation": {
+    "id": "R-AUTH-06",
+    "from": "社区干部",
+    "to": "居民",
+    "type": "authority"
+  },
+  "action": {
+    "id": "A-DISTRIBUTE-RESULT",
+    "name": "发结果"
+  },
+  "domain": {
+    "id": "D-HEALTH",
+    "name": "健康",
+    "sub": "饮食"
+  },
+  "ai": {
+    "level": "L2",
+    "level_name": "替代技能工作",
+    "capability": "AI-GENERATE",
+    "what_it_does": "围绕饮食记录，拍检查结果，AI自动生成给家属看的健康摘要",
+    "what_it_replaces": "替代技能工作"
+  },
+  "one_liner": "社区干部面向居民：围绕饮食记录，拍检查结果，AI自动生成给家属看的健康摘要",
+  "user_action": "上传图片/记录 → AI分析 → 查看结果",
+  "trigger": "拿到检查结果后",
+  "frequency": "每月 1 次",
+  "user": {
+    "primary": "家属、社区管理者、健康管理人员",
+    "secondary": "被照护者本人",
+    "population": "5000万"
+  },
+  "payment": {
+    "who_pays": "家属或组织者",
+    "why": "把复杂健康数据转化为可执行行动",
+    "price": "39.0元/月",
+    "free_tier": "基础摘要免费",
+    "vip_tier": "对比趋势 + 复诊提醒"
+  },
+  "spread": {
+    "mechanism": "community_group",
+    "description": "群内协作天然传播，可形成一人带多人",
+    "viral_action": "生成结果卡片或周报后分享",
+    "one_brings_many": "群内协作天然传播，可形成一人带多人"
+  },
+  "scores": {
+    "solo_feasible": 9,
+    "ai_breakthrough": 12,
+    "high_frequency": 8,
+    "clear_user_payment": 15,
+    "specific_executable": 9,
+    "large_market": 10,
+    "real_pain": 12,
+    "human_drive": 15,
+    "total": 86
+  },
+  "priority_score": 78.4,
+  "competition": {
+    "existing": "医院原始报告、人工解读",
+    "gap": "缺少面向家庭场景的持续健康摘要产品",
+    "moat": "长期健康事件与解释记录"
+  },
+  "risks": [
+    "对敏感结果需谨慎表达",
+    "需要稳定 OCR"
+  ],
+  "page_types": [
+    "dashboard",
+    "dashboard"
+  ],
+  "notes": "群体管理刚需，执行链条明确",
+  "rejection_reasons": [],
+  "template_id": "care-report-饮食"
+}

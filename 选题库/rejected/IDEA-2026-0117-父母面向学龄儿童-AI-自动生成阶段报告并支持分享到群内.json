@@ -1,0 +1,82 @@
+{
+  "id": "IDEA-2026-0117",
+  "batch_id": "BATCH-100",
+  "created": "2026-03-17",
+  "status": "rejected",
+  "dedupe_key": "R-CARE-03|A-DISTRIBUTE-RESULT|D-CONTENT|笔记",
+  "relation": {
+    "id": "R-CARE-03",
+    "from": "父母",
+    "to": "学龄儿童",
+    "type": "care"
+  },
+  "action": {
+    "id": "A-DISTRIBUTE-RESULT",
+    "name": "发结果"
+  },
+  "domain": {
+    "id": "D-CONTENT",
+    "name": "内容",
+    "sub": "笔记"
+  },
+  "ai": {
+    "level": "L1",
+    "level_name": "替代重复劳动",
+    "capability": "AI-TRANSFORM",
+    "what_it_does": "AI 自动生成阶段报告并支持分享到群内",
+    "what_it_replaces": "替代重复劳动"
+  },
+  "one_liner": "父母面向学龄儿童：AI 自动生成阶段报告并支持分享到群内",
+  "user_action": "上传图片/记录 → AI分析 → 查看结果",
+  "trigger": "每周总结时",
+  "frequency": "每周 1 次",
+  "user": {
+    "primary": "任意需要汇报的人",
+    "secondary": "群成员",
+    "population": "1亿"
+  },
+  "payment": {
+    "who_pays": "组织者",
+    "why": "省时间",
+    "price": "19.9元/月",
+    "free_tier": "基础模板免费",
+    "vip_tier": "高级模板"
+  },
+  "spread": {
+    "mechanism": "family_group",
+    "description": "群内协作天然传播，可形成一人带多人",
+    "viral_action": "生成结果卡片或周报后分享",
+    "one_brings_many": "群内协作天然传播，可形成一人带多人"
+  },
+  "scores": {
+    "solo_feasible": 6,
+    "ai_breakthrough": 3,
+    "high_frequency": 10,
+    "clear_user_payment": 15,
+    "specific_executable": 9,
+    "large_market": 10,
+    "real_pain": 15,
+    "human_drive": 15,
+    "total": 73
+  },
+  "priority_score": 69.2,
+  "competition": {
+    "existing": "飞书文档",
+    "gap": "差异化弱",
+    "moat": "几乎无"
+  },
+  "risks": [
+    "AI 价值过低",
+    "红海竞争严重"
+  ],
+  "page_types": [
+    "dashboard",
+    "dashboard"
+  ],
+  "notes": "家长高频刚需，群内传播强",
+  "rejection_reasons": [
+    "ai_level_below_threshold",
+    "red_ocean"
+  ],
+  "template_id": "generic-notion"
+}

@@ -1,0 +1,79 @@
+{
+  "id": "IDEA-2026-0629",
+  "batch_id": "BATCH-100",
+  "created": "2026-03-17",
+  "status": "candidate",
+  "dedupe_key": "R-SELF-03|A-EVALUATE-HEALTH|D-HEALTH|体检",
+  "relation": {
+    "id": "R-SELF-03",
+    "from": "自己",
+    "to": "学习进度",
+    "type": "self"
+  },
+  "action": {
+    "id": "A-EVALUATE-HEALTH",
+    "name": "判健康"
+  },
+  "domain": {
+    "id": "D-HEALTH",
+    "name": "健康",
+    "sub": "体检"
+  },
+  "ai": {
+    "level": "L3",
+    "level_name": "替代专家判断",
+    "capability": "AI-REASON",
+    "what_it_does": "拍体检，AI结合体检相关记录给出吃法建议",
+    "what_it_replaces": "替代专家判断"
+  },
+  "one_liner": "自己面向学习进度：拍体检，AI结合体检相关记录给出吃法建议",
+  "user_action": "上传图片/记录 → AI分析 → 查看结果",
+  "trigger": "每餐前后",
+  "frequency": "每天 3 次",
+  "user": {
+    "primary": "慢病患者、异地子女、控糖控脂人群",
+    "secondary": "需要照护父母的家庭成员",
+    "population": "2亿"
+  },
+  "payment": {
+    "who_pays": "患者本人或子女",
+    "why": "替代低频、昂贵的营养咨询，形成每餐决策助手",
+    "price": "29.9元/月",
+    "free_tier": "每日 1 次分析免费",
+    "vip_tier": "无限分析 + 周报 + 家庭协作"
+  },
+  "spread": {
+    "mechanism": "self",
+    "description": "个人使用为主，可通过成果分享传播",
+    "viral_action": "生成结果卡片或周报后分享",
+    "one_brings_many": "个人使用为主，可通过成果分享传播"
+  },
+  "scores": {
+    "solo_feasible": 8,
+    "ai_breakthrough": 15,
+    "high_frequency": 10,
+    "clear_user_payment": 10,
+    "specific_executable": 9,
+    "large_market": 10,
+    "real_pain": 8,
+    "human_drive": 10,
+    "total": 78
+  },
+  "priority_score": 71.2,
+  "competition": {
+    "existing": "薄荷健康、糖护士等偏记录工具",
+    "gap": "缺少基于个人病史与饮食场景的即时判断",
+    "moat": "病史+餐食图片+长期反馈构成个体化数据壁垒"
+  },
+  "risks": [
+    "医疗建议合规风险",
+    "食物识别准确率要求高"
+  ],
+  "page_types": [
+    "form-to-result",
+    "dashboard"
+  ],
+  "notes": "个体学习管理长期刚需",
+  "rejection_reasons": [],
+  "template_id": "care-diet-体检"
+}

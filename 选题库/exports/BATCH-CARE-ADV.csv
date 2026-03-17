@@ -1,0 +1,4 @@
+id,status,one_liner,relation,domain,ai_level,total_score,priority_score,price,rejection_reasons
+IDEA-2026-0001,candidate,成年子女面向老年父母：拍餐食，AI结合病史给出吃法建议,成年子女->老年父母,健康/饮食,L3,97,93.8,29.9元/月,
+IDEA-2026-0002,candidate,成年子女面向老年父母：拍药盒/病历，AI提醒并解释是否按医嘱执行,成年子女->老年父母,健康/用药,L2,95,83.0,19.9元/月,
+IDEA-2026-0003,candidate,成年子女面向老年父母：拍作业，AI逐题批改并生成同类巩固题,成年子女->老年父母,学业/作业,L2,95,83.0,19.9元/月,
