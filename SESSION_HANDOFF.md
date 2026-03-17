@@ -1,7 +1,7 @@
 # SESSION_HANDOFF
 
 ## current objective
-将新版石墨蓝灰主色调的 UI 升级提交并推送，然后等待 Render 部署线上版本。
+将深石墨蓝主题精修版提交并推送，然后等待 Render 部署线上版本。
 
 ## completed work
 - 已完成 V4 双标签架构：选题 / 概览
@@ -16,13 +16,12 @@
 - 已完成 V4.5 可用性收口：统一推荐/判断/筛选表达，减少术语感，提升标签与按钮层级
 - 已完成 V4.6 主题升级：主色改为更成熟的暖棕铜金系，整体更时尚高级；‘加入批量’已重构为‘选中此题 / 已选中’选择器
 - 已完成 V4.7 设计总监级精修：顶部品牌区更像正式产品、卡片阅读路径更明确、详情区更像结论式判断面板
-- 已完成本轮主色整体替换：由暖棕铜金系升级为更高级、克制、国际化的石墨蓝灰系，统一了 header、主按钮、筛选、卡片 hover、表格高亮、详情结论块与批量选择控件的视觉语义
-- 已清理旧主色残留，并通过 `node --check ui-web/app.js`
+- 已完成主色整体替换：由暖棕铜金系升级为石墨蓝灰系，统一了 header、主按钮、筛选、卡片 hover、表格高亮、详情结论块与批量选择控件的视觉语义
+- 已完成本轮主题精修：把主色进一步收敛为更高级的深石墨蓝系，并统一 header 状态、主按钮、焦点态、标签圆角、代码块与弱提示块的完成度
+- 已通过 `node --check ui-web/app.js`
 
 ## exact files changed
-- ui-web/index.html
 - ui-web/styles.css
-- ui-web/app.js
 - RUNLOG.md
 - TODO.autonomous.md
 - SESSION_HANDOFF.md
@@ -32,4 +31,4 @@
 - 当前仍主要是前端工作，后端接口与本地存储结构未改动
 
 ## recommended next command
-git add ui-web/index.html ui-web/styles.css ui-web/app.js RUNLOG.md TODO.autonomous.md SESSION_HANDOFF.md && git commit -m "feat(web): upgrade premium graphite blue theme" && git push
+git add ui-web/styles.css RUNLOG.md TODO.autonomous.md SESSION_HANDOFF.md && git commit -m "feat(web): polish premium graphite theme" && git push
