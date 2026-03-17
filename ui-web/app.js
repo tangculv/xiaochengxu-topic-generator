@@ -1,6 +1,6 @@
 const API_BASE = `${window.location.origin}/api`;
-const DECISION_STORAGE_KEY = 'topic-generator-decisions-v2';
-const LEGACY_STORAGE_KEY = 'topic-generator-decisions-v1';
+const DECISION_STORAGE_KEY = 'topic-generator-decisions-v3';
+const LEGACY_STORAGE_KEYS = ['topic-generator-decisions-v2', 'topic-generator-decisions-v1'];
 
 const QUICK_DECISION_TO_DETAIL = {
   要: '立项候选',
@@ -87,6 +87,21 @@ const SUBDOMAIN_TYPE = {
   笔记: '内容摘要',
 };
 
+const GRADE_META = {
+  S: { label: 'S｜优先立项', action: '建议先做', weight: 0 },
+  A: { label: 'A｜优先验证', action: '建议尽快验证', weight: 1 },
+  B: { label: 'B｜保留观察', action: '建议继续观察', weight: 2 },
+  C: { label: 'C｜价值有限', action: '建议谨慎投入', weight: 3 },
+  D: { label: 'D｜建议淘汰', action: '当前不建议投入', weight: 4 },
+};
+
+const PRODUCT_SHAPE_RULES = [
+  { test: card => card.logic_action === '判断型' && card.ai.level === 'L3', shape: '工具型', reason: '用户会为了即时判断结果反复使用，适合做高频轻工具。', mvp: '先做单场景输入 → AI判断 → 行动建议结果页。', monetization: '适合订阅制或按成员收费。' },
+  { test: card => card.logic_action === '分发型', shape: '报告型', reason: '价值体现在把复杂信息整理成可读报告。', mvp: '先做上传资料 → 自动摘要 → 一键分享报告。', monetization: '适合按报告包、按机构席位或高级模板收费。' },
+  { test: card => card.logic_action === '协调型' || card.topic_type_primary === '协同排期', shape: '协作型', reason: '多人协同和提醒是主要价值来源。', mvp: '先做信息收集 + 最优排期 + 自动提醒。', monetization: '适合按团队/组织者订阅收费。' },
+  { test: card => /报告|总结|摘要/.test(card.topic_type_secondary), shape: '内容型', reason: '结果内容本身就是可传播资产。', mvp: '先做标准化报告生成模板。', monetization: '适合订阅 + 模板增值。' },
+];
+
 const state = {
   index: null,
   dimensions: [],
@@ -98,6 +113,7 @@ const state = {
   sortBy: 'total',
   viewMode: 'cards',
   decisionMap: loadDecisionMap(),
+  activeQuickView: 'all',
   filters: {
     logicRelation: 'all',
     logicAction: 'all',
@@ -112,7 +128,7 @@ async function parseResponse(response) {
   const contentType = response.headers.get('content-type') || '';
   const text = await response.text();
   if (!contentType.includes('application/json')) {
-    const preview = text.slice(0, 160).replace(/\n/g, ' ');
+    const preview = text.slice(0, 180).replace(/\n/g, ' ');
     throw new Error(`接口没有返回 JSON，返回内容: ${preview}`);
   }
   return JSON.parse(text);
@@ -122,19 +138,24 @@ function loadDecisionMap() {
   try {
     const current = localStorage.getItem(DECISION_STORAGE_KEY);
     if (current) return JSON.parse(current);
-    const legacy = JSON.parse(localStorage.getItem(LEGACY_STORAGE_KEY) || '{}');
-    const migrated = Object.fromEntries(Object.entries(legacy).map(([id, value]) => {
-      const detailDecision = value.decision || '未处理';
-      const quickDecision = DETAIL_TO_QUICK[detailDecision] || '未处理';
-      return [id, {
-        quickDecision,
-        detailDecision,
-        note: value.note || '',
-        updatedAt: new Date().toISOString(),
-      }];
-    }));
-    localStorage.setItem(DECISION_STORAGE_KEY, JSON.stringify(migrated));
-    return migrated;
+    for (const key of LEGACY_STORAGE_KEYS) {
+      const raw = localStorage.getItem(key);
+      if (!raw) continue;
+      const legacy = JSON.parse(raw);
+      const migrated = Object.fromEntries(Object.entries(legacy).map(([id, value]) => {
+        const detailDecision = value.detailDecision || value.decision || '未处理';
+        const quickDecision = value.quickDecision || DETAIL_TO_QUICK[detailDecision] || '未处理';
+        return [id, {
+          quickDecision,
+          detailDecision,
+          note: value.note || '',
+          updatedAt: value.updatedAt || new Date().toISOString(),
+        }];
+      }));
+      localStorage.setItem(DECISION_STORAGE_KEY, JSON.stringify(migrated));
+      return migrated;
+    }
+    return {};
   } catch {
     return {};
   }
@@ -154,11 +175,17 @@ const els = {
   generateStatus: document.getElementById('generate-status'),
   commandPreview: document.getElementById('command-preview'),
   refreshBatches: document.getElementById('refresh-batches'),
+  openGenerator: document.getElementById('open-generator'),
+  closeGenerator: document.getElementById('close-generator'),
+  generatorPanel: document.getElementById('generator-panel'),
   clearFilters: document.getElementById('clear-filters'),
+  quickViews: document.getElementById('quick-views'),
   batchTitle: document.getElementById('batch-title'),
   batchMeta: document.getElementById('batch-meta'),
+  activeStrategyTags: document.getElementById('active-strategy-tags'),
   summaryMetrics: document.getElementById('summary-metrics'),
   gradeMetrics: document.getElementById('grade-metrics'),
+  funnelMetrics: document.getElementById('funnel-metrics'),
   quickMetrics: document.getElementById('quick-metrics'),
   decisionMetrics: document.getElementById('decision-metrics'),
   logicDistribution: document.getElementById('logic-distribution'),
@@ -220,7 +247,11 @@ function gradeClass(grade) {
 }
 
 function gradeLabel(grade) {
-  return `${grade}级`;
+  return GRADE_META[grade]?.label || grade;
+}
+
+function gradeActionHint(grade) {
+  return GRADE_META[grade]?.action || '继续观察';
 }
 
 function deriveLogicValue(card) {
@@ -230,7 +261,7 @@ function deriveLogicValue(card) {
   if ((card.priority_score || 0) >= 70 || /群|传播|协作/.test(card.spread.description || '')) values.push('强传播');
   if ((card.scores.real_pain || 0) >= 13) values.push('高痛点');
   if (['L2', 'L3'].includes(card.ai.level)) values.push('高AI杠杆');
-  if (!/作业帮|飞书文档|普通提醒类 App/.test(card.competition.existing || '')) values.push('低竞争窗口');
+  if (!/作业帮|飞书文档|普通提醒类 App/.test(card.competition.existing || '')) values.push('低竞争');
   return values[0] || '高痛点';
 }
 
@@ -253,6 +284,25 @@ function deriveProcessedState(card) {
   return card.quickDecision === '未处理' && card.detailDecision === '未处理' && !card.manualNote ? '未处理' : '已处理';
 }
 
+function deriveProductShape(card) {
+  const matched = PRODUCT_SHAPE_RULES.find(rule => rule.test(card));
+  if (matched) return matched;
+  return {
+    shape: '订阅型',
+    reason: '场景具备持续复用空间，更适合按月提供稳定价值。',
+    mvp: '先做单点价值最强的核心能力，形成可复用的日常入口。',
+    monetization: '适合订阅 + 高级分析增值。',
+  };
+}
+
+function deriveDecisionFunnelStage(card) {
+  if (card.detailDecision === '立项候选' || card.quickDecision === '要') return '已进入立项池';
+  if (card.quickDecision === '再看' || card.detailDecision === '收藏' || card.detailDecision === '待观察') return '已标记';
+  if (card.quickDecision === '不要' || card.detailDecision === '淘汰复核' || card.status === 'rejected') return '已淘汰';
+  if (card.processed_state === '已处理') return '已查看';
+  return '总候选';
+}
+
 function enrichCards(cards) {
   return cards.map(card => {
     const stored = state.decisionMap[card.id] || {};
@@ -266,6 +316,8 @@ function enrichCards(cards) {
       detailDecision,
       manualNote,
       recommendation_grade: grade,
+      grade_label: gradeLabel(grade),
+      grade_action_hint: gradeActionHint(grade),
       logic_relation: RELATION_LOGIC[card.relation.type] || '其他逻辑',
       logic_action: ACTION_LOGIC[card.action.category] || '判断型',
       topic_type_primary: deriveTopicPrimary(card),
@@ -274,8 +326,15 @@ function enrichCards(cards) {
     enriched.logic_value = deriveLogicValue(enriched);
     enriched.logic_stage = deriveLogicStage(enriched, grade);
     enriched.processed_state = deriveProcessedState(enriched);
+    const productShape = deriveProductShape(enriched);
+    enriched.product_shape = productShape.shape;
+    enriched.product_shape_reason = productShape.reason;
+    enriched.mvp_entry_suggestion = productShape.mvp;
+    enriched.monetization_hint = productShape.monetization;
     enriched.opportunity_summary = `${enriched.payment.who}愿意为“${enriched.payment.why}”付费，适合从${enriched.topic_type_secondary}切入。`;
     enriched.risk_summary = (enriched.risks || [])[0] || (enriched.rejection_reasons || []).join(' / ') || '暂无明显风险';
+    enriched.main_reason = `${enriched.logic_relation} + ${enriched.logic_value}，且更适合做${enriched.product_shape}。`;
+    enriched.decision_funnel_stage = deriveDecisionFunnelStage(enriched);
     return enriched;
   });
 }
@@ -310,6 +369,7 @@ async function loadBatch(batchId) {
   els.batchTitle.textContent = payload.batch.name;
   els.batchMeta.textContent = `${payload.batch.batch_id} · ${payload.batch.created} · 导出 ${payload.batch.export_csv || '无'}`;
   populateFilters(state.cards);
+  renderQuickViews(state.cards);
   renderMetrics(payload.batch, state.cards, state.cards);
   applyFilters();
 }
@@ -320,23 +380,31 @@ function metric(label, value, hint = '') {
 
 function renderMetrics(batch, allCards, currentCards) {
   const total = allCards.length;
+  const highValue = allCards.filter(card => ['S', 'A'].includes(card.recommendation_grade)).length;
   const processed = allCards.filter(card => card.processed_state === '已处理').length;
-  const candidates = allCards.filter(card => card.status === 'candidate').length;
-  const rejected = allCards.filter(card => card.status === 'rejected').length;
-  const current = currentCards.length;
+  const projectPool = allCards.filter(card => card.detailDecision === '立项候选' || card.quickDecision === '要').length;
+  const unprocessed = total - processed;
+  const topLogic = Object.entries(countBy(allCards, card => card.logic_relation))[0]?.[0] || '暂无';
   els.summaryMetrics.innerHTML = [
     metric('总题数', total),
-    metric('当前筛选后', current),
-    metric('候选数', candidates),
-    metric('淘汰数', rejected),
-    metric('已处理', processed),
-    metric('未处理', total - processed),
-    metric('最高分', Math.max(...allCards.map(card => card.scores.total), 0)),
-    metric('最高优先级', Math.max(...allCards.map(card => card.priority_score), 0)),
+    metric('高价值题占比', `${total ? Math.round((highValue / total) * 100) : 0}%`, `${highValue} 个 S/A 级`),
+    metric('已处理进度', `${total ? Math.round((processed / total) * 100) : 0}%`, `${processed}/${total}`),
+    metric('立项池数量', projectPool),
+    metric('未处理数量', unprocessed),
+    metric('当前主逻辑', topLogic),
   ].join('');
 
   const gradeCounts = countBy(allCards, card => card.recommendation_grade, ['S', 'A', 'B', 'C', 'D']);
-  els.gradeMetrics.innerHTML = Object.entries(gradeCounts).map(([label, value]) => metric(`${label} 级`, value)).join('');
+  els.gradeMetrics.innerHTML = Object.entries(gradeCounts).map(([label, value]) => metric(GRADE_META[label].label, value, GRADE_META[label].action)).join('');
+
+  const funnel = {
+    '总候选': allCards.length,
+    '已查看': allCards.filter(card => card.processed_state === '已处理').length,
+    '已标记“要”': allCards.filter(card => card.quickDecision === '要').length,
+    '已进入立项池': allCards.filter(card => card.detailDecision === '立项候选').length,
+    '已淘汰': allCards.filter(card => card.quickDecision === '不要' || card.status === 'rejected' || card.detailDecision === '淘汰复核').length,
+  };
+  els.funnelMetrics.innerHTML = Object.entries(funnel).map(([label, value]) => metric(label, value)).join('');
 
   const quickCounts = countBy(allCards, card => card.quickDecision, ['要', '再看', '不要', '未处理']);
   els.quickMetrics.innerHTML = Object.entries(quickCounts).map(([label, value]) => metric(label, value)).join('');
@@ -379,6 +447,26 @@ function renderScoreBars(cards) {
   }).join('');
 }
 
+function renderQuickViews(cards) {
+  const batchCreated = state.raw?.batch?.created || '';
+  const items = [
+    { id: 'all', label: '全部选题', count: cards.length },
+    { id: 'today', label: '今日新生成', count: cards.filter(card => String(card.created || '').startsWith(batchCreated)).length },
+    { id: 'priority', label: '值得先看', count: cards.filter(card => ['S', 'A'].includes(card.recommendation_grade)).length },
+    { id: 'project', label: '立项池', count: cards.filter(card => card.detailDecision === '立项候选' || card.quickDecision === '要').length },
+    { id: 'reviewed', label: '我已标记', count: cards.filter(card => card.processed_state === '已处理').length },
+    { id: 'spread', label: '高传播', count: cards.filter(card => card.logic_value === '强传播').length },
+    { id: 'payment', label: '强付费', count: cards.filter(card => card.logic_value === '强付费').length },
+    { id: 'lowCompetition', label: '低竞争', count: cards.filter(card => card.logic_value === '低竞争').length },
+  ];
+  els.quickViews.innerHTML = items.map(item => `
+    <button class="nav-item ${state.activeQuickView === item.id ? 'active' : ''}" data-quick-view="${item.id}">
+      <strong>${item.label}</strong>
+      <span class="muted small">${item.count}</span>
+    </button>
+  `).join('');
+}
+
 function populateFilters(cards) {
   els.relationFilter.innerHTML = ['<option value="all">全部</option>']
     .concat(uniq(cards.map(card => card.relation.type)).map(item => `<option value="${item}">${RELATION_LOGIC[item] || item}</option>`))
@@ -406,16 +494,38 @@ function renderChipGroup(target, filterKey, counts, allLabel) {
   target.innerHTML = buttons.join('');
 }
 
-function getActiveStrategy() {
+function getActiveStrategyParts() {
   const entries = [
-    ['逻辑', state.filters.logicRelation],
-    ['动作', state.filters.logicAction],
-    ['价值', state.filters.logicValue],
-    ['阶段', state.filters.logicStage],
-    ['类型', state.filters.topicPrimary],
-    ['子类', state.filters.topicSecondary],
-  ].filter(([, value]) => value && value !== 'all');
-  return entries.length ? `当前策略：${entries.map(([k, v]) => `${k}=${v}`).join(' / ')}` : '当前策略：未额外限定逻辑与类型';
+    ['视角', state.activeQuickView !== 'all' ? state.activeQuickView : null],
+    ['逻辑', state.filters.logicRelation !== 'all' ? state.filters.logicRelation : null],
+    ['动作', state.filters.logicAction !== 'all' ? state.filters.logicAction : null],
+    ['价值', state.filters.logicValue !== 'all' ? state.filters.logicValue : null],
+    ['阶段', state.filters.logicStage !== 'all' ? state.filters.logicStage : null],
+    ['类型', state.filters.topicPrimary !== 'all' ? state.filters.topicPrimary : null],
+    ['子类', state.filters.topicSecondary !== 'all' ? state.filters.topicSecondary : null],
+  ].filter(([, value]) => value);
+  return entries;
+}
+
+function renderActiveStrategyTags() {
+  const entries = getActiveStrategyParts();
+  els.activeStrategyTags.innerHTML = entries.length
+    ? entries.map(([label, value]) => `<span class="strategy-tag">${label} · ${value}</span>`).join('')
+    : '<span class="strategy-tag">当前策略 · 全部选题</span>';
+  els.activeStrategy.textContent = entries.length ? `当前策略：${entries.map(([label, value]) => `${label}=${value}`).join(' / ')}` : '当前策略：全部选题';
+}
+
+function matchesQuickView(card) {
+  switch (state.activeQuickView) {
+    case 'today': return String(card.created || '').startsWith(state.raw?.batch?.created || '');
+    case 'priority': return ['S', 'A'].includes(card.recommendation_grade);
+    case 'project': return card.detailDecision === '立项候选' || card.quickDecision === '要';
+    case 'reviewed': return card.processed_state === '已处理';
+    case 'spread': return card.logic_value === '强传播';
+    case 'payment': return card.logic_value === '强付费';
+    case 'lowCompetition': return card.logic_value === '低竞争';
+    default: return true;
+  }
 }
 
 function applyFilters() {
@@ -440,6 +550,7 @@ function applyFilters() {
     const matchLogicStage = state.filters.logicStage === 'all' || card.logic_stage === state.filters.logicStage;
     const matchTopicPrimary = state.filters.topicPrimary === 'all' || card.topic_type_primary === state.filters.topicPrimary;
     const matchTopicSecondary = state.filters.topicSecondary === 'all' || card.topic_type_secondary === state.filters.topicSecondary;
+    const matchQuickView = matchesQuickView(card);
     const haystack = [
       card.one_liner,
       card.logic_relation,
@@ -455,11 +566,13 @@ function applyFilters() {
       card.detailDecision,
       card.manualNote,
       card.payment.why,
+      card.product_shape,
+      card.mvp_entry_suggestion,
       ...(card.risks || []),
       ...(card.rejection_reasons || []),
     ].join(' ').toLowerCase();
     const matchKeyword = !keyword || haystack.includes(keyword);
-    return matchRelation && matchDomain && matchStatus && matchQuick && matchDetail && matchScore && matchLogicRelation && matchLogicAction && matchLogicValue && matchLogicStage && matchTopicPrimary && matchTopicSecondary && matchKeyword;
+    return matchRelation && matchDomain && matchStatus && matchQuick && matchDetail && matchScore && matchLogicRelation && matchLogicAction && matchLogicValue && matchLogicStage && matchTopicPrimary && matchTopicSecondary && matchQuickView && matchKeyword;
   });
 
   list.sort(sortComparator());
@@ -469,14 +582,15 @@ function applyFilters() {
   renderList(list);
   renderTable(list);
   renderDetail(list.find(card => card.id === state.selectedId));
+  renderQuickViews(state.cards);
+  renderActiveStrategyTags();
   els.listCount.textContent = `当前 ${list.length} / 总计 ${state.cards.length}`;
-  els.activeStrategy.textContent = getActiveStrategy();
   bindInteractiveNodes();
 }
 
 function sortComparator() {
   if (state.sortBy === 'priority') return (a, b) => b.priority_score - a.priority_score || b.scores.total - a.scores.total;
-  if (state.sortBy === 'grade') return (a, b) => 'SABCD'.indexOf(a.recommendation_grade) - 'SABCD'.indexOf(b.recommendation_grade) || b.priority_score - a.priority_score;
+  if (state.sortBy === 'grade') return (a, b) => GRADE_META[a.recommendation_grade].weight - GRADE_META[b.recommendation_grade].weight || b.priority_score - a.priority_score;
   return (a, b) => b.scores.total - a.scores.total || b.priority_score - a.priority_score;
 }
 
@@ -490,16 +604,24 @@ function quickBadge(quickDecision) {
   return `<span class="score-pill ${cls}">${quickDecision}</span>`;
 }
 
+function renderQuickActionButtons(card) {
+  return [
+    ['要', 'want'],
+    ['再看', 'review'],
+    ['不要', 'reject'],
+  ].map(([label, cls]) => `<button class="quick-action ${card.quickDecision === label ? `active ${cls}` : ''}" data-action="quick" data-quick="${label}" data-id="${card.id}">${label}</button>`).join('');
+}
+
 function renderList(cards) {
   if (!cards.length) {
-    els.ideaList.innerHTML = '<div class="empty-state">当前筛选条件下没有选题，换一个逻辑或降低最低分试试。</div>';
+    els.ideaList.innerHTML = '<div class="empty-state">当前筛选条件下没有选题，换一个视角或降低最低分试试。</div>';
     return;
   }
   els.ideaList.innerHTML = cards.map(card => `
     <article class="idea-card ${card.id === state.selectedId ? 'active' : ''}" data-id="${card.id}">
       <div class="card-header">
         <div class="score-row">
-          <span class="grade-pill ${gradeClass(card.recommendation_grade)}">${gradeLabel(card.recommendation_grade)}</span>
+          <span class="grade-pill ${gradeClass(card.recommendation_grade)}">${card.grade_label}</span>
           <span class="score-pill ${card.status === 'rejected' ? 'danger' : ''}">${card.status === 'candidate' ? '候选' : '淘汰'}</span>
           ${quickBadge(card.quickDecision)}
           ${decisionBadge(card.detailDecision)}
@@ -510,35 +632,29 @@ function renderList(cards) {
         </div>
       </div>
       <h3>${card.one_liner}</h3>
+      <p class="muted"><strong>${card.grade_action_hint}</strong> · ${card.main_reason}</p>
       <div class="tags">
         <span class="tag emphasis">${card.logic_relation}</span>
         <span class="tag emphasis">${card.logic_action}</span>
         <span class="tag emphasis">${card.logic_value}</span>
         <span class="tag">${card.topic_type_primary}</span>
         <span class="tag">${card.topic_type_secondary}</span>
-        <span class="tag">${card.domain.name}-${card.domain.sub}</span>
+        <span class="tag">${card.product_shape}</span>
       </div>
       <div class="card-body">
-        <p><strong>核心机会：</strong>${card.opportunity_summary}</p>
+        <p><strong>一句话机会：</strong>${card.opportunity_summary}</p>
         <p><strong>目标用户：</strong>${card.user.primary}</p>
+        <p><strong>商业摘要：</strong>${card.monetization_hint}</p>
         <p><strong>风险一句话：</strong>${card.risk_summary}</p>
       </div>
       <div class="card-actions">
         ${renderQuickActionButtons(card)}
         <button class="quick-action favorite-toggle ${card.detailDecision === '收藏' ? 'active review' : ''}" data-action="favorite" data-id="${card.id}">收藏</button>
-        <button class="quick-action" data-action="open" data-id="${card.id}">打开详情</button>
+        <button class="quick-action" data-action="open" data-id="${card.id}">查看详情</button>
       </div>
       ${card.manualNote ? `<div class="summary-line"><span class="tag">备注</span><span class="muted small">${card.manualNote}</span></div>` : ''}
     </article>
   `).join('');
-}
-
-function renderQuickActionButtons(card) {
-  return [
-    ['要', 'want'],
-    ['再看', 'review'],
-    ['不要', 'reject'],
-  ].map(([label, cls]) => `<button class="quick-action ${card.quickDecision === label ? `active ${cls}` : ''}" data-action="quick" data-quick="${label}" data-id="${card.id}">${label}</button>`).join('');
 }
 
 function renderTable(cards) {
@@ -550,7 +666,7 @@ function renderTable(cards) {
     <tr class="${card.id === state.selectedId ? 'active' : ''}" data-id="${card.id}">
       <td>
         <strong>${card.one_liner}</strong>
-        <div class="muted small">${card.topic_type_secondary} · ${card.user.primary}</div>
+        <div class="muted small">${card.grade_action_hint}</div>
       </td>
       <td>${card.logic_relation}<br/><span class="muted small">${card.logic_action}</span></td>
       <td>${card.topic_type_primary}<br/><span class="muted small">${card.topic_type_secondary}</span></td>
@@ -558,7 +674,7 @@ function renderTable(cards) {
       <td>${card.priority_score}</td>
       <td><span class="grade-pill ${gradeClass(card.recommendation_grade)}">${card.recommendation_grade}</span></td>
       <td>${card.payment.price}</td>
-      <td>${card.logic_value}</td>
+      <td>${card.product_shape}</td>
       <td>${card.ai.level}</td>
       <td>${card.quickDecision}</td>
     </tr>
@@ -585,27 +701,67 @@ function renderDetail(card) {
     els.detailContent.innerHTML = '<p class="muted">没有符合条件的选题。</p>';
     return;
   }
-  const quickConclusion = card.logic_stage === '可立项' ? '建议先做' : card.logic_stage === '可测试' ? '建议尽快验证' : card.logic_stage === '可观察' ? '建议先观察' : '当前不建议投入';
   els.detailContent.innerHTML = `
     <section class="detail-block">
       <div class="score-row">
-        <span class="grade-pill ${gradeClass(card.recommendation_grade)}">${gradeLabel(card.recommendation_grade)}</span>
+        <span class="grade-pill ${gradeClass(card.recommendation_grade)}">${card.grade_label}</span>
         ${quickBadge(card.quickDecision)}
         ${decisionBadge(card.detailDecision)}
       </div>
       <h2>${card.one_liner}</h2>
       <p class="muted">${card.id} · 模板 ${card.template_id}</p>
-      <p><strong>快速结论：</strong>${quickConclusion}</p>
+      <p><strong>快速结论：</strong>${card.grade_action_hint}</p>
+      <p><strong>主要原因：</strong>${card.main_reason}</p>
       <div class="summary-line">
         <span class="tag emphasis">${card.logic_relation}</span>
         <span class="tag emphasis">${card.logic_action}</span>
         <span class="tag emphasis">${card.logic_value}</span>
         <span class="tag">${card.logic_stage}</span>
+        <span class="tag">${card.product_shape}</span>
       </div>
     </section>
 
     <section class="detail-block">
-      <h3>人工沉淀</h3>
+      <h3>机会分析</h3>
+      <p><strong>这是个什么机会：</strong>${card.opportunity_summary}</p>
+      <p><strong>为什么是现在：</strong>${card.logic_value} + ${card.ai.level} 级 AI 能力，让这个场景比传统工具更容易形成明确差异。</p>
+      <p><strong>为什么值得你看：</strong>${card.grade_action_hint}，而且当前更适合从 ${card.topic_type_secondary} 这个入口切入。</p>
+    </section>
+
+    <section class="detail-block">
+      <h3>用户与商业</h3>
+      <div class="kv-grid">
+        <div class="kv-item"><span>核心用户</span><strong>${card.user.primary}</strong></div>
+        <div class="kv-item"><span>次级用户</span><strong>${card.user.secondary}</strong></div>
+        <div class="kv-item"><span>谁买单</span><strong>${card.payment.who}</strong></div>
+        <div class="kv-item"><span>价格带</span><strong>${card.payment.price}</strong></div>
+      </div>
+      <p><strong>为什么会付费：</strong>${card.payment.why}</p>
+      <p><strong>更可能的收费方式：</strong>${card.monetization_hint}</p>
+      <p class="muted">免费层：${card.payment.free_tier}<br/>会员层：${card.payment.vip_tier}</p>
+    </section>
+
+    <section class="detail-block">
+      <h3>产品形态建议</h3>
+      <div class="kv-grid">
+        <div class="kv-item"><span>推荐形态</span><strong>${card.product_shape}</strong></div>
+        <div class="kv-item"><span>页面类型</span><strong>${card.action.page_type || '结果页'}</strong></div>
+      </div>
+      <p><strong>为什么适合：</strong>${card.product_shape_reason}</p>
+      <p><strong>MVP 切入建议：</strong>${card.mvp_entry_suggestion}</p>
+    </section>
+
+    <section class="detail-block">
+      <h3>竞争与风险</h3>
+      <p><strong>替代方案：</strong>${card.competition.existing}</p>
+      <p><strong>差异点：</strong>${card.competition.gap}</p>
+      <p><strong>难点：</strong>${card.competition.moat}</p>
+      <ul class="bullet-list">${(card.risks || []).map(item => `<li>${item}</li>`).join('')}</ul>
+      ${card.rejection_reasons?.length ? `<p class="danger-text"><strong>淘汰原因：</strong>${card.rejection_reasons.join(' / ')}</p>` : ''}
+    </section>
+
+    <section class="detail-block">
+      <h3>人工决策与沉淀</h3>
       <label>
         <span>第一层：快速决策</span>
         <select id="detail-quick-decision">
@@ -624,51 +780,8 @@ function renderDetail(card) {
       </label>
       <div class="inline-actions">
         <button id="save-decision" class="button primary">保存判断</button>
-        <button id="mark-project" class="button">加入立项池</button>
+        <button id="mark-project" class="button secondary">加入立项池</button>
       </div>
-    </section>
-
-    <section class="detail-block">
-      <h3>选题逻辑</h3>
-      <div class="kv-grid">
-        <div class="kv-item"><span>关系逻辑</span><strong>${card.logic_relation}</strong></div>
-        <div class="kv-item"><span>动作逻辑</span><strong>${card.logic_action}</strong></div>
-        <div class="kv-item"><span>价值逻辑</span><strong>${card.logic_value}</strong></div>
-        <div class="kv-item"><span>阶段判断</span><strong>${card.logic_stage}</strong></div>
-      </div>
-      <p><strong>为什么会生成这个题：</strong>${card.relation.from} 对 ${card.relation.to} 存在 ${card.action.name} 需求，适合做成 ${card.action.page_type || '轻量结果页'}。</p>
-      <p><strong>为什么它具备机会窗口：</strong>${card.opportunity_summary}</p>
-    </section>
-
-    <section class="detail-block">
-      <h3>选题类型</h3>
-      <div class="kv-grid">
-        <div class="kv-item"><span>主类型</span><strong>${card.topic_type_primary}</strong></div>
-        <div class="kv-item"><span>子类型</span><strong>${card.topic_type_secondary}</strong></div>
-        <div class="kv-item"><span>页面形态</span><strong>${card.action.page_type || '结果页'}</strong></div>
-        <div class="kv-item"><span>AI能力</span><strong>${card.ai.level} / ${card.ai.capability}</strong></div>
-      </div>
-      <p><strong>领域：</strong>${card.domain.name} / ${card.domain.sub}</p>
-      <p><strong>触发频率：</strong>${card.frequency}</p>
-    </section>
-
-    <section class="detail-block">
-      <h3>商业与用户</h3>
-      <p><strong>用户是谁：</strong>${card.user.primary}</p>
-      <p><strong>次级用户：</strong>${card.user.secondary}</p>
-      <p><strong>谁付费：</strong>${card.payment.who}</p>
-      <p><strong>为什么愿意付费：</strong>${card.payment.why}</p>
-      <p><strong>价格：</strong>${card.payment.price}</p>
-      <p class="muted">免费层：${card.payment.free_tier}<br/>会员层：${card.payment.vip_tier}</p>
-    </section>
-
-    <section class="detail-block">
-      <h3>竞争与风险</h3>
-      <p><strong>现有替代：</strong>${card.competition.existing}</p>
-      <p><strong>差异化空间：</strong>${card.competition.gap}</p>
-      <p><strong>潜在门槛：</strong>${card.competition.moat}</p>
-      <ul class="bullet-list">${(card.risks || []).map(item => `<li>${item}</li>`).join('')}</ul>
-      ${card.rejection_reasons?.length ? `<p class="danger-text"><strong>淘汰原因：</strong>${card.rejection_reasons.join(' / ')}</p>` : ''}
     </section>
 
     <section class="detail-block">
@@ -738,6 +851,11 @@ function bindInteractiveNodes() {
     populateFilters(state.cards);
     applyFilters();
   }));
+
+  document.querySelectorAll('[data-quick-view]').forEach(node => node.addEventListener('click', () => {
+    state.activeQuickView = node.dataset.quickView;
+    applyFilters();
+  }));
 }
 
 function buildCommandPreview() {
@@ -793,6 +911,7 @@ function setView(viewMode) {
 }
 
 function clearFilterState() {
+  state.activeQuickView = 'all';
   state.filters = {
     logicRelation: 'all',
     logicAction: 'all',
@@ -811,6 +930,10 @@ function clearFilterState() {
   els.keywordFilter.value = '';
   populateFilters(state.cards);
   applyFilters();
+}
+
+function toggleGenerator(open) {
+  els.generatorPanel.classList.toggle('hidden', !open);
 }
 
 els.batchSelect.addEventListener('change', async () => loadBatch(els.batchSelect.value));
@@ -833,6 +956,8 @@ els.sortGrade.addEventListener('click', () => setSort('grade'));
 els.viewCards.addEventListener('click', () => setView('cards'));
 els.viewTable.addEventListener('click', () => setView('table'));
 els.clearFilters.addEventListener('click', clearFilterState);
+els.openGenerator.addEventListener('click', () => toggleGenerator(true));
+els.closeGenerator.addEventListener('click', () => toggleGenerator(false));
 document.querySelectorAll('.idea-table thead th[data-sort]').forEach(th => th.addEventListener('click', () => {
   const key = th.dataset.sort;
   if (key === 'priority_score') return setSort('priority');
@@ -843,6 +968,7 @@ document.querySelectorAll('.idea-table thead th[data-sort]').forEach(th => th.ad
 loadIndex().then(() => {
   buildCommandPreview();
   setView('cards');
+  toggleGenerator(false);
 }).catch(error => {
-  document.body.innerHTML = `<pre style="padding:24px;color:#fff">加载失败：${error.message}\n请检查服务是否正常启动，然后访问 /ui-web/</pre>`;
+  document.body.innerHTML = `<pre style="padding:24px;color:#0f172a">加载失败：${error.message}\n请检查服务是否正常启动，然后访问 /ui-web/</pre>`;
 });
