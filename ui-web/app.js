@@ -126,6 +126,7 @@ const state = {
   expandedCards: new Set(),
   selectedCards: new Set(),
   expandAll: false,
+  mainTab: 'ideas',
 };
 
 async function parseResponse(response) {
@@ -223,6 +224,7 @@ const els = {
   topicPrimaryChips: document.getElementById('topic-primary-chips'),
   topicSecondaryChips: document.getElementById('topic-secondary-chips'),
   actionInsights: document.getElementById('action-insights'),
+  inlineAiTip: document.getElementById('inline-ai-tip'),
   selectionCount: document.getElementById('selection-count'),
   selectionHint: document.getElementById('selection-hint'),
   batchWant: document.getElementById('batch-want'),
@@ -232,6 +234,10 @@ const els = {
   clearSelection: document.getElementById('clear-selection'),
   toggleAllExpanded: document.getElementById('toggle-all-expanded'),
   selectAllTable: document.getElementById('select-all-table'),
+  tabIdeas: document.getElementById('tab-ideas'),
+  tabOverview: document.getElementById('tab-overview'),
+  ideasTab: document.getElementById('ideas-tab'),
+  overviewTab: document.getElementById('overview-tab'),
 };
 
 const uniq = values => [...new Set(values)].filter(Boolean);
@@ -467,6 +473,7 @@ function renderMetrics(batch, allCards, currentCards) {
   renderBars(els.typeDistribution, countBy(allCards, card => card.topic_type_primary));
   renderScoreBars(currentCards);
   renderActionInsights(allCards, currentCards);
+  renderInlineAiTip(currentCards);
 }
 
 function countBy(cards, selector, fixedOrder = null) {
@@ -503,13 +510,10 @@ function renderQuickViews(cards) {
   const batchCreated = state.raw?.batch?.created || '';
   const items = [
     { id: 'all', label: '全部选题', description: '查看整个批次', count: cards.length },
-    { id: 'today', label: '今日新生成', description: '只看本次新鲜题目', count: cards.filter(card => String(card.created || '').startsWith(batchCreated)).length },
     { id: 'priority', label: '值得先看', description: '先看 S/A 级', count: cards.filter(card => ['S', 'A'].includes(card.recommendation_grade)).length },
     { id: 'project', label: '立项池', description: '已判断为要做', count: cards.filter(card => card.detailDecision === '立项候选' || card.quickDecision === '要').length },
     { id: 'reviewed', label: '我已标记', description: '已经处理过的题', count: cards.filter(card => card.processed_state === '已处理').length },
-    { id: 'spread', label: '高传播', description: '偏传播扩散场景', count: cards.filter(card => card.logic_value === '强传播').length },
-    { id: 'payment', label: '强付费', description: '付费意愿更清晰', count: cards.filter(card => card.logic_value === '强付费').length },
-    { id: 'lowCompetition', label: '低竞争', description: '竞争相对可控', count: cards.filter(card => card.logic_value === '低竞争').length },
+    { id: 'today', label: '今日新生成', description: '只看本次新鲜题目', count: cards.filter(card => String(card.created || '').startsWith(batchCreated)).length },
   ];
   els.quickViews.innerHTML = items.map(item => `
     <button class="nav-item ${state.activeQuickView === item.id ? 'active' : ''}" data-quick-view="${item.id}">
@@ -524,10 +528,9 @@ function renderQuickViews(cards) {
 
 function renderSystemViews(cards) {
   const items = [
-    { id: 'recommendLaunch', label: '最值得优先立项', description: 'S 级且强付费 / 低竞争', count: cards.filter(card => card.recommendation_grade === 'S' && ['强付费', '低竞争'].includes(card.logic_value)).length },
-    { id: 'recommendValidate', label: '最适合快速验证', description: 'A 级且未处理', count: cards.filter(card => card.recommendation_grade === 'A' && card.quickDecision === '未处理').length },
-    { id: 'subscription', label: '适合做订阅', description: '工具型 / 订阅型优先', count: cards.filter(card => ['工具型', '订阅型'].includes(card.product_shape)).length },
-    { id: 'mvpEasy', label: '最容易低成本 MVP', description: '判断型 / 报告型入口', count: cards.filter(card => ['判断型', '分发型'].includes(card.logic_action)).length },
+    { id: 'recommendLaunch', label: '优先立项', description: 'S 级且强付费 / 低竞争', count: cards.filter(card => card.recommendation_grade === 'S' && ['强付费', '低竞争'].includes(card.logic_value)).length },
+    { id: 'recommendValidate', label: '优先验证', description: 'A 级且未处理', count: cards.filter(card => card.recommendation_grade === 'A' && card.quickDecision === '未处理').length },
+    { id: 'mvpEasy', label: '低成本 MVP', description: '判断型 / 报告型入口', count: cards.filter(card => ['判断型', '分发型'].includes(card.logic_action)).length },
   ];
   els.systemViews.innerHTML = items.map(item => `
     <button class="nav-item ${state.activeSystemView === item.id ? 'active' : ''}" data-system-view="${item.id}">
@@ -571,7 +574,6 @@ function getSystemViewLabel() {
   const map = {
     recommendLaunch: '系统推荐=优先立项',
     recommendValidate: '系统推荐=快速验证',
-    subscription: '系统推荐=适合订阅',
     mvpEasy: '系统推荐=低成本 MVP',
   };
   return map[state.activeSystemView] || null;
@@ -631,8 +633,6 @@ function matchesSystemView(card) {
       return card.recommendation_grade === 'S' && ['强付费', '低竞争'].includes(card.logic_value);
     case 'recommendValidate':
       return card.recommendation_grade === 'A' && card.quickDecision === '未处理';
-    case 'subscription':
-      return ['工具型', '订阅型'].includes(card.product_shape);
     case 'mvpEasy':
       return ['判断型', '分发型'].includes(card.logic_action);
     default:
@@ -745,10 +745,6 @@ function renderExpandedSection(card) {
         <p><strong>商业摘要：</strong>${card.monetization_hint}</p>
         <p><strong>风险一句话：</strong>${card.risk_summary}</p>
       </div>
-      <div class="card-mini-grid">
-        <div class="mini-panel"><span class="muted small">为什么高分</span><strong>${card.strengths.join(' / ') || '综合表现稳定'}</strong></div>
-        <div class="mini-panel"><span class="muted small">还要验证什么</span><strong>${card.validation_need}</strong></div>
-      </div>
       ${card.manualNote ? `<div class="summary-line"><span class="tag">备注</span><span class="muted small">${card.manualNote}</span></div>` : ''}
     </div>
   `;
@@ -786,9 +782,9 @@ function renderList(cards) {
         <span class="tag emphasis">${card.logic_value}</span>
         <span class="tag">${card.topic_type_primary}</span>
       </div>
-      <div class="card-summary-grid">
-        <div><span class="muted small">目标用户</span><strong>${card.user.primary}</strong></div>
-        <div><span class="muted small">产品形态</span><strong>${card.product_shape}</strong></div>
+      <div class="card-summary-inline">
+        <span class="muted small">目标用户</span>
+        <strong>${card.user.primary}</strong>
       </div>
       <div class="card-actions">
         ${renderQuickActionButtons(card)}
@@ -1065,6 +1061,29 @@ function renderActionInsights(allCards, currentCards) {
   `).join('');
 }
 
+
+function renderInlineAiTip(currentCards) {
+  const pendingHigh = currentCards.filter(card => ['S', 'A'].includes(card.recommendation_grade) && card.quickDecision === '未处理');
+  const pendingAll = currentCards.filter(card => card.quickDecision === '未处理');
+  if (pendingHigh.length) {
+    els.inlineAiTip.textContent = `当前最值得先处理：${pendingHigh.length} 个未判断的 S/A 级题。`;
+    return;
+  }
+  if (pendingAll.length) {
+    els.inlineAiTip.textContent = `你当前还有 ${pendingAll.length} 个未处理题，建议先批量做一轮“再看 / 不要”。`;
+    return;
+  }
+  els.inlineAiTip.textContent = '当前筛选已经较聚焦，可以进入细看与立项比较。';
+}
+
+function setMainTab(tab) {
+  state.mainTab = tab;
+  els.tabIdeas.classList.toggle('active', tab === 'ideas');
+  els.tabOverview.classList.toggle('active', tab === 'overview');
+  els.ideasTab.classList.toggle('hidden', tab !== 'ideas');
+  els.overviewTab.classList.toggle('hidden', tab !== 'overview');
+}
+
 function bindInteractiveNodes() {
   document.querySelectorAll('.idea-card').forEach(node => node.addEventListener('click', event => {
     if (event.target.closest('[data-action]') || event.target.closest('input[type="checkbox"]')) return;
@@ -1251,7 +1270,16 @@ els.clearFilters.addEventListener('click', clearFilterState);
 els.openGenerator.addEventListener('click', () => toggleGenerator(true));
 els.closeGenerator.addEventListener('click', () => toggleGenerator(false));
 els.toggleAllExpanded.addEventListener('click', toggleExpandAll);
+els.tabIdeas.addEventListener('click', () => setMainTab('ideas'));
+els.tabOverview.addEventListener('click', () => setMainTab('overview'));
 els.selectAllTable?.addEventListener('change', () => toggleSelectAllVisible(els.selectAllTable.checked));
+
+document.querySelectorAll('.filter-toggle').forEach(button => button.addEventListener('click', () => {
+  const target = document.getElementById(button.dataset.toggleGroup);
+  target?.classList.toggle('hidden');
+  button.parentElement?.classList.toggle('open', !target?.classList.contains('hidden'));
+}));
+
 els.batchWant.addEventListener('click', () => updateDecisionBatch([...state.selectedCards], { quickDecision: '要' }));
 els.batchReview.addEventListener('click', () => updateDecisionBatch([...state.selectedCards], { quickDecision: '再看' }));
 els.batchReject.addEventListener('click', () => updateDecisionBatch([...state.selectedCards], { quickDecision: '不要' }));
@@ -1267,6 +1295,7 @@ document.querySelectorAll('.idea-table thead th[data-sort]').forEach(th => th.ad
 loadIndex().then(() => {
   buildCommandPreview();
   setView('cards');
+  setMainTab('ideas');
   toggleGenerator(false);
   renderSelectionState();
 }).catch(error => {

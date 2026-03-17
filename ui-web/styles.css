@@ -398,3 +398,57 @@ textarea { resize: vertical; width: 100%; }
 @media (max-width: 1024px) {
   .selection-actions, .card-mini-grid, .detail-grid-three, .card-summary-grid { grid-template-columns: 1fr; }
 }
+
+.main-tab.hidden { display: none; }
+.compact-hero { padding: 18px 20px; }
+.hero-main { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.hero-actions-compact { align-items: center; }
+.tab-switcher { display: inline-flex; gap: 8px; padding: 4px; border-radius: 999px; background: var(--surface-soft); border: 1px solid rgba(226, 232, 240, 0.9); }
+.result-count { font-size: 13px; color: var(--muted); font-weight: 600; }
+.ideas-first-panel { padding-top: 18px; }
+.ideas-toolbar-header { margin-bottom: 12px; }
+.toolbar-actions { display: flex; align-items: center; gap: 8px; }
+.mini-toolbar {
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: none;
+}
+.selection-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.selection-summary-inline { display: flex; flex-direction: column; gap: 4px; }
+.selection-actions-inline { display: flex; flex-wrap: wrap; gap: 8px; }
+.overview-grid { margin-bottom: 18px; }
+.overview-panel { padding: 22px; margin-bottom: 18px; }
+.filter-toggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface-soft);
+  border: 1px solid rgba(226, 232, 240, 0.92);
+  border-radius: 14px;
+  padding: 10px 12px;
+  font-weight: 700;
+  color: var(--text-strong);
+  cursor: pointer;
+}
+.filter-toggle-body { margin-top: 12px; display: grid; gap: 12px; }
+.filter-toggle-body.hidden { display: none; }
+.compact-collapsible.open { padding-top: 0; }
+.card-summary-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: var(--surface-soft);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+}
+.card-summary-inline strong { color: var(--text-strong); font-size: 13px; }
+@media (max-width: 1024px) {
+  .hero-main, .selection-toolbar { flex-direction: column; align-items: stretch; }
+  .selection-actions-inline { justify-content: flex-start; }
+}
