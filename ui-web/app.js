@@ -88,11 +88,11 @@ const SUBDOMAIN_TYPE = {
 };
 
 const GRADE_META = {
-  S: { label: 'S｜优先立项', action: '建议先做', weight: 0 },
-  A: { label: 'A｜优先验证', action: '建议尽快验证', weight: 1 },
-  B: { label: 'B｜保留观察', action: '建议继续观察', weight: 2 },
-  C: { label: 'C｜价值有限', action: '建议谨慎投入', weight: 3 },
-  D: { label: 'D｜建议淘汰', action: '当前不建议投入', weight: 4 },
+  S: { label: 'S｜优先立项', shortLabel: '优先立项', action: '建议先做', weight: 0, brief: '值得优先做' },
+  A: { label: 'A｜优先验证', shortLabel: '优先验证', action: '建议尽快验证', weight: 1, brief: '值得尽快试' },
+  B: { label: 'B｜继续观察', shortLabel: '继续观察', action: '建议继续观察', weight: 2, brief: '先保留观察' },
+  C: { label: 'C｜谨慎评估', shortLabel: '谨慎评估', action: '建议谨慎投入', weight: 3, brief: '暂时别投入太多' },
+  D: { label: 'D｜暂不投入', shortLabel: '暂不投入', action: '当前不建议投入', weight: 4, brief: '暂时不用做' },
 };
 
 const PRODUCT_SHAPE_RULES = [
@@ -271,8 +271,16 @@ function gradeLabel(grade) {
   return GRADE_META[grade]?.label || grade;
 }
 
+function gradeShortLabel(grade) {
+  return GRADE_META[grade]?.shortLabel || grade;
+}
+
 function gradeActionHint(grade) {
   return GRADE_META[grade]?.action || '继续观察';
+}
+
+function gradeBrief(grade) {
+  return GRADE_META[grade]?.brief || '继续观察';
 }
 
 function deriveLogicValue(card) {
@@ -366,6 +374,7 @@ function enrichCards(cards) {
       manualNote,
       recommendation_grade: grade,
       grade_label: gradeLabel(grade),
+      grade_short_label: gradeShortLabel(grade),
       grade_action_hint: gradeActionHint(grade),
       logic_relation: RELATION_LOGIC[card.relation.type] || '其他逻辑',
       logic_action: ACTION_LOGIC[card.action.category] || '判断型',
@@ -380,9 +389,9 @@ function enrichCards(cards) {
     enriched.product_shape_reason = productShape.reason;
     enriched.mvp_entry_suggestion = productShape.mvp;
     enriched.monetization_hint = productShape.monetization;
-    enriched.opportunity_summary = `${enriched.payment.who}愿意为“${enriched.payment.why}”付费，适合从${enriched.topic_type_secondary}切入。`;
+    enriched.opportunity_summary = `${enriched.payment.who}愿意为“${enriched.payment.why}”付费，适合先从${enriched.topic_type_secondary}切入。`;
     enriched.risk_summary = (enriched.risks || [])[0] || (enriched.rejection_reasons || []).join(' / ') || '暂无明显风险';
-    enriched.main_reason = `${enriched.logic_relation} + ${enriched.logic_value}，且更适合做${enriched.product_shape}。`;
+    enriched.main_reason = `${enriched.logic_relation}、${enriched.logic_value}，更适合先做${enriched.product_shape}。`;
     enriched.decision_funnel_stage = deriveDecisionFunnelStage(enriched);
     enriched.strengths = deriveStrengths(enriched);
     enriched.weaknesses = deriveWeaknesses(enriched);
@@ -509,11 +518,11 @@ function renderScoreBars(cards) {
 function renderQuickViews(cards) {
   const batchCreated = state.raw?.batch?.created || '';
   const items = [
-    { id: 'all', label: '全部选题', description: '查看整个批次', count: cards.length },
-    { id: 'priority', label: '值得先看', description: '先看 S/A 级', count: cards.filter(card => ['S', 'A'].includes(card.recommendation_grade)).length },
-    { id: 'project', label: '立项池', description: '已判断为要做', count: cards.filter(card => card.detailDecision === '立项候选' || card.quickDecision === '要').length },
-    { id: 'reviewed', label: '我已标记', description: '已经处理过的题', count: cards.filter(card => card.processed_state === '已处理').length },
-    { id: 'today', label: '今日新生成', description: '只看本次新鲜题目', count: cards.filter(card => String(card.created || '').startsWith(batchCreated)).length },
+    { id: 'all', label: '全部选题', description: '查看当前批次的全部题目', count: cards.length },
+    { id: 'priority', label: '优先看', description: '优先看最值得处理的题目', count: cards.filter(card => ['S', 'A'].includes(card.recommendation_grade)).length },
+    { id: 'project', label: '立项池', description: '你已经归入立项池的题目', count: cards.filter(card => card.detailDecision === '立项候选' || card.quickDecision === '要').length },
+    { id: 'reviewed', label: '已处理', description: '你已经看过并做过判断的题目', count: cards.filter(card => card.processed_state === '已处理').length },
+    { id: 'today', label: '本批新增', description: '只看这个批次里刚生成的题目', count: cards.filter(card => String(card.created || '').startsWith(batchCreated)).length },
   ];
   els.quickViews.innerHTML = items.map(item => `
     <button class="nav-item ${state.activeQuickView === item.id ? 'active' : ''}" data-quick-view="${item.id}">
@@ -528,9 +537,9 @@ function renderQuickViews(cards) {
 
 function renderSystemViews(cards) {
   const items = [
-    { id: 'recommendLaunch', label: '优先立项', description: 'S 级且强付费 / 低竞争', count: cards.filter(card => card.recommendation_grade === 'S' && ['强付费', '低竞争'].includes(card.logic_value)).length },
-    { id: 'recommendValidate', label: '优先验证', description: 'A 级且未处理', count: cards.filter(card => card.recommendation_grade === 'A' && card.quickDecision === '未处理').length },
-    { id: 'mvpEasy', label: '低成本 MVP', description: '判断型 / 报告型入口', count: cards.filter(card => ['判断型', '分发型'].includes(card.logic_action)).length },
+    { id: 'recommendLaunch', label: '优先立项', description: '适合优先推进立项的题目', count: cards.filter(card => card.recommendation_grade === 'S' && ['强付费', '低竞争'].includes(card.logic_value)).length },
+    { id: 'recommendValidate', label: '优先验证', description: '适合先做验证的题目', count: cards.filter(card => card.recommendation_grade === 'A' && card.quickDecision === '未处理').length },
+    { id: 'mvpEasy', label: '低成本 MVP', description: '更适合低成本先做 MVP 的题目', count: cards.filter(card => ['判断型', '分发型'].includes(card.logic_action)).length },
   ];
   els.systemViews.innerHTML = items.map(item => `
     <button class="nav-item ${state.activeSystemView === item.id ? 'active' : ''}" data-system-view="${item.id}">
@@ -572,19 +581,19 @@ function renderChipGroup(target, filterKey, counts, allLabel) {
 
 function getSystemViewLabel() {
   const map = {
-    recommendLaunch: '系统推荐=优先立项',
-    recommendValidate: '系统推荐=快速验证',
-    mvpEasy: '系统推荐=低成本 MVP',
+    recommendLaunch: '系统建议=优先立项',
+    recommendValidate: '系统建议=优先验证',
+    mvpEasy: '系统建议=低成本 MVP',
   };
   return map[state.activeSystemView] || null;
 }
 
 function getQuickViewLabel() {
   const map = {
-    today: '今日新生成',
-    priority: '值得先看',
+    today: '本批新增',
+    priority: '优先看',
     project: '立项池',
-    reviewed: '我已标记',
+    reviewed: '已处理',
     spread: '高传播',
     payment: '强付费',
     lowCompetition: '低竞争',
@@ -611,7 +620,7 @@ function renderActiveStrategyTags() {
   els.activeStrategyTags.innerHTML = entries.length
     ? entries.map(([label, value]) => `<span class="strategy-tag">${label} · ${value}</span>`).join('')
     : '<span class="strategy-tag">当前策略 · 全部选题</span>';
-  els.activeStrategy.textContent = entries.length ? `当前策略：${entries.map(([label, value]) => `${label}=${value}`).join(' / ')}` : '当前策略：全部选题';
+  els.activeStrategy.textContent = entries.length ? `当前筛选：${entries.map(([label, value]) => `${label}=${value}`).join(' / ')}` : '当前筛选：全部题目';
 }
 
 function matchesQuickView(card) {
@@ -712,12 +721,12 @@ function sortComparator() {
 
 function decisionBadge(decision) {
   const cls = decision === '立项候选' ? 'priority' : decision === '淘汰复核' ? 'danger' : decision === '待观察' ? 'warn' : 'neutral';
-  return `<span class="score-pill ${cls}">${decision}</span>`;
+  return `<span class="score-pill ${cls}" title="当前判断">${decision}</span>`;
 }
 
 function quickBadge(quickDecision) {
   const cls = quickDecision === '要' ? 'priority' : quickDecision === '不要' ? 'danger' : quickDecision === '再看' ? 'warn' : 'neutral';
-  return `<span class="score-pill ${cls}">${quickDecision}</span>`;
+  return `<span class="score-pill ${cls}" title="快速判断">${quickDecision}</span>`;
 }
 
 function renderQuickActionButtons(card) {
@@ -733,17 +742,16 @@ function isExpanded(cardId) {
 }
 
 function renderCompactReason(card) {
-  return `${card.grade_action_hint} · ${card.main_reason}`;
+  return card.main_reason || gradeBrief(card.recommendation_grade);
 }
 
 function renderExpandedSection(card) {
   return `
     <div class="card-expanded ${isExpanded(card.id) ? '' : 'hidden'}">
       <div class="card-body">
-        <p><strong>一句话机会：</strong>${card.opportunity_summary}</p>
-        <p><strong>目标用户：</strong>${card.user.primary}</p>
-        <p><strong>商业摘要：</strong>${card.monetization_hint}</p>
-        <p><strong>风险一句话：</strong>${card.risk_summary}</p>
+        <p><strong>这题在做什么：</strong>${card.opportunity_summary}</p>
+        <p><strong>怎么赚钱更顺：</strong>${card.monetization_hint}</p>
+        <p><strong>现在要注意：</strong>${card.risk_summary}</p>
       </div>
       ${card.manualNote ? `<div class="summary-line"><span class="tag">备注</span><span class="muted small">${card.manualNote}</span></div>` : ''}
     </div>
@@ -752,44 +760,48 @@ function renderExpandedSection(card) {
 
 function renderList(cards) {
   if (!cards.length) {
-    els.ideaList.innerHTML = '<div class="empty-state">当前筛选条件下没有选题，换一个视角或降低最低分试试。</div>';
+    els.ideaList.innerHTML = '<div class="empty-state">当前没有符合条件的选题。你可以换个筛选条件，或者先点“查看全部”。</div>';
     return;
   }
   els.ideaList.innerHTML = cards.map(card => `
-    <article class="idea-card ${card.id === state.selectedId ? 'active' : ''}" data-id="${card.id}">
-      <div class="card-select-row">
-        <label class="check-pill" title="加入批量操作">
-          <input type="checkbox" data-action="select-card" data-id="${card.id}" ${state.selectedCards.has(card.id) ? 'checked' : ''} />
-          <span>选择</span>
-        </label>
-        <button class="button ghost small-button" data-action="toggle-expand" data-id="${card.id}">${isExpanded(card.id) ? '收起' : '展开'}</button>
-      </div>
-      <div class="card-header">
-        <div class="score-row">
-          <span class="grade-pill ${gradeClass(card.recommendation_grade)}">${card.grade_label}</span>
-          <span class="score-pill ${card.status === 'rejected' ? 'danger' : ''}">${card.status === 'candidate' ? '候选' : '淘汰'}</span>
+    <article class="idea-card ${card.id === state.selectedId ? 'active' : ''}" data-id="${card.id}" data-grade="${card.recommendation_grade}">
+      <div class="card-topline">
+        <div class="card-topline-left">
+          <span class="grade-pill ${gradeClass(card.recommendation_grade)}">${card.grade_short_label}</span>
           ${quickBadge(card.quickDecision)}
+          ${card.detailDecision !== '未处理' ? decisionBadge(card.detailDecision) : ''}
         </div>
-        <div class="score-row">
-          <span class="score-pill">总分 ${card.scores.total}</span>
-          <span class="score-pill priority">优先级 ${card.priority_score}</span>
+        <div class="card-topline-right">
+          <span class="card-score-text">总分 ${card.scores.total}</span>
+          <span class="card-score-text">优先级 ${card.priority_score}</span>
         </div>
       </div>
-      <h3>${card.one_liner}</h3>
-      <p class="muted compact-copy"><strong>${card.grade_action_hint}</strong> · ${renderCompactReason(card)}</p>
-      <div class="tags primary-tags">
-        <span class="tag emphasis">${card.logic_relation}</span>
-        <span class="tag emphasis">${card.logic_value}</span>
-        <span class="tag">${card.topic_type_primary}</span>
+
+      <div class="card-main-row">
+        <div class="card-main-copy">
+          <h3>${card.one_liner}</h3>
+          <p class="card-reason">${renderCompactReason(card)}</p>
+          <div class="card-meta-row">
+            <strong class="card-user">${card.user.primary}</strong>
+            <span class="tag emphasis">${card.logic_relation}</span>
+            <span class="tag">${card.topic_type_primary}</span>
+          </div>
+        </div>
+        <label class="bulk-pick ${state.selectedCards.has(card.id) ? 'active' : ''}" title="选中后可做批量操作">
+          <input type="checkbox" data-action="select-card" data-id="${card.id}" ${state.selectedCards.has(card.id) ? 'checked' : ''} />
+          <span>${state.selectedCards.has(card.id) ? '已选中' : '选中此题'}</span>
+        </label>
       </div>
-      <div class="card-summary-inline">
-        <span class="muted small">目标用户</span>
-        <strong>${card.user.primary}</strong>
-      </div>
-      <div class="card-actions">
-        ${renderQuickActionButtons(card)}
-        <button class="quick-action favorite-toggle ${card.detailDecision === '收藏' ? 'active review' : ''}" data-action="favorite" data-id="${card.id}">收藏</button>
-        <button class="quick-action" data-action="open" data-id="${card.id}">查看详情</button>
+
+      <div class="card-actions-row">
+        <div class="card-actions card-actions-primary">
+          ${renderQuickActionButtons(card)}
+        </div>
+        <div class="card-actions card-actions-secondary">
+          <button class="quick-action favorite-toggle ${card.detailDecision === '收藏' ? 'active review' : ''}" data-action="favorite" data-id="${card.id}">收藏</button>
+          <button class="quick-action" data-action="open" data-id="${card.id}">查看详情</button>
+          <button class="button ghost small-button" data-action="toggle-expand" data-id="${card.id}">${isExpanded(card.id) ? '收起补充信息' : '展开补充信息'}</button>
+        </div>
       </div>
       ${renderExpandedSection(card)}
     </article>
@@ -798,7 +810,7 @@ function renderList(cards) {
 
 function renderTable(cards) {
   if (!cards.length) {
-    els.ideaTableBody.innerHTML = '<tr><td colspan="11" class="muted">暂无结果</td></tr>';
+    els.ideaTableBody.innerHTML = '<tr><td colspan="11" class="muted">当前没有符合条件的题目</td></tr>';
     return;
   }
   els.ideaTableBody.innerHTML = cards.map(card => `
@@ -806,13 +818,13 @@ function renderTable(cards) {
       <td><input type="checkbox" data-action="select-card" data-id="${card.id}" ${state.selectedCards.has(card.id) ? 'checked' : ''} /></td>
       <td>
         <strong>${card.one_liner}</strong>
-        <div class="muted small">${card.grade_action_hint}</div>
+        <div class="muted small">${card.grade_short_label}</div>
       </td>
       <td>${card.logic_relation}<br/><span class="muted small">${card.logic_action}</span></td>
       <td>${card.topic_type_primary}<br/><span class="muted small">${card.topic_type_secondary}</span></td>
       <td>${card.scores.total}</td>
       <td>${card.priority_score}</td>
-      <td><span class="grade-pill ${gradeClass(card.recommendation_grade)}">${card.recommendation_grade}</span></td>
+      <td><span class="grade-pill ${gradeClass(card.recommendation_grade)}">${card.grade_short_label}</span></td>
       <td>${card.payment.price}</td>
       <td>${card.product_shape}</td>
       <td>${card.ai.level}</td>
@@ -862,16 +874,16 @@ function updateDecisionBatch(cardIds, patch) {
 function renderDecisionReasons(card) {
   return `
     <div class="detail-grid-three">
-      <div class="mini-panel">
-        <span class="muted small">入选原因</span>
+      <div class="mini-panel mini-panel-strong">
+        <span class="muted small">为什么能入选</span>
         <strong>${card.strengths.join(' / ') || '综合表现稳定'}</strong>
       </div>
       <div class="mini-panel">
-        <span class="muted small">当前短板</span>
+        <span class="muted small">现在的短板</span>
         <strong>${card.weaknesses.join(' / ') || '暂无明显短板'}</strong>
       </div>
-      <div class="mini-panel">
-        <span class="muted small">下一步验证</span>
+      <div class="mini-panel mini-panel-warn">
+        <span class="muted small">下一步先验证什么</span>
         <strong>${card.validation_need}</strong>
       </div>
     </div>
@@ -893,77 +905,89 @@ function renderDetail(card) {
       <h2>${card.one_liner}</h2>
       <p class="muted">${card.id} · 模板 ${card.template_id}</p>
       <div class="decision-callout ${card.recommendation_grade === 'S' ? 'good' : card.recommendation_grade === 'A' ? 'focus' : 'neutral'}">
-        <strong>系统结论：${card.recommendation_grade === 'S' ? '值得优先立项' : card.recommendation_grade === 'A' ? '值得优先验证' : card.recommendation_grade === 'B' ? '建议继续观察' : '当前不建议投入'}</strong>
+        <strong>系统判断：${card.recommendation_grade === 'S' ? '值得优先立项' : card.recommendation_grade === 'A' ? '值得优先验证' : card.recommendation_grade === 'B' ? '建议继续观察' : '当前不建议投入'}</strong>
         <p>${card.grade_action_hint}。主要因为 ${card.main_reason}</p>
+        <p class="muted small">总分 ${card.scores.total} · 优先级 ${card.priority_score} · ${card.logic_relation} · ${card.topic_type_primary}</p>
       </div>
       ${renderDecisionReasons(card)}
     </section>
 
     <section class="detail-block">
-      <h3>机会分析</h3>
-      <p><strong>这是个什么机会：</strong>${card.opportunity_summary}</p>
-      <p><strong>为什么是现在：</strong>${card.logic_value} + ${card.ai.level} 级 AI 能力，让这个场景比传统工具更容易形成明确差异。</p>
-      <p><strong>为什么值得你看：</strong>${card.grade_action_hint}，而且当前更适合从 ${card.topic_type_secondary} 这个入口切入。</p>
+      <h3>为什么值得看</h3>
+      <div class="detail-conclusion">
+        <strong>${card.grade_action_hint}</strong>
+        <p>${card.main_reason}</p>
+      </div>
+      <p><strong>这个题适合做什么：</strong>${card.opportunity_summary}</p>
+      <p><strong>为什么现在值得看：</strong>${card.logic_value}，而且 AI 能力已经能把这个场景做得比传统工具更省事。</p>
+      <p><strong>建议怎么开始：</strong>先从 ${card.topic_type_secondary} 这个入口切入，再验证 ${card.validation_need}。</p>
     </section>
 
     <section class="detail-block">
-      <h3>用户与商业</h3>
+      <h3>谁会持续使用，谁会付费</h3>
       <div class="kv-grid">
         <div class="kv-item"><span>核心用户</span><strong>${card.user.primary}</strong></div>
         <div class="kv-item"><span>次级用户</span><strong>${card.user.secondary}</strong></div>
         <div class="kv-item"><span>谁买单</span><strong>${card.payment.who}</strong></div>
         <div class="kv-item"><span>价格带</span><strong>${card.payment.price}</strong></div>
       </div>
-      <p><strong>为什么会付费：</strong>${card.payment.why}</p>
-      <p><strong>更可能的收费方式：</strong>${card.monetization_hint}</p>
-      <p class="muted">免费层：${card.payment.free_tier}<br/>会员层：${card.payment.vip_tier}</p>
+      <p><strong>为什么愿意付费：</strong>${card.payment.why}</p>
+      <p><strong>更适合怎么收费：</strong>${card.monetization_hint}</p>
+      <p class="muted">免费版：${card.payment.free_tier}<br/>付费版：${card.payment.vip_tier}</p>
     </section>
 
     <section class="detail-block">
-      <h3>产品形态建议</h3>
+      <h3>更适合做成什么产品</h3>
+      <div class="detail-conclusion subtle">
+        <strong>${card.product_shape}</strong>
+        <p>${card.product_shape_reason}</p>
+      </div>
       <div class="kv-grid">
         <div class="kv-item"><span>推荐形态</span><strong>${card.product_shape}</strong></div>
         <div class="kv-item"><span>页面类型</span><strong>${card.action.page_type || '结果页'}</strong></div>
       </div>
-      <p><strong>为什么适合：</strong>${card.product_shape_reason}</p>
-      <p><strong>MVP 切入建议：</strong>${card.mvp_entry_suggestion}</p>
+      <p><strong>最小可行版本建议：</strong>${card.mvp_entry_suggestion}</p>
     </section>
 
     <section class="detail-block">
-      <h3>竞争与风险</h3>
-      <p><strong>替代方案：</strong>${card.competition.existing}</p>
-      <p><strong>差异点：</strong>${card.competition.gap}</p>
-      <p><strong>难点：</strong>${card.competition.moat}</p>
+      <h3>替代方案与风险</h3>
+      <div class="detail-conclusion subtle danger-tone">
+        <strong>真正的风险不在功能，而在用户是否愿意稳定采用</strong>
+        <p>${card.risk_summary}</p>
+      </div>
+      <p><strong>用户现在怎么解决：</strong>${card.competition.existing}</p>
+      <p><strong>你能做出的差异：</strong>${card.competition.gap}</p>
+      <p><strong>真正难的地方：</strong>${card.competition.moat}</p>
       <ul class="bullet-list">${(card.risks || []).map(item => `<li>${item}</li>`).join('')}</ul>
       ${card.rejection_reasons?.length ? `<p class="danger-text"><strong>淘汰原因：</strong>${card.rejection_reasons.join(' / ')}</p>` : ''}
     </section>
 
     <section class="detail-block">
-      <h3>人工决策与沉淀</h3>
+      <h3>你的判断与备注</h3>
       <label>
-        <span>第一层：快速决策</span>
+        <span>第一步：快速判断</span>
         <select id="detail-quick-decision">
           ${['未处理', '要', '再看', '不要'].map(item => `<option value="${item}" ${card.quickDecision === item ? 'selected' : ''}>${item}</option>`).join('')}
         </select>
       </label>
       <label>
-        <span>第二层：详细标签</span>
+        <span>第二步：归类标签</span>
         <select id="detail-decision">
           ${['未处理', '收藏', '待观察', '立项候选', '淘汰复核'].map(item => `<option value="${item}" ${card.detailDecision === item ? 'selected' : ''}>${item}</option>`).join('')}
         </select>
       </label>
       <label>
         <span>备注</span>
-        <textarea id="detail-note" rows="4" placeholder="记录你的判断依据">${card.manualNote || ''}</textarea>
+        <textarea id="detail-note" rows="4" placeholder="写下你为什么看好，或为什么暂时不做">${card.manualNote || ''}</textarea>
       </label>
       <div class="inline-actions">
-        <button id="save-decision" class="button primary">保存判断</button>
-        <button id="mark-project" class="button secondary">加入立项池</button>
+        <button id="save-decision" class="button primary">保存当前判断</button>
+        <button id="mark-project" class="button secondary">标记为立项候选</button>
       </div>
     </section>
 
     <section class="detail-block">
-      <h3>评分拆解</h3>
+      <h3>评分明细</h3>
       <div class="kv-grid">${Object.entries(card.scores).map(([k, v]) => `<div class="kv-item"><span>${k}</span><strong>${v}</strong></div>`).join('')}</div>
     </section>
   `;
@@ -1009,7 +1033,7 @@ function syncSelectionWithVisibleCards() {
 function renderSelectionState() {
   const count = state.selectedCards.size;
   els.selectionCount.textContent = `已选 ${count} 项`;
-  els.selectionHint.textContent = count ? '可直接批量标记为要 / 再看 / 不要，或直接加入立项池。' : '在卡片或表格中勾选后可批量标记。';
+  els.selectionHint.textContent = count ? '已选中的题目可以一起改判断结果，或一起加入立项池。' : '先在卡片或表格里选中题目，再做批量操作。';
   [els.batchWant, els.batchReview, els.batchReject, els.batchProject, els.clearSelection].forEach(btn => {
     if (!btn) return;
     btn.disabled = count === 0;
@@ -1045,7 +1069,7 @@ function renderActionInsights(allCards, currentCards) {
     {
       title: '你的筛选状态',
       body: pendingAll.length > Math.max(12, Math.round(currentCards.length * 0.5))
-        ? `未处理题仍较多（${pendingAll.length} 个），建议先批量处理一轮“再看 / 不要”，降低列表噪音。`
+        ? `还没判断的题较多（${pendingAll.length} 个），建议先批量过一轮“再看 / 不要”，让列表更干净。`
         : `当前筛选已较聚焦，淘汰率约 ${rejectRate}% ，当前更适合进入细看与立项比较。`,
     },
     {
@@ -1066,14 +1090,14 @@ function renderInlineAiTip(currentCards) {
   const pendingHigh = currentCards.filter(card => ['S', 'A'].includes(card.recommendation_grade) && card.quickDecision === '未处理');
   const pendingAll = currentCards.filter(card => card.quickDecision === '未处理');
   if (pendingHigh.length) {
-    els.inlineAiTip.textContent = `当前最值得先处理：${pendingHigh.length} 个未判断的 S/A 级题。`;
+    els.inlineAiTip.textContent = `建议先看：${pendingHigh.length} 个还没判断的 S/A 级题。`;
     return;
   }
   if (pendingAll.length) {
-    els.inlineAiTip.textContent = `你当前还有 ${pendingAll.length} 个未处理题，建议先批量做一轮“再看 / 不要”。`;
+    els.inlineAiTip.textContent = `还有 ${pendingAll.length} 个题没判断，建议先批量过一轮“再看 / 不要”。`;
     return;
   }
-  els.inlineAiTip.textContent = '当前筛选已经较聚焦，可以进入细看与立项比较。';
+  els.inlineAiTip.textContent = '当前范围已经收得比较准，可以开始细看和比较了。';
 }
 
 function setMainTab(tab) {

@@ -8,26 +8,29 @@
   </head>
   <body>
     <div class="app-shell">
-      <header class="topbar panel">
-        <div class="brand-block">
+      <header class="topbar panel topbar-refined">
+        <div class="brand-block brand-block-refined">
           <div class="brand-mark">AI</div>
-          <div>
+          <div class="brand-copy">
             <p class="eyebrow">小程序工厂</p>
-            <h1>选题决策工作台</h1>
-            <p class="muted">选题优先的 AI 决策产品，让你先找到值得处理的题，再在需要时查看统计与分析。</p>
+            <div class="brand-title-row">
+              <h1>选题决策工作台</h1>
+              <span class="header-status">决策模式</span>
+            </div>
+            <p class="muted">先快速看题、做判断，需要时再看分析和统计，帮你更快挑出值得做的方向。</p>
           </div>
         </div>
-        <div class="topbar-actions">
+        <div class="topbar-actions topbar-actions-refined">
           <label class="topbar-field batch-field">
             <span>当前批次</span>
             <select id="batch-select"></select>
           </label>
           <label class="topbar-field search-field">
-            <span>全局搜索</span>
-            <input id="keyword-filter" type="search" placeholder="搜索机会逻辑、用户、风险、备注" />
+            <span>搜索选题</span>
+            <input id="keyword-filter" type="search" placeholder="搜索题目、用户、风险、备注" />
           </label>
           <div class="topbar-cta">
-            <button id="open-generator" class="button secondary">批次设置</button>
+            <button id="open-generator" class="button secondary">生成设置</button>
             <button id="generate-batch" class="button primary">生成新批次</button>
           </div>
         </div>
@@ -37,10 +40,10 @@
         <section class="panel compact nav-panel">
           <div class="section-header tight">
             <div>
-              <p class="eyebrow">Workspace</p>
+              <p class="eyebrow">浏览视角</p>
               <h2>我的视角</h2>
             </div>
-            <button id="clear-filters" class="button ghost small-button">回到全部</button>
+            <button id="clear-filters" class="button ghost small-button">查看全部</button>
           </div>
           <div id="quick-views" class="nav-list"></div>
         </section>
@@ -48,7 +51,7 @@
         <section class="panel compact recommendation-panel">
           <div class="section-header tight">
             <div>
-              <p class="eyebrow">Recommended</p>
+              <p class="eyebrow">系统建议</p>
               <h2>系统推荐</h2>
             </div>
           </div>
@@ -95,36 +98,36 @@
         <section class="panel compact strategy-panel">
           <div class="section-header tight">
             <div>
-              <p class="eyebrow">Strategy</p>
-              <h2>快速筛选</h2>
+              <p class="eyebrow">筛选策略</p>
+              <h2>筛选条件</h2>
             </div>
           </div>
           <div class="filter-group compact-collapsible open">
-            <button class="filter-toggle" data-toggle-group="logic-core">核心逻辑</button>
+            <button class="filter-toggle" data-toggle-group="logic-core">按逻辑筛选</button>
             <div id="logic-core" class="filter-toggle-body">
-              <h3>关系逻辑</h3>
+              <h3>关系场景</h3>
               <div class="chip-group" id="logic-relation-chips"></div>
-              <h3>价值逻辑</h3>
+              <h3>价值特点</h3>
               <div class="chip-group" id="logic-value-chips"></div>
             </div>
           </div>
           <div class="filter-group compact-collapsible open">
-            <button class="filter-toggle" data-toggle-group="type-core">主类型</button>
+            <button class="filter-toggle" data-toggle-group="type-core">按类型筛选</button>
             <div id="type-core" class="filter-toggle-body">
               <div class="chip-group" id="topic-primary-chips"></div>
             </div>
           </div>
           <div class="filter-group compact-collapsible">
-            <button class="filter-toggle" data-toggle-group="advanced-filters">高级筛选</button>
+            <button class="filter-toggle" data-toggle-group="advanced-filters">更多筛选条件</button>
             <div id="advanced-filters" class="filter-toggle-body hidden">
-              <h3>动作逻辑</h3>
+              <h3>动作类型</h3>
               <div class="chip-group" id="logic-action-chips"></div>
-              <h3>阶段逻辑</h3>
+              <h3>当前阶段</h3>
               <div class="chip-group" id="logic-stage-chips"></div>
-              <h3>子类型</h3>
+              <h3>细分类型</h3>
               <div class="chip-group" id="topic-secondary-chips"></div>
               <label>
-                <span>候选状态</span>
+                <span>当前状态</span>
                 <select id="status-filter">
                   <option value="all">全部</option>
                   <option value="candidate">候选</option>
@@ -132,7 +135,7 @@
                 </select>
               </label>
               <label>
-                <span>快速决策</span>
+                <span>你的判断</span>
                 <select id="quick-filter">
                   <option value="all">全部</option>
                   <option value="未处理">未处理</option>
@@ -142,7 +145,7 @@
                 </select>
               </label>
               <label>
-                <span>详细标签</span>
+                <span>归类标签</span>
                 <select id="decision-filter">
                   <option value="all">全部</option>
                   <option value="未处理">未处理</option>
@@ -153,15 +156,15 @@
                 </select>
               </label>
               <label>
-                <span>关系类型</span>
+                <span>关系维度</span>
                 <select id="relation-filter"></select>
               </label>
               <label>
-                <span>领域</span>
+                <span>所属领域</span>
                 <select id="domain-filter"></select>
               </label>
               <label>
-                <span>最低分</span>
+                <span>最低总分</span>
                 <input id="score-filter" type="range" min="50" max="100" value="70" />
                 <strong id="score-value">70</strong>
               </label>
@@ -171,25 +174,25 @@
       </aside>
 
       <main class="content">
-        <section class="panel workspace-hero compact-hero">
-          <div class="hero-main">
-            <div>
-              <p class="eyebrow">Browse first</p>
+        <section class="panel workspace-hero compact-hero workspace-hero-refined">
+          <div class="hero-main hero-main-refined">
+            <div class="hero-title-block">
+              <p class="eyebrow">先看选题</p>
               <h2 id="batch-title">加载中...</h2>
               <p class="muted" id="batch-meta"></p>
             </div>
             <div id="active-strategy-tags" class="strategy-tags"></div>
           </div>
-          <div class="hero-actions hero-actions-compact">
+          <div class="hero-actions hero-actions-compact hero-toolbar">
             <div class="tab-switcher">
               <button id="tab-ideas" class="button active">选题</button>
               <button id="tab-overview" class="button">概览</button>
             </div>
-            <button id="sort-total" class="button active">按总分</button>
-            <button id="sort-priority" class="button">按优先级</button>
-            <button id="sort-grade" class="button">按推荐等级</button>
-            <button id="view-cards" class="button active">卡片视图</button>
-            <button id="view-table" class="button">表格视图</button>
+            <button id="sort-total" class="button active">总分优先</button>
+            <button id="sort-priority" class="button">优先级优先</button>
+            <button id="sort-grade" class="button">推荐等级优先</button>
+            <button id="view-cards" class="button active">卡片</button>
+            <button id="view-table" class="button">表格</button>
             <span id="list-count" class="result-count"></span>
           </div>
         </section>
@@ -198,25 +201,25 @@
           <section class="panel list-panel ideas-first-panel">
             <div class="section-header ideas-toolbar-header">
               <div>
-                <p class="eyebrow">Ideas</p>
-                <h2>选题浏览</h2>
-                <p id="inline-ai-tip" class="muted small">系统会根据当前筛选策略给你轻量提示。</p>
+                <p class="eyebrow">候选列表</p>
+                <h2>选题列表</h2>
+                <p id="inline-ai-tip" class="muted small">根据你当前的筛选条件，系统会提示最值得先看的题目。</p>
               </div>
               <div class="toolbar-actions">
-                <button id="toggle-all-expanded" class="button ghost small-button">展开当前列表摘要</button>
+                <button id="toggle-all-expanded" class="button ghost small-button">展开全部补充信息</button>
               </div>
             </div>
 
             <div class="panel mini-toolbar selection-toolbar">
               <div class="selection-summary-inline">
-                <strong id="selection-count">已选 0 项</strong>
-                <span id="selection-hint" class="muted small">在卡片或表格中勾选后可批量标记。</span>
+                <strong id="selection-count">已选择 0 项</strong>
+                <span id="selection-hint" class="muted small">勾选后可以一次性改判断结果，适合先粗筛一轮。</span>
               </div>
               <div class="selection-actions-inline">
-                <button id="batch-want" class="button secondary">标记要</button>
-                <button id="batch-review" class="button secondary">标记再看</button>
-                <button id="batch-reject" class="button secondary">标记不要</button>
-                <button id="batch-project" class="button secondary">加入立项池</button>
+                <button id="batch-want" class="button secondary">批量标记“要”</button>
+                <button id="batch-review" class="button secondary">批量标记“再看”</button>
+                <button id="batch-reject" class="button secondary">批量标记“不要”</button>
+                <button id="batch-project" class="button secondary">批量加入立项池</button>
                 <button id="clear-selection" class="button ghost">清空</button>
               </div>
             </div>
@@ -231,15 +234,15 @@
                     <tr>
                       <th><input id="select-all-table" type="checkbox" /></th>
                       <th data-sort="title">题目</th>
-                      <th data-sort="logic_relation">逻辑</th>
-                      <th data-sort="topic_type_primary">类型</th>
+                      <th data-sort="logic_relation">关系场景</th>
+                      <th data-sort="topic_type_primary">主类型</th>
                       <th data-sort="scores.total">总分</th>
                       <th data-sort="priority_score">优先级</th>
-                      <th data-sort="recommendation_grade">推荐等级</th>
-                      <th>付费</th>
+                      <th data-sort="recommendation_grade">推荐</th>
+                      <th>付费强度</th>
                       <th>产品形态</th>
-                      <th>AI</th>
-                      <th data-sort="quickDecision">当前决策</th>
+                      <th>AI能力</th>
+                      <th data-sort="quickDecision">你的判断</th>
                     </tr>
                   </thead>
                   <tbody id="idea-table-body"></tbody>
@@ -254,8 +257,8 @@
             <section class="panel summary-panel">
               <div class="section-header">
                 <div>
-                  <p class="eyebrow">Health</p>
-                  <h2>批次健康度</h2>
+                  <p class="eyebrow">批次概览</p>
+                  <h2>批次总体情况</h2>
                 </div>
               </div>
               <div id="summary-metrics" class="metrics metrics-hero"></div>
@@ -265,8 +268,8 @@
             <section class="panel summary-panel funnel-panel">
               <div class="section-header">
                 <div>
-                  <p class="eyebrow">Funnel</p>
-                  <h2>决策漏斗</h2>
+                  <p class="eyebrow">处理进度</p>
+                  <h2>处理进度</h2>
                 </div>
               </div>
               <div id="funnel-metrics" class="metrics metrics-funnel"></div>
@@ -278,8 +281,8 @@
           <section class="panel overview-panel">
             <div class="section-header">
               <div>
-                <p class="eyebrow">Insight</p>
-                <h2>系统行动建议</h2>
+                <p class="eyebrow">系统建议</p>
+                <h2>下一步建议</h2>
               </div>
             </div>
             <div id="action-insights" class="action-insights"></div>
@@ -288,8 +291,8 @@
           <section class="panel distribution-panel">
             <div class="section-header">
               <div>
-                <p class="eyebrow">Distribution</p>
-                <h2>主要逻辑与类型</h2>
+                <p class="eyebrow">分布情况</p>
+                <h2>逻辑与类型分布</h2>
               </div>
               <span id="active-strategy" class="muted small"></span>
             </div>
@@ -313,8 +316,8 @@
 
       <aside class="detail panel">
         <div class="detail-header">
-          <p class="eyebrow">Analysis</p>
-          <h2>详情与沉淀</h2>
+          <p class="eyebrow">详细分析</p>
+          <h2>详细信息</h2>
         </div>
         <div id="detail-content" class="detail-content"></div>
       </aside>
