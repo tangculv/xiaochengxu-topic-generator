@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>选题决策工作台 V3</title>
+    <title>选题决策工作台 V3.1</title>
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
@@ -14,7 +14,7 @@
           <div>
             <p class="eyebrow">小程序工厂</p>
             <h1>选题决策工作台</h1>
-            <p class="muted">商业产品级 AI 选题工作台，帮助你从海量候选中收敛出真正值得立项的方向。</p>
+            <p class="muted">面向高频筛选与立项判断的 AI 决策工作台，让你更快从海量候选中收敛出值得做的方向。</p>
           </div>
         </div>
         <div class="topbar-actions">
@@ -43,6 +43,16 @@
             <button id="clear-filters" class="button ghost small-button">回到全部</button>
           </div>
           <div id="quick-views" class="nav-list"></div>
+        </section>
+
+        <section class="panel compact recommendation-panel">
+          <div class="section-header tight">
+            <div>
+              <p class="eyebrow">Recommended</p>
+              <h2>系统推荐路径</h2>
+            </div>
+          </div>
+          <div id="system-views" class="nav-list compact-list"></div>
         </section>
 
         <section class="panel compact generator-panel hidden" id="generator-panel">
@@ -89,7 +99,6 @@
               <h2>逻辑与类型</h2>
             </div>
           </div>
-
           <div class="filter-group">
             <h3>关系逻辑</h3>
             <div class="chip-group" id="logic-relation-chips"></div>
@@ -208,6 +217,37 @@
           </section>
         </section>
 
+        <section class="summary-grid action-grid">
+          <section class="panel action-panel">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Next best action</p>
+                <h2>系统行动建议</h2>
+              </div>
+            </div>
+            <div id="action-insights" class="action-insights"></div>
+          </section>
+          <section class="panel batch-panel">
+            <div class="section-header">
+              <div>
+                <p class="eyebrow">Selection</p>
+                <h2>批量处理</h2>
+              </div>
+            </div>
+            <div class="selection-summary">
+              <strong id="selection-count">已选 0 项</strong>
+              <span id="selection-hint" class="muted small">在卡片或表格中勾选后可批量标记。</span>
+            </div>
+            <div class="selection-actions">
+              <button id="batch-want" class="button secondary">批量标记要</button>
+              <button id="batch-review" class="button secondary">批量标记再看</button>
+              <button id="batch-reject" class="button secondary">批量标记不要</button>
+              <button id="batch-project" class="button secondary">加入立项池</button>
+              <button id="clear-selection" class="button ghost">清空选择</button>
+            </div>
+          </section>
+        </section>
+
         <section class="panel distribution-panel">
           <div class="section-header">
             <div>
@@ -237,8 +277,9 @@
             <div>
               <p class="eyebrow">Ideas</p>
               <h2>结果工作区</h2>
-              <p class="muted small">适合高频筛选、判断和沉淀的商业级卡片流。</p>
+              <p class="muted small">默认轻量扫题，只有在需要时再展开看更深的信息。</p>
             </div>
+            <button id="toggle-all-expanded" class="button ghost small-button">展开当前列表摘要</button>
           </div>
           <div id="cards-view" class="view-pane">
             <div id="idea-list" class="idea-list"></div>
@@ -248,6 +289,7 @@
               <table class="idea-table">
                 <thead>
                   <tr>
+                    <th><input id="select-all-table" type="checkbox" /></th>
                     <th data-sort="title">题目</th>
                     <th data-sort="logic_relation">逻辑</th>
                     <th data-sort="topic_type_primary">类型</th>
