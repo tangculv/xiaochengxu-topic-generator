@@ -843,7 +843,7 @@ function buildSuggestedQueue(cards) {
   if (missingAction.length) return { type: 'fillNextAction', label: '系统推荐：先补动作', hint: '这些题已经值得推进，但卡在下一步动作不清楚', cards: missingAction };
   if (missingValidation.length) return { type: 'fillValidation', label: '系统推荐：先补验证', hint: '这些题已经进入待验证，但验证方式还没写清楚', cards: missingValidation };
   if (readyPrototype.length) return { type: 'stagePrototype', label: '系统推荐：推进到原型', hint: '这些题验证信息已齐，可以进入原型设计', cards: readyPrototype };
-  return { type: 'project', label: '系统推荐：继续挑立项题', hint: '当前执行队列已较完整，可以继续补充新的立项题', cards: candidates.slice(0, 4) };
+  return { type: 'project', label: '系统推荐：继续挑立项题', hint: '当前执行队列已较完整，可以继续补充新的立项候选', cards: candidates.slice(0, 4) };
 }
 
 function applySuggestedQueueSelection(suggestion) {
@@ -1111,7 +1111,7 @@ function renderExpandedSection(card) {
 
 function renderList(cards) {
   if (!cards.length) {
-    els.ideaList.innerHTML = '<div class="empty-state">当前没有符合条件的选题。你可以换个筛选条件，或者先点“查看全部”。</div>';
+    els.ideaList.innerHTML = '<div class="empty-state">当前没有符合条件的选题。你可以调整筛选条件，或先点“查看全部”。</div>';
     return;
   }
   els.ideaList.innerHTML = cards.map(card => `
@@ -1598,12 +1598,12 @@ function renderSelectionState() {
     const stageText = selectedStages.length === 1 ? `当前都在“${selectedStages[0]}”` : `包含 ${selectedStages.length} 种推进状态`;
     const gapSummary = [missingOwner ? `缺负责人 ${missingOwner}` : '', missingAction ? `缺动作 ${missingAction}` : '', missingValidation ? `缺验证 ${missingValidation}` : ''].filter(Boolean);
     const compact = isMobileLayout() && count <= 2;
-    const mobileHint = compact ? '复杂操作已收进下方折叠区。' : (isMobileLayout() ? '先用上方四个高频动作，其他推进操作再展开。' : '你可以直接在下方继续批量推进。');
+    const mobileHint = compact ? '复杂操作已收进下方折叠区。' : (isMobileLayout() ? '先用上方四个高频动作，需要时再展开更多推进操作。' : '你可以直接在下方继续批量推进。');
     els.selectionHint.textContent = isMobileLayout()
       ? `已选 ${count} 项；${gapSummary.length ? gapSummary.join('，') : stageText}。${mobileHint}`
       : `已选中的题目可以一起改判断结果或推进阶段，${stageText}${gapSummary.length ? `；${gapSummary.join('，')}` : ''}。${mobileHint}`;
   } else {
-    els.selectionHint.textContent = autoHideText || '先在卡片或表格里选中题目，再做批量操作。';
+    els.selectionHint.textContent = autoHideText || '先在卡片或表格里勾选题目，再做批量处理。';
   }
   [els.batchWant, els.batchReview, els.batchReject, els.batchProject, els.batchStageValidate, els.batchStagePrototype, els.batchStageBuild, els.batchPriorityP0, els.batchFillOwner, els.batchFillNextAction, els.batchFillValidation, els.clearSelection].forEach(btn => {
     if (!btn) return;
@@ -1673,7 +1673,7 @@ function renderInlineAiTip(currentCards) {
   const pendingHigh = currentCards.filter(card => ['S', 'A'].includes(card.recommendation_grade) && card.quickDecision === '未处理');
   const pendingAll = currentCards.filter(card => card.quickDecision === '未处理');
   if (state.focusMode && state.hideProcessedInFocus) {
-    els.inlineAiTip.textContent = isMobileLayout() ? '连续处理已开启：做完即自动隐藏。' : `连续处理已开启：当前列表只保留未处理题，做完判断会自动收起。`;
+    els.inlineAiTip.textContent = isMobileLayout() ? '连续处理已开启：做完后会自动隐藏。' : `连续处理已开启：当前列表只保留未处理题，做完判断后会自动隐藏。`;
     return;
   }
   if (pendingHigh.length) {
@@ -2124,7 +2124,7 @@ els.focusMode?.addEventListener('click', () => {
   if (!state.focusMode) state.hideProcessedInFocus = false;
   else if (!state.hideProcessedInFocus) state.hideProcessedInFocus = true;
   els.focusMode.classList.toggle('active', state.focusMode);
-  els.focusMode.textContent = state.focusMode ? '连续处理' : '普通浏览';
+  els.focusMode.textContent = state.focusMode ? '连续处理' : '浏览模式';
   if (els.focusHideProcessed) {
     els.focusHideProcessed.checked = state.hideProcessedInFocus;
     els.focusHideProcessed.disabled = !state.focusMode;
@@ -2221,7 +2221,7 @@ loadIndex().then(() => {
   toggleGenerator(false);
   renderSelectionState();
   syncMobileDetailState();
-  if (els.focusMode) els.focusMode.textContent = state.focusMode ? '连续处理' : '普通浏览';
+  if (els.focusMode) els.focusMode.textContent = state.focusMode ? '连续处理' : '浏览模式';
   if (els.focusHideProcessed) {
     els.focusHideProcessed.checked = state.hideProcessedInFocus;
     els.focusHideProcessed.disabled = !state.focusMode;

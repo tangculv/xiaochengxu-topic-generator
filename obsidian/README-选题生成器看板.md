@@ -10,14 +10,14 @@ status: active
 ## 入口导航
 
 - PRD：[[03 Projects/小程序工厂/选题库/PRD-选题生成器.md]]
-- 当前批次：[[03 Projects/小程序工厂/选题库/batches/BATCH-20260317-154644.md]]
+- 当前批次：[[03 Projects/小程序工厂/选题库/batches/BATCH-WEB-20260317150033.md]]
 - Web 界面：`[[03 Projects/小程序工厂/ui-web/index.html]]`
 - 候选目录：[[03 Projects/小程序工厂/选题库/candidates]]
 - 淘汰目录：[[03 Projects/小程序工厂/选题库/rejected]]
 
 ## 批次摘要
 
-- 批次：`BATCH-20260317-154644`
+- 批次：`BATCH-WEB-20260317150033`
 - 候选数：174
 - 淘汰数：0
 
