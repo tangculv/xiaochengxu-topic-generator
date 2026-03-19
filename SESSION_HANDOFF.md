@@ -1,25 +1,26 @@
 # SESSION_HANDOFF
 
 ## current objective
-完成最终交付版收口：继续补充交付说明，整理数据快照边界，并提交推送触发 Render 部署。
+完成 OpenAI 兼容 baseURL 最小支持的提交、推送与部署核验，保持当前版本不过度设计。
 
 ## completed work
-- 已完成最终交付基线检查：语法校验、数据快照轻校验、线上 `/ui-web/` 与 `/api/batches` 可访问性探测
-- 已完成第一轮最终收口：统一关键文案，降低术语感，并把主色调切换为更明亮的浅色紫粉层级方案
-- 已确认线上服务当前可访问，但线上 HTML 仍显示旧标题，说明还需新的提交与部署验证
+- 已确认当前项目主目标仍是稳定可用的选题决策工作台，而不是完整云端 LLM 平台
+- 已在生成面板新增“高级接口设置（可选）”，支持填写 OpenAI 兼容 Base URL 与 API Key
+- 已实现浏览器 localStorage 保存 LLM 配置，并在命令预览与生成请求元信息中反映是否已配置
+- 已明确保持当前 `/api/generate` 继续使用内置生成器，避免引入密钥托管、计费、限流与部署复杂度
 
 ## exact files changed
 - ui-web/index.html
 - ui-web/app.js
 - ui-web/styles.css
+- FINAL_DELIVERY.md
 - RUNLOG.md
 - TODO.autonomous.md
 - SESSION_HANDOFF.md
 
 ## open issues
-- 需要补一份面向非程序员的最终交付说明
-- 需要整理 Render 自查步骤，帮助判断为什么“没有部署记录”
-- 需要完成本轮改动提交与推送，再验证线上是否更新
+- 本轮改动尚未提交推送
+- Render 是否会自动拉取本轮提交仍需在 push 后验证
 
 ## recommended next action
-完善交付说明文档，更新 TODO 状态，然后提交并推送本轮最终收口改动，等待并验证 Render 部署。
+运行静态校验后，仅提交本轮相关文件并推送到 `origin/main`，然后检查 GitHub 最新提交与 Render deploy 记录是否出现对应更新。

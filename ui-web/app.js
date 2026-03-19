@@ -1,6 +1,7 @@
 const API_BASE = `${window.location.origin}/api`;
 const DECISION_STORAGE_KEY = 'topic-generator-decisions-v4';
 const PROJECT_STORAGE_KEY = 'topic-generator-project-state-v1';
+const LLM_CONFIG_STORAGE_KEY = 'topic-generator-llm-config-v1';
 const LEGACY_STORAGE_KEYS = ['topic-generator-decisions-v2', 'topic-generator-decisions-v1'];
 
 const QUICK_DECISION_TO_DETAIL = {
@@ -343,9 +344,40 @@ const els = {
   projectPipeline: document.getElementById('project-pipeline'),
   mobileDetailToggle: document.getElementById('mobile-detail-toggle'),
   mobileTableTip: document.getElementById('mobile-table-tip'),
+  llmBaseUrl: document.getElementById('llm-base-url'),
+  llmApiKey: document.getElementById('llm-api-key'),
 };
 
 const uniq = values => [...new Set(values)].filter(Boolean);
+
+
+function loadLlmConfig() {
+  try {
+    return JSON.parse(localStorage.getItem(LLM_CONFIG_STORAGE_KEY) || '{}');
+  } catch {
+    return {};
+  }
+}
+
+function saveLlmConfig(patch = {}) {
+  const next = { ...loadLlmConfig(), ...patch, updatedAt: new Date().toISOString() };
+  localStorage.setItem(LLM_CONFIG_STORAGE_KEY, JSON.stringify(next));
+  return next;
+}
+
+function syncLlmConfigForm() {
+  const config = loadLlmConfig();
+  if (els.llmBaseUrl) els.llmBaseUrl.value = config.baseUrl || '';
+  if (els.llmApiKey) els.llmApiKey.value = config.apiKey || '';
+}
+
+function buildGenerateEndpointMeta() {
+  const config = loadLlmConfig();
+  const meta = { endpoint: 'POST /api/generate', generator: 'built-in' };
+  if (config.baseUrl) meta.openaiCompatibleBaseUrl = config.baseUrl;
+  if (config.apiKey) meta.apiKeyConfigured = true;
+  return meta;
+}
 
 async function request(path, options = {}) {
   const response = await fetch(`${API_BASE}${path}`, {
@@ -2004,7 +2036,7 @@ function buildCommandPreview() {
   const name = els.generateName.value.trim() || '页面触发批次';
   const multiplier = Number(els.generateMultiplier.value || 1);
   const qualityMode = els.generateQuality.value;
-  els.commandPreview.textContent = JSON.stringify({ relation, name, multiplier, qualityMode, endpoint: 'POST /api/generate' }, null, 2);
+  els.commandPreview.textContent = JSON.stringify({ relation, name, multiplier, qualityMode, ...buildGenerateEndpointMeta() }, null, 2);
 }
 
 async function handleGenerate() {
@@ -2017,9 +2049,10 @@ async function handleGenerate() {
   els.generateStatus.textContent = '正在生成批次，请稍候...';
   buildCommandPreview();
   try {
+    const llmConfig = loadLlmConfig();
     const result = await request('/generate', {
       method: 'POST',
-      body: JSON.stringify({ relation, name, multiplier, batch_id: batchId, quality_mode: qualityMode }),
+      body: JSON.stringify({ relation, name, multiplier, batch_id: batchId, quality_mode: qualityMode, llm: llmConfig.baseUrl || llmConfig.apiKey ? { provider: 'openai-compatible', base_url: llmConfig.baseUrl || null, api_key_configured: Boolean(llmConfig.apiKey) } : null }),
     });
     els.generateStatus.textContent = `生成完成：${result.batch.batch_id}，共 ${result.cards_count} 条`;
     await loadIndex();
@@ -2205,6 +2238,8 @@ function batchFillValidation() {
   updateProjectStateBatchWithMap(patchMap);
 }
 els.clearSelection.addEventListener('click', clearSelection);
+els.llmBaseUrl?.addEventListener('change', () => { saveLlmConfig({ baseUrl: els.llmBaseUrl.value.trim() }); buildCommandPreview(); });
+els.llmApiKey?.addEventListener('change', () => { saveLlmConfig({ apiKey: els.llmApiKey.value.trim() }); buildCommandPreview(); });
 document.querySelectorAll('.idea-table thead th[data-sort]').forEach(th => th.addEventListener('click', () => {
   const key = th.dataset.sort;
   if (key === 'priority_score') return setSort('priority');
@@ -2215,6 +2250,7 @@ document.querySelectorAll('.idea-table thead th[data-sort]').forEach(th => th.ad
 document.addEventListener('keydown', handleKeyboardNavigation);
 
 loadIndex().then(() => {
+  syncLlmConfigForm();
   buildCommandPreview();
   setView('cards');
   setMainTab('ideas');

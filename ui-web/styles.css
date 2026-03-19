@@ -1641,3 +1641,32 @@ input[type="date"] {
     max-height: 80vh;
   }
 }
+
+.llm-config-panel {
+  margin-top: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(139, 92, 246, 0.03);
+}
+
+.llm-config-panel summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 10px 12px;
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.llm-config-panel summary::-webkit-details-marker {
+  display: none;
+}
+
+.llm-config-grid {
+  padding: 0 12px 12px;
+}
+
+@media (max-width: 768px) {
+  .llm-config-grid {
+    grid-template-columns: 1fr;
+  }
+}

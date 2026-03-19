@@ -92,6 +92,20 @@
           <div class="button-row">
             <button id="refresh-batches" class="button secondary">刷新批次</button>
           </div>
+          <details class="llm-config-panel">
+            <summary>高级接口设置（可选）</summary>
+            <div class="inline-grid two llm-config-grid">
+              <label>
+                <span>OpenAI 兼容 Base URL</span>
+                <input id="llm-base-url" type="url" placeholder="例如：https://api.openai.com/v1" />
+              </label>
+              <label>
+                <span>API Key</span>
+                <input id="llm-api-key" type="password" placeholder="仅保存在当前浏览器，不会写入仓库" autocomplete="off" />
+              </label>
+            </div>
+            <p class="muted small">当前版本的批次生成仍默认使用本项目内置生成器。这里先提供 OpenAI 兼容接口配置入口，供后续接入云端生成链路时直接复用。</p>
+          </details>
           <p id="generate-status" class="muted small">线上可直接生成；本地也可用 python3 scripts/topic_generator_server.py 启动。</p>
           <pre id="command-preview" class="code-block">POST /api/generate</pre>
         </section>
